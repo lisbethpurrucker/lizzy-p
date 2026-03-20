@@ -1,0 +1,117 @@
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page {
+  min-height: 100svh;
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: calc(var(--nav-h) + 3.5rem) 2rem 5rem;
+  animation: fadeIn 0.4s ease-out both;
+}
+
+/* ─── Header ──────────────────────────────────── */
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  margin-bottom: 0.3rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+
+/* ─── Card grid ───────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ─── Card ────────────────────────────────────── */
+
+.card {
+  border-radius: var(--r);
+  overflow: hidden;
+  aspect-ratio: 1 / 1.1;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.card:hover { transform: translateY(-3px); opacity: 0.9; }
+
+.cardBg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 70% at 40% 30%,
+      hsl(calc(var(--hue)), 55%, 28%) 0%,
+      hsl(calc(var(--hue)), 40%, 12%) 60%,
+      #0f0e0d 100%
+    );
+}
+
+.cardContent {
+  position: absolute;
+  inset: 0;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+}
+
+.cardTag {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: rgba(240, 232, 220, 0.55);
+  margin-bottom: 0.3rem;
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 0.3rem;
+}
+
+.cardDesc {
+  font-size: 0.8125rem;
+  color: rgba(240, 232, 220, 0.5);
+  line-height: 1.4;
+}
+
+/* ─── Mobile ──────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .page {
+    padding: calc(var(--nav-h) + 2rem) 1.25rem 3rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+}

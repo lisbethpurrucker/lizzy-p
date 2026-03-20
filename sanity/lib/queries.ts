@@ -1,0 +1,115 @@
+import { groq } from 'next-sanity'
+
+// ─── Site Settings ───────────────────────────────────────────────────────────
+export const getSiteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    heroPoemText,
+    logoPlaceholderText,
+    contactIntroCopy,
+    email,
+    footerText,
+    coverImage
+  }
+`
+
+// ─── Categories ──────────────────────────────────────────────────────────────
+export const getCategoriesQuery = groq`
+  *[_type == "category"] | order(order asc) {
+    _id,
+    name,
+    introLine,
+    "slug": slug.current,
+    order
+  }
+`
+
+// ─── Projects by category ────────────────────────────────────────────────────
+export const getProjectsByCategoryQuery = groq`
+  *[_type == "project" && category->slug.current == $categorySlug] | order(order asc) {
+    _id,
+    title,
+    coverImage,
+    description,
+    tags,
+    externalLink,
+    gallery,
+    publishedAt
+  }
+`
+
+// ─── All projects (with category slug) ──────────────────────────────────────
+export const getAllProjectsQuery = groq`
+  *[_type == "project"] | order(order asc) {
+    _id,
+    title,
+    "categorySlug": category->slug.current,
+    coverImage,
+    description,
+    tags,
+    externalLink,
+    gallery,
+    publishedAt
+  }
+`
+
+// ─── Poems ───────────────────────────────────────────────────────────────────
+export const getAllPoemsQuery = groq`
+  *[_type == "poem"] | order(order asc) {
+    _id,
+    title,
+    body,
+    publishedAt
+  }
+`
+
+// ─── OMM entries (paginated) ─────────────────────────────────────────────────
+// Pass { start: number, end: number } — uses exclusive-end slice [...].
+export const getOmmEntriesQuery = groq`
+  *[_type == "ommEntry"] | order(publishedAt desc) [$start...$end] {
+    _id,
+    publishedAt,
+    entryType,
+    image,
+    caption,
+    quoteText,
+    attribution,
+    url,
+    linkTitle,
+    linkDescription,
+    linkImage,
+    videoFile,
+    videoUrl,
+    audioFile
+  }
+`
+
+// ─── OMM total count ─────────────────────────────────────────────────────────
+export const getOmmEntryCountQuery = groq`count(*[_type == "ommEntry"])`
+
+// ─── Speaking Settings ───────────────────────────────────────────────────────
+export const getSpeakingSettingsQuery = groq`
+  *[_type == "speakingSettings"][0] {
+    intro,
+    topics,
+    ctaText,
+    ctaEmail
+  }
+`
+
+// ─── Substack Settings ───────────────────────────────────────────────────────
+export const getSubstackSettingsQuery = groq`
+  *[_type == "substackSettings"][0] {
+    name,
+    tagline,
+    rssUrl
+  }
+`
+
+// ─── Social Links ────────────────────────────────────────────────────────────
+export const getSocialLinksQuery = groq`
+  *[_type == "socialLink"] | order(order asc) {
+    _id,
+    label,
+    url
+  }
+`

@@ -1,0 +1,143 @@
+.entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  break-inside: avoid;
+}
+
+.timestamp {
+  font-size: 0.65rem;
+  color: var(--muted);
+  font-family: 'Courier New', Courier, ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Image / Sketch ───────────────────────────────── */
+
+.imageWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Quote ────────────────────────────────────────── */
+
+.quote {
+  padding: 1.5rem 1.25rem 1rem;
+}
+
+.quoteText {
+  font-size: 1.0625rem;
+  color: var(--text);
+  line-height: 1.65;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+
+.attribution {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: normal;
+}
+
+/* ─── Link ─────────────────────────────────────────── */
+
+.linkCard {
+  display: flex;
+  flex-direction: column;
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.linkCard:active {
+  background: var(--card);
+}
+
+.linkImageWrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 52%;
+  overflow: hidden;
+}
+
+.linkImage {
+  object-fit: cover;
+}
+
+.linkBody {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.linkTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.linkDescription {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.linkUrl {
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  word-break: break-all;
+  margin-top: 0.15rem;
+}
+
+/* ─── Caption (shared) ─────────────────────────────── */
+
+.caption {
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding: 0.6rem 1rem;
+  line-height: 1.5;
+}
+
+/* ─── Video ────────────────────────────────────────── */
+
+.videoWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  display: block;
+}
+
+.video {
+  width: 100%;
+  display: block;
+}
+
+/* ─── Audio ────────────────────────────────────────── */
+
+.audioWrap {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.audio {
+  width: 100%;
+  accent-color: var(--accent);
+}
