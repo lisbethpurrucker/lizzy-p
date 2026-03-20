@@ -14,6 +14,12 @@ export const siteSettings = defineType({
         'she is trying to find her place in this world.\nso much noise.\nshe covers her ears and listens to her heart.\nit burns.\nit burns to create meaning in existence.',
     }),
     defineField({
+      name: 'homeCopy',
+      title: 'Home Intro Copy',
+      type: 'text',
+      description: 'A paragraph about you shown in the scrollable section below the hero.',
+    }),
+    defineField({
       name: 'logoPlaceholderText',
       title: 'Logo Placeholder Text',
       type: 'string',

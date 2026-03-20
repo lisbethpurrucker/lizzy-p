@@ -22,15 +22,20 @@ export default async function Omm() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.inner}>
       <div className={styles.header}>
         <p className={styles.label}>on my mind</p>
         <h1 className={styles.title}>OMM</h1>
       </div>
+      <p className={styles.description}>
+        make space to think out loud. louder. deeper. there you go.
+      </p>
 
       <OmmClient
         initialEntries={initialEntries as Parameters<typeof OmmClient>[0]['initialEntries']}
         totalCount={totalCount}
       />
+      </div>
     </main>
   )
 }

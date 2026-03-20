@@ -1,6 +1,5 @@
 .window {
   background: #0d1117;
-  border: 1px solid var(--border);
   border-radius: var(--r);
   overflow: hidden;
   margin-bottom: 1.5rem;
@@ -8,9 +7,9 @@
 }
 
 .header {
-  background: #161b22;
+  background: #c8ced6;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(26, 24, 32, 0.1);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -26,14 +25,15 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(240, 232, 220, 0.12);
+  background: rgba(26, 24, 32, 0.18);
   display: inline-block;
 }
 
 .filename {
   font-size: 0.72rem;
-  color: var(--muted);
+  color: rgba(26, 24, 32, 0.55);
   letter-spacing: 0.04em;
+  font-family: 'Courier New', Courier, ui-monospace, monospace;
 }
 
 .body {

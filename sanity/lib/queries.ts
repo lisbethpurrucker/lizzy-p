@@ -4,6 +4,7 @@ import { groq } from 'next-sanity'
 export const getSiteSettingsQuery = groq`
   *[_type == "siteSettings"][0] {
     heroPoemText,
+    homeCopy,
     logoPlaceholderText,
     contactIntroCopy,
     email,

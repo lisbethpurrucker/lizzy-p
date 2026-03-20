@@ -79,6 +79,7 @@ export default async function Words() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.inner}>
       <div className={styles.header}>
         <p className={styles.label}>
           {substackSettings?.name || 'critical sidequest'}
@@ -163,6 +164,7 @@ export default async function Words() {
           </a>
         )}
       </section>
+      </div>
     </main>
   )
 }

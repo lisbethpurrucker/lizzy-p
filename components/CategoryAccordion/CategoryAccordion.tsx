@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
-import { urlFor } from '@/sanity/lib/image'
 import ProjectModal from '@/components/ProjectModal/ProjectModal'
 import styles from './CategoryAccordion.module.css'
 
@@ -30,65 +28,71 @@ interface Props {
   projects: Project[]
 }
 
-export default function CategoryAccordion({ categories, projects }: Props) {
-  const [openSlug, setOpenSlug] = useState<string | null>(null)
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+const RADIUS = 68
 
-  function toggle(slug: string) {
-    setOpenSlug((prev) => (prev === slug ? null : slug))
-  }
+export default function CategoryAccordion({ categories, projects }: Props) {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   return (
     <>
-      <div className={styles.accordion}>
-        {categories.map((cat) => {
-          const isOpen = openSlug === cat.slug
+      <div className={styles.list}>
+        {categories.map((cat, i) => {
           const catProjects = projects.filter((p) => p.categorySlug === cat.slug)
+          const isRight = i % 2 === 1
+          const letters = cat.name.toUpperCase().split('')
+          const n = letters.length
 
           return (
-            <div key={cat._id} className={styles.category}>
-              <button
-                className={`${styles.categoryHeader} ${isOpen ? styles.open : ''}`}
-                onClick={() => toggle(cat.slug)}
-                aria-expanded={isOpen}
-              >
-                <span className={styles.categoryName}>{cat.name}</span>
-                <span className={styles.chevron} aria-hidden="true">
-                  {isOpen ? '−' : '+'}
-                </span>
-              </button>
+            <div
+              key={cat._id}
+              className={`${styles.category} ${isRight ? styles.right : ''}`}
+            >
+              {/* ── Circle text header ── */}
+              <div className={styles.header}>
+                <span className={styles.num}>0{i + 1}</span>
 
-              <div className={`${styles.panel} ${isOpen ? styles.panelOpen : ''}`}>
-                <div className={styles.panelInner}>
-                  {cat.introLine && (
-                    <p className={styles.introLine}>{cat.introLine}</p>
-                  )}
+                <div className={styles.circleWrap}>
+                  {letters.map((letter, li) => {
+                    const angleDeg = (li / n) * 360 - 90
+                    return (
+                      <span
+                        key={li}
+                        className={styles.letter}
+                        style={{
+                          '--angle': `${angleDeg}deg`,
+                          '--i': li,
+                          '--n': n,
+                          '--r': `${RADIUS}px`,
+                        } as React.CSSProperties}
+                      >
+                        {letter === ' ' ? '\u00a0' : letter}
+                      </span>
+                    )
+                  })}
+                </div>
+
+                {cat.introLine && (
+                  <p className={styles.introLine}>{cat.introLine}</p>
+                )}
+              </div>
+
+              {/* ── Expanding projects ── */}
+              <div className={styles.projectsWrap}>
+                <div className={styles.projectsInner}>
                   {catProjects.length > 0 ? (
-                    <div className={styles.grid}>
+                    <div className={styles.tagRow}>
                       {catProjects.map((project) => (
                         <button
                           key={project._id}
-                          className={styles.projectCard}
+                          className={styles.projectTag}
                           onClick={() => setSelectedProject(project)}
                         >
-                          <div className={styles.cardImage}>
-                            {project.coverImage ? (
-                              <Image
-                                src={urlFor(project.coverImage).width(400).height(300).url()}
-                                alt={project.title}
-                                fill
-                                className={styles.cardImg}
-                              />
-                            ) : (
-                              <div className={styles.cardPlaceholder} />
-                            )}
-                          </div>
-                          <p className={styles.cardTitle}>{project.title}</p>
+                          {project.title}
                         </button>
                       ))}
                     </div>
                   ) : (
-                    <p className={styles.empty}>No projects yet.</p>
+                    <p className={styles.empty}>coming soon.</p>
                   )}
                 </div>
               </div>

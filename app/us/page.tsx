@@ -30,18 +30,11 @@ export default async function Us() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.inner}>
       <div className={styles.header}>
         <p className={styles.label}>get in touch</p>
         <h1 className={styles.title}>Us</h1>
       </div>
-
-      {settings?.contactIntroCopy ? (
-        <p className={styles.copy}>{settings.contactIntroCopy}</p>
-      ) : (
-        <p className={styles.copy}>
-          I am not trying to recreate someone else&apos;s path. If something here moved you, if you want to build something, if you just want to say hello —
-        </p>
-      )}
 
       <a href={`mailto:${email}`} className={styles.email}>
         {email}
@@ -60,6 +53,7 @@ export default async function Us() {
             <span className={styles.linkArrow}>↗</span>
           </a>
         ))}
+      </div>
       </div>
     </main>
   )

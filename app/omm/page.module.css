@@ -5,10 +5,14 @@
 
 .page {
   min-height: 100svh;
+  background: var(--page-bg);
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.inner {
   max-width: var(--content-w);
   margin: 0 auto;
-  padding: calc(var(--nav-h) + 3.5rem) 2rem 5rem;
-  animation: fadeIn 0.4s ease-out both;
+  padding: calc(var(--nav-h) + 3.5rem) 2.5rem 5rem;
 }
 
 .header {
@@ -16,18 +20,31 @@
 }
 
 .label {
-  font-size: 0.7rem;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  text-transform: lowercase;
-  margin-bottom: 0.3rem;
+  font-family: var(--font-fluor-rush);
+  font-size: 0.875rem;
+  color: #c41818;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
 }
 
 .title {
-  font-size: 2.25rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  color: var(--text);
+  font-family: var(--font-fluor-rush);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #1a1820;
+  line-height: 0.85;
+}
+
+.description {
+  font-family: var(--font-fluor-rush);
+  font-size: clamp(1.5rem, 4vw, 2.75rem);
+  color: #1a1820;
+  line-height: 1.2;
+  max-width: 640px;
+  margin-bottom: 3rem;
+  font-weight: 400;
 }
 
 /* ─── Entry grid ──────────────────────────────────── */
@@ -54,9 +71,9 @@
   margin: 2rem auto 0;
   padding: 0.85rem 1.5rem;
   background: none;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(26, 24, 32, 0.2);
   border-radius: var(--r);
-  color: var(--muted);
+  color: rgba(26, 24, 32, 0.6);
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -65,8 +82,8 @@
 
 .loadMore:hover,
 .loadMore:focus-visible {
-  border-color: rgba(240, 232, 220, 0.25);
-  color: var(--text);
+  border-color: rgba(26, 24, 32, 0.4);
+  color: #1a1820;
 }
 
 .loadMore:disabled {
@@ -84,7 +101,7 @@
 /* ─── Mobile ──────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .page {
+  .inner {
     padding: calc(var(--nav-h) + 2rem) 1.25rem 3rem;
   }
 
