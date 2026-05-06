@@ -43,6 +43,7 @@ export const getAllProjectsQuery = groq`
   *[_type == "project"] | order(order asc) {
     _id,
     title,
+    "slug": slug.current,
     "categorySlug": category->slug.current,
     coverImage,
     description,
@@ -50,6 +51,39 @@ export const getAllProjectsQuery = groq`
     externalLink,
     gallery,
     publishedAt
+  }
+`
+
+// ─── Single project by slug ──────────────────────────────────────────────────
+export const getProjectBySlugQuery = groq`
+  *[_type == "project" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    "categorySlug": category->slug.current,
+    "categoryName": category->name,
+    tagline,
+    role,
+    yearStart,
+    yearEnd,
+    status,
+    coverImage,
+    theWhy,
+    theHow,
+    whatILearned,
+    description,
+    tags,
+    externalLink,
+    gallery,
+    publishedAt
+  }
+`
+
+// ─── All project slugs in a category (for pagination) ────────────────────────
+export const getProjectSlugsByCategoryQuery = groq`
+  *[_type == "project" && category->slug.current == $categorySlug] | order(order asc) {
+    "slug": slug.current,
+    title
   }
 `
 

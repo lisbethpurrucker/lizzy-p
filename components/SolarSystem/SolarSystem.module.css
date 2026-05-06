@@ -1,0 +1,377 @@
+/* ── Orrery (space view) ──────────────────────────────────────────────────── */
+
+.orrery {
+  position: relative;
+  width: 100%;
+  height: calc(100svh - var(--nav-h));
+  background:
+    radial-gradient(ellipse at 50% 50%, #1e0e10 0%, #0a0708 70%),
+    #0a0708;
+  overflow: hidden;
+  color: #f6efe6;
+  user-select: none;
+}
+
+/* full-bleed SVG for stars / orbits / sun */
+.bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── Individual planet ────────────────────────────────────────────────────── */
+
+.planet {
+  position: absolute;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.6));
+}
+
+.planetHover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 22px rgba(216, 35, 42, 0.55));
+}
+
+/* ── Planet label below each planet ──────────────────────────────────────── */
+
+.label {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: auto;
+  cursor: pointer;
+  font-family: var(--mono);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.labelName {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.9);
+  text-shadow: 0 1px 4px #000;
+  display: block;
+}
+
+.labelMeta {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(242, 236, 226, 0.5);
+  display: block;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  max-width: 240px;
+}
+
+.labelHover .labelMeta {
+  opacity: 1;
+}
+
+/* ── Header (top-left overlay) ────────────────────────────────────────────── */
+
+.header {
+  position: absolute;
+  top: 28px;
+  left: 36px;
+  z-index: 5;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ff3a2c;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: rgba(242, 236, 226, 0.9);
+}
+
+.subtitle {
+  font-size: 12px;
+  color: rgba(242, 236, 226, 0.5);
+  max-width: 280px;
+  margin-top: 10px;
+  line-height: 1.55;
+}
+
+/* ── Footer hint ──────────────────────────────────────────────────────────── */
+
+.hint {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.45);
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Category index view
+═══════════════════════════════════════════════════════════════════════════ */
+
+.catView {
+  min-height: calc(100svh - var(--nav-h));
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 0%,  rgba(255, 213, 74, 0.10), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 85% 100%, rgba(216, 35,  42, 0.10), transparent 55%),
+    #f6efe6;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme="dark"] .catView {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%,  rgba(216, 35, 42, 0.10), transparent 55%),
+    #14100d;
+}
+
+/* ── Category head (back + hero) ─────────────────────────────────────────── */
+
+.catHead {
+  padding: 40px 56px;
+  border-bottom: 1px solid var(--border);
+}
+
+.backBtn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 700;
+  margin-bottom: 32px;
+  display: block;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.backBtn:hover { opacity: 0.7; }
+
+.catHero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 48px;
+}
+
+.catEyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 14px;
+}
+
+.catTitle {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.accent {
+  color: var(--red);
+}
+
+.catIntro {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.55;
+}
+
+.catPlanetThumb {
+  flex-shrink: 0;
+}
+
+/* ── Column header ────────────────────────────────────────────────────────── */
+
+.colHead {
+  display: grid;
+  grid-template-columns: 44px 1fr 80px 28px;
+  gap: 24px;
+  padding: 12px 56px;
+  border-bottom: 1px solid var(--text);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ── Project rows ─────────────────────────────────────────────────────────── */
+
+.projectList {
+  padding: 0 56px;
+}
+
+.projectRow {
+  display: grid;
+  grid-template-columns: 44px 1fr 80px 28px;
+  gap: 24px;
+  align-items: baseline;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+  text-align: left;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.18s ease;
+  font-family: var(--mono);
+}
+
+.projectRow:hover {
+  transform: translateX(8px);
+}
+
+.projectRow:hover .rowArrow {
+  color: var(--red);
+}
+
+.rowNum {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--faint);
+  padding-top: 4px;
+}
+
+.rowBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rowTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.rowTags {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.rowStatus {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 700;
+  align-self: center;
+}
+
+.rowArrow {
+  font-size: 20px;
+  color: var(--faint);
+  align-self: center;
+  transition: color 0.18s;
+}
+
+.emptyNote {
+  padding: 48px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ── Other worlds strip ───────────────────────────────────────────────────── */
+
+.otherWorlds {
+  margin-top: auto;
+  padding: 40px 56px;
+  border-top: 1px solid var(--text);
+}
+
+.otherLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 18px;
+}
+
+.otherGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.otherItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  color: var(--text);
+  font-family: var(--mono);
+  transition: opacity 0.15s;
+}
+
+.otherItem:hover { opacity: 0.7; }
+
+.otherName {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.otherCount {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: 2px;
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .catHead      { padding: 24px 20px; }
+  .colHead      { padding: 12px 20px; }
+  .projectList  { padding: 0 20px; }
+  .otherWorlds  { padding: 32px 20px; }
+
+  .catHero      { grid-template-columns: 1fr; }
+  .catPlanetThumb { display: none; }
+  .colHead      { grid-template-columns: 36px 1fr; }
+  .projectRow   { grid-template-columns: 36px 1fr; }
+  .rowStatus, .rowArrow { display: none; }
+
+  .otherGrid    { grid-template-columns: repeat(2, 1fr); }
+
+  .header { top: 16px; left: 16px; }
+  .hint   { display: none; }
+}

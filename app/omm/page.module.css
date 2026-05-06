@@ -1,89 +1,144 @@
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
+/* ── Page wrapper: dark background ───────────────────────────────────────── */
+
 .page {
+  padding-top: var(--nav-h);
   min-height: 100svh;
-  background: var(--page-bg);
+  background: #1a1612;
   animation: fadeIn 0.4s ease-out both;
 }
 
-.inner {
-  max-width: var(--content-w);
-  margin: 0 auto;
-  padding: calc(var(--nav-h) + 3.5rem) 2.5rem 5rem;
+/* ── Stage: centers the receipt ──────────────────────────────────────────── */
+
+.stage {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px 0;
 }
 
-.header {
-  margin-bottom: 2.5rem;
+/* ── Receipt paper ────────────────────────────────────────────────────────── */
+
+.receipt {
+  width: 100%;
+  max-width: 440px;
+  background: #f9f4e9;
+  padding: 28px 24px 96px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.55;
+  color: #14100d;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+
+  /* torn bottom edge */
+  --tooth: 9px;
+  -webkit-mask:
+    linear-gradient(#000, #000) top / 100% calc(100% - var(--tooth)) no-repeat,
+    conic-gradient(from -45deg at 50% var(--tooth), #000 90deg, transparent 0)
+      bottom / 18px var(--tooth) repeat-x;
+  mask:
+    linear-gradient(#000, #000) top / 100% calc(100% - var(--tooth)) no-repeat,
+    conic-gradient(from -45deg at 50% var(--tooth), #000 90deg, transparent 0)
+      bottom / 18px var(--tooth) repeat-x;
 }
 
-.label {
-  font-family: var(--font-fluor-rush);
-  font-size: 0.875rem;
-  color: #c41818;
-  letter-spacing: 0.1em;
+/* ── Receipt header ───────────────────────────────────────────────────────── */
+
+.receiptHead {
+  text-align: center;
+  border-bottom: 1px dashed rgba(20, 16, 13, 0.3);
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
+
+.receiptLabel {
+  font-size: 10px;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  color: rgba(20, 16, 13, 0.5);
+  margin-bottom: 4px;
 }
 
-.title {
-  font-family: var(--font-fluor-rush);
-  font-size: clamp(3rem, 8vw, 7rem);
-  font-weight: 400;
+.receiptTitle {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.3em;
+  color: #d8232a;
+  margin-bottom: 4px;
+}
+
+.receiptSub {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(20, 16, 13, 0.45);
+}
+
+/* ── Individual entry ─────────────────────────────────────────────────────── */
+
+.entry {
+  padding: 14px 0;
+  border-bottom: 1px dashed rgba(20, 16, 13, 0.2);
+}
+
+.entryMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.timestamp {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(20, 16, 13, 0.5);
+}
+
+.entryType {
+  display: inline-block;
+  font-size: 8px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #1a1820;
-  line-height: 0.85;
+  border: 1.5px solid #d8232a;
+  color: #d8232a;
+  padding: 1px 6px;
 }
 
-.description {
-  font-family: var(--font-fluor-rush);
-  font-size: clamp(1.5rem, 4vw, 2.75rem);
-  color: #1a1820;
-  line-height: 1.2;
-  max-width: 640px;
-  margin-bottom: 3rem;
-  font-weight: 400;
+.entryBody {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #14100d;
 }
 
-/* ─── Entry grid ──────────────────────────────────── */
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  align-items: start;
+.entryContent {
+  font-size: 13px;
+  color: rgba(20, 16, 13, 0.6);
 }
 
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* ─── Load more ───────────────────────────────────── */
+/* ── Load more ────────────────────────────────────────────────────────────── */
 
 .loadMore {
   display: block;
   width: 100%;
-  max-width: 320px;
-  margin: 2rem auto 0;
-  padding: 0.85rem 1.5rem;
+  margin: 18px 0 0;
+  padding: 10px 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(20, 16, 13, 0.5);
   background: none;
-  border: 1px solid rgba(26, 24, 32, 0.2);
-  border-radius: var(--r);
-  color: rgba(26, 24, 32, 0.6);
-  font-size: 0.875rem;
-  font-weight: 500;
+  border: none;
+  border-top: 1px dashed rgba(20, 16, 13, 0.2);
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  text-align: center;
+  transition: color 0.15s;
 }
 
-.loadMore:hover,
-.loadMore:focus-visible {
-  border-color: rgba(26, 24, 32, 0.4);
-  color: #1a1820;
+.loadMore:hover:not(:disabled) {
+  color: #d8232a;
 }
 
 .loadMore:disabled {
@@ -91,29 +146,15 @@
   cursor: default;
 }
 
-/* ─── Empty state ─────────────────────────────────── */
+/* ── Receipt footer ───────────────────────────────────────────────────────── */
 
-.empty {
-  font-size: 0.875rem;
-  color: var(--muted);
-}
-
-/* ─── Mobile ──────────────────────────────────────── */
-
-@media (max-width: 640px) {
-  .inner {
-    padding: calc(var(--nav-h) + 2rem) 1.25rem 3rem;
-  }
-
-  .title {
-    font-size: 1.75rem;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .loadMore {
-    max-width: 100%;
-  }
+.receiptFoot {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(20, 16, 13, 0.2);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(20, 16, 13, 0.35);
+  text-align: center;
 }

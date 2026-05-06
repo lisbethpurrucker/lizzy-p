@@ -1,6 +1,6 @@
 import { client, isConfigured } from '@/sanity/lib/client'
 import { getCategoriesQuery, getAllProjectsQuery } from '@/sanity/lib/queries'
-import UniverseLayout from '@/components/UniverseLayout/UniverseLayout'
+import SolarSystem from '@/components/SolarSystem/SolarSystem'
 import styles from './page.module.css'
 
 export const revalidate = 60
@@ -20,14 +20,9 @@ export default async function Universe() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.topBar}>
-        <p className={styles.label}>my work</p>
-        <h1 className={styles.title}>Universe</h1>
-      </div>
-
-      <UniverseLayout
-        categories={categories as Parameters<typeof UniverseLayout>[0]['categories']}
-        projects={projects as Parameters<typeof UniverseLayout>[0]['projects']}
+      <SolarSystem
+        categories={categories as Parameters<typeof SolarSystem>[0]['categories']}
+        projects={projects as Parameters<typeof SolarSystem>[0]['projects']}
       />
     </main>
   )

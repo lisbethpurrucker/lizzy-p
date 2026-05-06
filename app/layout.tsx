@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { JetBrains_Mono, Bungee, Caveat } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/Nav/Nav'
 
@@ -21,6 +22,27 @@ const publiFluorOuverte = localFont({
   display: 'swap',
 })
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-mono',
+  display: 'swap',
+})
+
+const bungee = Bungee({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-hand',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'lizzyp.',
   description: 'creative technologist. artist. writer.',
@@ -28,7 +50,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${departureMono.variable} ${publiFluorRush.variable} ${publiFluorOuverte.variable}`}>
+    <html
+      lang="en"
+      className={`${departureMono.variable} ${publiFluorRush.variable} ${publiFluorOuverte.variable} ${jetbrainsMono.variable} ${bungee.variable} ${caveat.variable}`}
+    >
       <body>
         <Nav />
         {children}

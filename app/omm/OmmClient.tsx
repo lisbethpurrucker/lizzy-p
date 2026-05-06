@@ -19,19 +19,25 @@ interface Props {
   totalCount: number
 }
 
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: '2-digit',
+  }).toUpperCase()
+}
+
 export default function OmmClient({ initialEntries, totalCount }: Props) {
   const [entries, setEntries] = useState<OmmEntry[]>(initialEntries)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading]  = useState(false)
 
   const hasMore = entries.length < totalCount
 
   async function loadMore() {
     setLoading(true)
     try {
-      const start = entries.length
-      const end = start + PAGE_SIZE
-      const more = await fetchOmmEntries(start, end)
-      setEntries((prev) => [...prev, ...more])
+      const more = await fetchOmmEntries(entries.length, entries.length + PAGE_SIZE)
+      setEntries(prev => [...prev, ...more])
     } finally {
       setLoading(false)
     }
@@ -39,17 +45,27 @@ export default function OmmClient({ initialEntries, totalCount }: Props) {
 
   if (entries.length === 0) {
     return (
-      <p className={styles.empty}>Nothing yet. Check back soon.</p>
+      <div className={styles.entry}>
+        <p className={styles.timestamp}>—</p>
+        <p className={styles.entryType}>note</p>
+        <p className={styles.entryContent}>Nothing yet. Check back soon.</p>
+      </div>
     )
   }
 
   return (
     <>
-      <div className={styles.grid}>
-        {entries.map((entry) => (
-          <OmmEntryRenderer key={entry._id} entry={entry as Parameters<typeof OmmEntryRenderer>[0]['entry']} />
-        ))}
-      </div>
+      {entries.map(entry => (
+        <div key={entry._id} className={styles.entry}>
+          <div className={styles.entryMeta}>
+            <span className={styles.timestamp}>{formatDate(entry.publishedAt)}</span>
+            <span className={styles.entryType}>{entry.entryType}</span>
+          </div>
+          <div className={styles.entryBody}>
+            <OmmEntryRenderer entry={entry as Parameters<typeof OmmEntryRenderer>[0]['entry']} />
+          </div>
+        </div>
+      ))}
 
       {hasMore && (
         <button
@@ -57,9 +73,13 @@ export default function OmmClient({ initialEntries, totalCount }: Props) {
           onClick={loadMore}
           disabled={loading}
         >
-          {loading ? 'Loading…' : 'Load more'}
+          {loading ? '…' : '▼ load more'}
         </button>
       )}
+
+      <div className={styles.receiptFoot}>
+        — end of tape —
+      </div>
     </>
   )
 }
