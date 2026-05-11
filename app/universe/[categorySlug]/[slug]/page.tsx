@@ -153,7 +153,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
             />
           ) : (
             <div className={styles.screenshotPlaceholder}>
-              [ real screenshot · 16:10 ]
+              [ real screenshot : 16:10 ]
             </div>
           )}
         </div>

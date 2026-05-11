@@ -160,7 +160,7 @@
 }
 
 .sectionLabel {
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--red);
@@ -194,13 +194,12 @@
   font-size: 12px;
   letter-spacing: 0.1em;
   color: var(--faint);
-  /* diagonal stripe pattern */
   background-image: repeating-linear-gradient(
     -45deg,
     transparent,
-    transparent 8px,
-    rgba(20, 16, 13, 0.04) 8px,
-    rgba(20, 16, 13, 0.04) 16px
+    transparent 10px,
+    rgba(20, 16, 13, 0.09) 10px,
+    rgba(20, 16, 13, 0.09) 11px
   );
 }
 
@@ -210,7 +209,6 @@
   font-size: 14px;
   line-height: 1.7;
   color: var(--text);
-  max-width: 68ch;
 }
 
 .sectionBody p { margin-bottom: 1em; }

@@ -31,21 +31,39 @@
 /* ─── Quote ────────────────────────────────────────── */
 
 .quote {
-  padding: 1.5rem 1.25rem 1rem;
+  padding: 1.5rem 1.25rem 1.25rem;
+  position: relative;
+}
+
+.quote::before {
+  content: '"';
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  font-family: Georgia, serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--red);
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .quoteText {
-  font-size: 1.0625rem;
+  font-family: var(--hand);
+  font-size: 1.05rem;
   color: var(--text);
-  line-height: 1.65;
+  line-height: 1.6;
   font-style: italic;
   margin-bottom: 0.75rem;
+  padding-top: 1rem;
 }
 
 .attribution {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: var(--muted);
   font-style: normal;
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
 }
 
 /* ─── Link ─────────────────────────────────────────── */

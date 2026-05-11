@@ -52,7 +52,7 @@ function MoonIcon() {
   const cx = 11, cy = 11, r = 11
   return (
     <svg viewBox="0 0 22 22" width="22" height="22" aria-label={`${name} · ${pct}% illuminated`}>
-      <title>{name} · {pct}% illuminated</title>
+      <title>{`${name} · ${pct}% illuminated`}</title>
       <circle cx={cx} cy={cy} r={r} fill="var(--text)" />
       <clipPath id="moon-clip"><circle cx={cx} cy={cy} r={r - 0.5} /></clipPath>
       <g clipPath="url(#moon-clip)"><path d={path} fill="#ebd9b0" /></g>

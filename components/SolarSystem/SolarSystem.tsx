@@ -134,12 +134,20 @@ function SaturnFill({ r, id }: { r: number; id: string }) {
         <rect width={r * 2} y={r * 1.0}  height={r * 0.18} fill="#a78332" opacity="0.55" />
         <rect width={r * 2} y={r * 1.4}  height={r * 0.22} fill="#d4ae6a" opacity="0.5" />
       </g>
-      {/* front rings */}
+      {/* front rings rendered in PlanetSVG after shadow overlay */}
+    </g>
+  )
+}
+
+function SaturnFrontRings({ r }: { r: number }) {
+  const cx = r, cy = r
+  return (
+    <>
       <path d={`M ${cx - r * 1.65} ${cy} A ${r * 1.65} ${r * 0.35} 0 0 0 ${cx + r * 1.65} ${cy}`}
         fill="none" stroke="#e8d090" strokeWidth={r * 0.10} opacity="0.85" />
       <path d={`M ${cx - r * 1.95} ${cy + r * 0.05} A ${r * 1.95} ${r * 0.46} 0 0 0 ${cx + r * 1.95} ${cy + r * 0.05}`}
         fill="none" stroke="#bfa56c" strokeWidth={r * 0.06} opacity="0.7" />
-    </g>
+    </>
   )
 }
 
@@ -165,6 +173,8 @@ function PlanetSVG({ kind, size, id, glowing }: { kind: PlanetKind; size: number
 
       <circle cx={cx} cy={cy} r={r}       fill={`url(#shadow-${id})`} clipPath={`url(#clip-${id})`} />
       <circle cx={cx} cy={cy} r={r - 0.5} fill="none" stroke="rgba(0,0,0,0.3)" />
+
+      {kind === 'saturn' && <SaturnFrontRings r={r} />}
 
       {glowing && (
         <circle cx={cx} cy={cy} r={r + 7} fill="none"
