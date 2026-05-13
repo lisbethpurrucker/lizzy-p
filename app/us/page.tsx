@@ -27,24 +27,18 @@ const SHAPES = [
   },
   {
     num: '04',
-    name: 'AI, built in',
-    desc: "You know your product needs AI but don't know where to start. I build the integration — agents, workflows, Anthropic/Claude APIs — and I speak both the product language and the technical one.",
-    subject: 'AI integration project',
-  },
-  {
-    num: '05',
     name: 'a site that stays alive',
     desc: "For studios, founders, cultural spaces. Content-heavy, editorially considered, with a CMS you'll actually use. I design the structure, write the first words, and hand you the keys.",
     subject: 'website / CMS project',
   },
   {
-    num: '06',
+    num: '05',
     name: 'a workshop or a room',
     desc: "Team onboarding, founder sprints, teaching code from scratch. I've run full-stack curricula for Le Wagon across Berlin and Cape Town. I design the material, I don't recycle slides.",
     subject: 'workshop / education enquiry',
   },
   {
-    num: '07',
+    num: '06',
     name: 'a talk',
     desc: "Conferences, women-in-tech rooms, creative technology, founding & building. I share from experience — a female founder who shipped a real product and kept going.",
     subject: 'speaking enquiry',

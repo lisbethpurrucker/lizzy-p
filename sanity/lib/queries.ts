@@ -67,6 +67,8 @@ export const getProjectBySlugQuery = groq`
     "slug": slug.current,
     "categorySlug": category->slug.current,
     "categoryName": category->name,
+    projectType,
+    shortDescription,
     tagline,
     role,
     yearStart,
@@ -75,13 +77,13 @@ export const getProjectBySlugQuery = groq`
     coverImage,
     "videoFile": videoFile { asset->{ url } },
     videoUrl,
+    "gallery": gallery[] { asset->{ url, metadata { dimensions } }, hotspot, crop },
     theWhy,
     theHow,
     whatILearned,
     description,
     tags,
     externalLink,
-    gallery,
     publishedAt
   }
 `

@@ -26,28 +26,59 @@ export const project = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'projectType',
+      title: 'Project Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Full write-up (building, creating, collaborating)', value: 'full' },
+          { title: 'Gallery — film shots, photos', value: 'gallery' },
+          { title: 'Video — animation, motion work', value: 'video' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'full',
+      validation: (Rule) => Rule.required(),
+    }),
+
+    // ── Shared: short note for gallery + video types ──────────────
+    defineField({
+      name: 'shortDescription',
+      title: 'Short description (optional)',
+      type: 'text',
+      rows: 3,
+      description: 'A sentence or two. Shown below the title.',
+      hidden: ({ document }) => document?.projectType === 'full',
+    }),
+
+    // ── Full type only ─────────────────────────────────────────────
+    defineField({
       name: 'tagline',
       title: 'Tagline',
       type: 'string',
       description: 'One-line description in your voice, shown below the title.',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'role',
       title: 'Role',
       type: 'string',
       description: 'e.g. founder / builder / collaborator',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'yearStart',
       title: 'Year Start',
       type: 'string',
       description: 'e.g. 2022',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'yearEnd',
       title: 'Year End',
       type: 'string',
       description: 'e.g. 2024 or "present" — leave blank for ongoing',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'status',
@@ -62,32 +93,51 @@ export const project = defineType({
         ],
         layout: 'radio',
       },
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
+
+    // ── Cover image (all types) ────────────────────────────────────
     defineField({
       name: 'coverImage',
-      title: 'Cover Image / Screenshot',
+      title: 'Cover Image / Thumbnail',
       type: 'image',
       options: { hotspot: true },
     }),
+
+    // ── Video (video type only) ────────────────────────────────────
     defineField({
       name: 'videoFile',
       title: 'Video File (MP4)',
       type: 'file',
       options: { accept: 'video/mp4,video/*' },
-      description: 'Upload an MP4 to show instead of (or alongside) the screenshot.',
+      hidden: ({ document }) => document?.projectType !== 'video',
     }),
     defineField({
       name: 'videoUrl',
       title: 'Video URL (YouTube / Vimeo)',
       type: 'url',
       description: 'Alternative to uploading — paste a YouTube or Vimeo link.',
+      hidden: ({ document }) => document?.projectType !== 'video',
     }),
+
+    // ── Gallery (gallery + video types — sketches, stills) ────────
+    defineField({
+      name: 'gallery',
+      title: 'Photos / Stills',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
+      description: 'Film shots for gallery type. Sketches / process stills for video type.',
+      hidden: ({ document }) => document?.projectType === 'full',
+    }),
+
+    // ── Full type write-up fields ──────────────────────────────────
     defineField({
       name: 'theWhy',
       title: 'The Why',
       type: 'array',
       of: [{ type: 'block' }],
       description: 'Why this exists, in your voice. Specific. Honest.',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'theHow',
@@ -95,6 +145,7 @@ export const project = defineType({
       type: 'array',
       of: [{ type: 'block' }],
       description: 'What you actually built. What was hard. What surprised you.',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'whatILearned',
@@ -102,13 +153,17 @@ export const project = defineType({
       type: 'array',
       of: [{ type: 'block' }],
       description: 'Three bullet-able lessons, written as sentences.',
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'description',
       title: 'Description (legacy)',
       type: 'array',
       of: [{ type: 'block' }],
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
+
+    // ── Shared ─────────────────────────────────────────────────────
     defineField({
       name: 'tags',
       title: 'Stack / Tags',
@@ -120,12 +175,7 @@ export const project = defineType({
       title: 'External Link',
       type: 'url',
       description: 'Optional. Opens in a new tab.',
-    }),
-    defineField({
-      name: 'gallery',
-      title: 'Gallery',
-      type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      hidden: ({ document }) => document?.projectType !== 'full',
     }),
     defineField({
       name: 'order',

@@ -4,16 +4,44 @@
   transition: background 0.3s ease;
 }
 
-.prompt {
+/* ── Window chrome ─────────────────────────────────────────── */
+
+.window {
   max-width: 760px;
   margin: 0 auto;
+  border: 1px solid var(--border);
+  font-family: var(--font-departure), monospace;
+}
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+/* ── Body ──────────────────────────────────────────────────── */
+
+.body {
+  padding: 1.75rem 1.5rem;
   display: flex;
   gap: 1.25rem;
   align-items: flex-start;
+  background: var(--surface);
 }
 
 .arrow {
-  font-family: var(--font-departure), monospace;
   font-size: 1rem;
   color: var(--tw-prompt);
   flex-shrink: 0;
@@ -21,18 +49,34 @@
   user-select: none;
 }
 
+/* ── Text overlay trick ────────────────────────────────────── */
+
+.textWrap {
+  display: grid;
+  flex: 1;
+}
+
+/* both ghost and live text occupy the same grid cell */
+.ghost,
 .text {
-  font-family: var(--font-departure), monospace;
-  font-size: 1.125rem;
+  grid-area: 1 / 1;
+  font-size: 1.0625rem;
   line-height: 1.85;
-  color: var(--tw-text);
   white-space: pre-wrap;
   word-break: break-word;
 }
 
+.ghost {
+  visibility: hidden;
+  color: transparent;
+  pointer-events: none;
+}
+
+.text {
+  color: var(--tw-text);
+}
+
 .cursor {
-  font-family: var(--font-departure), monospace;
-  font-size: 1.125rem;
   color: var(--tw-cursor);
   animation: blink 0.9s step-end infinite;
   display: inline;
@@ -45,9 +89,10 @@
 
 @media (max-width: 640px) {
   .section {
-    padding: 3.5rem 1.5rem;
+    padding: 3.5rem 1.25rem;
   }
 
+  .ghost,
   .text,
   .cursor {
     font-size: 0.9375rem;

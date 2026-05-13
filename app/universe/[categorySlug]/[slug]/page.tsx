@@ -14,6 +14,8 @@ interface Params {
   slug: string
 }
 
+type GalleryImage = { asset: { url: string }; hotspot?: unknown; crop?: unknown }
+
 export default async function ProjectPage({ params }: { params: Params }) {
   const { categorySlug, slug } = await Promise.resolve(params)
 
@@ -31,61 +33,173 @@ export default async function ProjectPage({ params }: { params: Params }) {
 
   if (!project) notFound()
 
-  const siblingIndex = siblings.findIndex(s => s.slug === slug)
-  const position     = siblingIndex + 1
-  const total        = siblings.length
-  const prevProject  = siblingIndex > 0 ? siblings[siblingIndex - 1] : null
-  const nextProject  = siblingIndex < siblings.length - 1 ? siblings[siblingIndex + 1] : null
+  const siblingIndex      = siblings.findIndex(s => s.slug === slug)
+  const position          = siblingIndex + 1
+  const total             = siblings.length
+  const prevProject       = siblingIndex > 0 ? siblings[siblingIndex - 1] : null
+  const nextProject       = siblingIndex < siblings.length - 1 ? siblings[siblingIndex + 1] : null
 
-  const title       = project.title as string
-  const categoryName = project.categoryName as string
-  const tagline     = project.tagline as string | undefined
-  const role        = project.role as string | undefined
-  const yearStart   = project.yearStart as string | undefined
-  const yearEnd     = project.yearEnd as string | undefined
-  const status      = project.status as string | undefined
-  const tags        = project.tags as string[] | undefined
-  const externalLink = project.externalLink as string | undefined
-  const coverImage  = project.coverImage as { asset: { _ref: string } } | undefined
-  const videoFile   = project.videoFile as { asset: { url: string } } | undefined
-  const videoUrl    = project.videoUrl as string | undefined
-  const theWhy      = project.theWhy as unknown[] | undefined
-  const theHow      = project.theHow as unknown[] | undefined
-  const whatILearned = project.whatILearned as unknown[] | undefined
-  const description = project.description as unknown[] | undefined
+  const projectType       = (project.projectType as string) || 'full'
+  const title             = project.title as string
+  const categoryName      = project.categoryName as string
+  const shortDescription  = project.shortDescription as string | undefined
+  const tags              = project.tags as string[] | undefined
+  const coverImage        = project.coverImage as { asset: { _ref: string } } | undefined
+  const videoFile         = project.videoFile as { asset: { url: string } } | undefined
+  const videoUrl          = project.videoUrl as string | undefined
+  const gallery           = project.gallery as GalleryImage[] | undefined
 
-  const period = yearStart
-    ? `${yearStart} — ${yearEnd ?? 'present'}`
-    : undefined
+  // full-type only
+  const tagline           = project.tagline as string | undefined
+  const role              = project.role as string | undefined
+  const yearStart         = project.yearStart as string | undefined
+  const yearEnd           = project.yearEnd as string | undefined
+  const status            = project.status as string | undefined
+  const externalLink      = project.externalLink as string | undefined
+  const theWhy            = project.theWhy as unknown[] | undefined
+  const theHow            = project.theHow as unknown[] | undefined
+  const whatILearned      = project.whatILearned as unknown[] | undefined
+  const description       = project.description as unknown[] | undefined
 
-  return (
-    <main className={styles.page}>
+  const period = yearStart ? `${yearStart} — ${yearEnd ?? 'present'}` : undefined
 
-      {/* ── Top bar ──────────────────────────────────────────────────────── */}
-      <div className={styles.topBar}>
-        <Link href="/universe" className={styles.backLink}>
-          ← back to {categoryName?.toLowerCase() ?? 'universe'}
-        </Link>
-        <div className={styles.breadcrumb}>
-          <span className={styles.breadcrumbDot} />
-          <span>{categoryName?.toUpperCase()} / {title}</span>
+  // ── Shared top bar ─────────────────────────────────────────────────────────
+  const topBar = (
+    <div className={styles.topBar}>
+      <Link href={`/universe`} className={styles.backLink}>
+        ← {categoryName?.toLowerCase() ?? 'universe'}
+      </Link>
+      <div className={styles.breadcrumb}>
+        <span className={styles.breadcrumbDot} />
+        <span>{categoryName?.toUpperCase()} / {title}</span>
+      </div>
+      {total > 0 && (
+        <div className={styles.pagination}>
+          {prevProject && (
+            <Link href={`/universe/${categorySlug}/${prevProject.slug}`} className={styles.pageNav}>←</Link>
+          )}
+          <span>{String(position).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+          {nextProject && (
+            <Link href={`/universe/${categorySlug}/${nextProject.slug}`} className={styles.pageNav}>→</Link>
+          )}
         </div>
-        {total > 0 && (
-          <div className={styles.pagination}>
-            {prevProject && (
-              <Link href={`/universe/${categorySlug}/${prevProject.slug}`} className={styles.pageNav}>←</Link>
-            )}
-            <span>
-              {String(position).padStart(2, '0')} / {String(total).padStart(2, '0')}
-            </span>
-            {nextProject && (
-              <Link href={`/universe/${categorySlug}/${nextProject.slug}`} className={styles.pageNav}>→</Link>
-            )}
+      )}
+    </div>
+  )
+
+  const footNav = (prevProject || nextProject) && (
+    <div className={styles.footNav}>
+      {prevProject ? (
+        <Link href={`/universe/${categorySlug}/${prevProject.slug}`} className={styles.footNavLink}>
+          ← {prevProject.title}
+        </Link>
+      ) : <span />}
+      {nextProject && (
+        <Link href={`/universe/${categorySlug}/${nextProject.slug}`} className={styles.footNavLink}>
+          {nextProject.title} →
+        </Link>
+      )}
+    </div>
+  )
+
+  // ── Gallery template ───────────────────────────────────────────────────────
+  if (projectType === 'gallery') {
+    return (
+      <main className={styles.page}>
+        {topBar}
+        <div className={styles.lightHeader}>
+          <h1 className={styles.lightTitle}>{title}</h1>
+          {shortDescription && <p className={styles.lightDesc}>{shortDescription}</p>}
+        </div>
+        <div className={styles.photoGrid}>
+          {gallery && gallery.length > 0 ? (
+            gallery.map((img, i) => (
+              <div key={i} className={styles.photoWrap}>
+                <Image
+                  src={img.asset.url}
+                  alt={`${title} ${i + 1}`}
+                  fill
+                  className={styles.photo}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            ))
+          ) : coverImage ? (
+            <div className={styles.photoWrap}>
+              <Image
+                src={urlFor(coverImage).width(1200).url()}
+                alt={title}
+                fill
+                className={styles.photo}
+                sizes="100vw"
+              />
+            </div>
+          ) : null}
+        </div>
+        {footNav}
+      </main>
+    )
+  }
+
+  // ── Video template ─────────────────────────────────────────────────────────
+  if (projectType === 'video') {
+    return (
+      <main className={styles.page}>
+        {topBar}
+        <div className={styles.lightHeader}>
+          <h1 className={styles.lightTitle}>{title}</h1>
+          {shortDescription && <p className={styles.lightDesc}>{shortDescription}</p>}
+        </div>
+        <div className={styles.videoSection}>
+          {videoFile?.asset?.url ? (
+            <video src={videoFile.asset.url} controls playsInline className={styles.videoPlayer} />
+          ) : videoUrl ? (
+            <iframe
+              src={
+                videoUrl.includes('youtu')
+                  ? videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
+                  : videoUrl.replace('vimeo.com/', 'player.vimeo.com/video/')
+              }
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              className={styles.videoPlayer}
+              title={title}
+            />
+          ) : coverImage ? (
+            <Image
+              src={urlFor(coverImage).width(1200).height(750).url()}
+              alt={title}
+              width={1200}
+              height={750}
+              className={styles.videoPlayer}
+            />
+          ) : null}
+        </div>
+        {gallery && gallery.length > 0 && (
+          <div className={styles.sketchGrid}>
+            {gallery.map((img, i) => (
+              <div key={i} className={styles.sketchWrap}>
+                <Image
+                  src={img.asset.url}
+                  alt={`${title} sketch ${i + 1}`}
+                  fill
+                  className={styles.photo}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+            ))}
           </div>
         )}
-      </div>
+        {footNav}
+      </main>
+    )
+  }
 
-      {/* ── Header ───────────────────────────────────────────────────────── */}
+  // ── Full template (default) ────────────────────────────────────────────────
+  return (
+    <main className={styles.page}>
+      {topBar}
+
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <p className={styles.eyebrow}>
@@ -127,12 +241,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
             <div className={styles.metaRow}>
               <dt className={styles.metaKey}>link</dt>
               <dd className={styles.metaVal}>
-                <a
-                  href={externalLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.metaLink}
-                >
+                <a href={externalLink} target="_blank" rel="noopener noreferrer" className={styles.metaLink}>
                   [ {(() => { try { return new URL(externalLink).hostname.replace('www.', '') } catch { return externalLink } })()} →]
                 </a>
               </dd>
@@ -141,19 +250,13 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </dl>
       </div>
 
-      {/* ── Media (video or screenshot) ──────────────────────────────────── */}
       <div className={styles.section}>
         <p className={styles.sectionLabel}>
           {(videoFile || videoUrl) ? 'the video' : 'the screenshot'}
         </p>
         <div className={styles.screenshotWrap}>
           {videoFile?.asset?.url ? (
-            <video
-              src={videoFile.asset.url}
-              controls
-              playsInline
-              className={styles.screenshot}
-            />
+            <video src={videoFile.asset.url} controls playsInline className={styles.screenshot} />
           ) : videoUrl ? (
             <iframe
               src={
@@ -167,22 +270,13 @@ export default async function ProjectPage({ params }: { params: Params }) {
               title={title}
             />
           ) : coverImage ? (
-            <Image
-              src={urlFor(coverImage).width(1200).height(750).url()}
-              alt={title}
-              width={1200}
-              height={750}
-              className={styles.screenshot}
-            />
+            <Image src={urlFor(coverImage).width(1200).height(750).url()} alt={title} width={1200} height={750} className={styles.screenshot} />
           ) : (
-            <div className={styles.screenshotPlaceholder}>
-              [ screenshot / video ]
-            </div>
+            <div className={styles.screenshotPlaceholder}>[ screenshot / video ]</div>
           )}
         </div>
       </div>
 
-      {/* ── The Why ──────────────────────────────────────────────────────── */}
       {(theWhy && theWhy.length > 0) && (
         <div className={styles.section}>
           <p className={styles.sectionLabel}>the why</p>
@@ -191,8 +285,6 @@ export default async function ProjectPage({ params }: { params: Params }) {
           </div>
         </div>
       )}
-
-      {/* ── The How ──────────────────────────────────────────────────────── */}
       {(theHow && theHow.length > 0) && (
         <div className={styles.section}>
           <p className={styles.sectionLabel}>the how</p>
@@ -201,8 +293,6 @@ export default async function ProjectPage({ params }: { params: Params }) {
           </div>
         </div>
       )}
-
-      {/* ── What I Learned ───────────────────────────────────────────────── */}
       {(whatILearned && whatILearned.length > 0) && (
         <div className={styles.section}>
           <p className={styles.sectionLabel}>what i learned</p>
@@ -211,8 +301,6 @@ export default async function ProjectPage({ params }: { params: Params }) {
           </div>
         </div>
       )}
-
-      {/* ── Fallback: legacy description ─────────────────────────────────── */}
       {(!theWhy?.length && !theHow?.length && !whatILearned?.length && !!description?.length) && (
         <div className={styles.section}>
           <p className={styles.sectionLabel}>about</p>
@@ -222,22 +310,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </div>
       )}
 
-      {/* ── Footer nav ───────────────────────────────────────────────────── */}
-      {(prevProject || nextProject) && (
-        <div className={styles.footNav}>
-          {prevProject ? (
-            <Link href={`/universe/${categorySlug}/${prevProject.slug}`} className={styles.footNavLink}>
-              ← {prevProject.title}
-            </Link>
-          ) : <span />}
-          {nextProject && (
-            <Link href={`/universe/${categorySlug}/${nextProject.slug}`} className={styles.footNavLink}>
-              {nextProject.title} →
-            </Link>
-          )}
-        </div>
-      )}
-
+      {footNav}
     </main>
   )
 }

@@ -249,6 +249,80 @@
 
 .footNavLink:hover { color: var(--red); }
 
+/* ── Gallery template ────────────────────────────────────────────────────── */
+
+.lightHeader {
+  padding: 40px 32px 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.lightTitle {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 48px);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.lightDesc {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 60ch;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+
+.photoWrap {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--card);
+}
+
+.photo {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.photoWrap:hover .photo {
+  transform: scale(1.02);
+}
+
+/* ── Video template ───────────────────────────────────────────────────────── */
+
+.videoSection {
+  padding: 32px 32px 0;
+}
+
+.videoPlayer {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: none;
+}
+
+.sketchGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.sketchWrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--card);
+}
+
 /* ── Mobile ──────────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -273,4 +347,9 @@
   }
 
   .footNav { padding: 24px 20px; }
+
+  .lightHeader { padding: 28px 20px 24px; }
+  .videoSection { padding: 20px 20px 0; }
+  .photoGrid { grid-template-columns: 1fr; }
+  .sketchGrid { grid-template-columns: repeat(2, 1fr); }
 }

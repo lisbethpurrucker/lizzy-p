@@ -96,19 +96,16 @@ export default async function Home() {
       <section className={styles.otherThings}>
         <div className={styles.otherHead}>
           <p className={styles.aboutEyebrow}>other things</p>
-          <h2 className={styles.otherTitle}>about me_</h2>
+          <h2 className={styles.otherTitle}>about me</h2>
         </div>
         <ul className={styles.otherList}>
           <li>ex athlete &amp; sports science student</li>
           <li>certified yoga teacher</li>
-          <li>speaks 3 languages — biggest life goal is 5</li>
-          <li>has visited all continents</li>
-          <li>ex seasonal flight attendant</li>
-          <li>ex strict vegan (still figuring that one out)</li>
-          <li>quadruple auntie to 4 brilliant humans</li>
+          <li>life goal: to speak 5 languages fluently (3/5 check)</li>
+          <li>second life goal: own ducklings</li>
         </ul>
         <p className={styles.otherCaption}>
-          you can interpret for yourself what this says about me.
+          what does this
         </p>
       </section>
 

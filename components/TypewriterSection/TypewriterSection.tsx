@@ -29,7 +29,7 @@ export default function TypewriterSection({ text }: { text: string }) {
           }, 22)
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.15 }
     )
 
     obs.observe(el)
@@ -38,10 +38,24 @@ export default function TypewriterSection({ text }: { text: string }) {
 
   return (
     <div ref={ref} className={styles.section}>
-      <div className={styles.prompt}>
-        <span className={styles.arrow}>&gt;&gt;</span>
-        <span className={styles.text}>{displayed}</span>
-        {!done && <span className={styles.cursor} aria-hidden="true">▌</span>}
+      <div className={styles.window}>
+        <div className={styles.titleBar}>
+          <span className={styles.dot} />
+          <span className={styles.dot} />
+          <span className={styles.dot} />
+        </div>
+        <div className={styles.body}>
+          <span className={styles.arrow}>&gt;&gt;</span>
+          <div className={styles.textWrap}>
+            {/* ghost: invisible full text locks the container height */}
+            <span className={styles.ghost} aria-hidden="true">{text}</span>
+            {/* live: typed text sits on top */}
+            <span className={styles.text}>
+              {displayed}
+              {!done && <span className={styles.cursor} aria-hidden="true">▌</span>}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   )
