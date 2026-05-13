@@ -1,0 +1,117 @@
+.footer {
+  background: var(--card);
+  width: 100%;
+  border-top: 1px solid var(--border);
+}
+
+.inner {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+/* ─── Top: message + nav ──────────────────────────── */
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 3rem;
+  padding: 4rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.line {
+  font-family: var(--font-fluor-rush);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1;
+}
+
+.cta {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--red);
+  transition: opacity 0.15s ease;
+}
+
+.cta:hover { opacity: 0.7; }
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+  padding-bottom: 0.2rem;
+}
+
+.navLink {
+  font-family: var(--font-fluor-rush);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.navLink:hover { color: var(--text); }
+
+/* ─── Bottom bar ──────────────────────────────────── */
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+}
+
+.logo {
+  font-family: var(--font-fluor-rush);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.logo:hover { color: var(--muted); }
+
+.copy {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+  font-family: var(--mono);
+  opacity: 0.6;
+}
+
+/* ─── Mobile ──────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .inner {
+    padding: 0 1.25rem;
+  }
+
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.5rem;
+    padding: 3rem 0 2.5rem;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem 1.25rem;
+  }
+}

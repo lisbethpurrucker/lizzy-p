@@ -22,22 +22,27 @@ export default async function Omm() {
 
   return (
     <main className={styles.page}>
-      <div className={styles.stage}>
-        <div className={styles.receipt}>
+      <div className={styles.inner}>
 
-          {/* Receipt head */}
-          <div className={styles.receiptHead}>
-            <p className={styles.receiptLabel}>on my mind</p>
-            <h1 className={styles.receiptTitle}>OMM</h1>
-            <p className={styles.receiptSub}>updated whenever something matters</p>
+        <div className={styles.header}>
+          <p className={styles.label}>on my mind</p>
+          <h1 className={styles.title}>OMM</h1>
+          <p className={styles.intro}>updated whenever something matters</p>
+        </div>
+
+        <div className={styles.window}>
+          <div className={styles.titleBar}>
+            <span className={styles.dot} />
+            <span className={styles.dot} />
+            <span className={styles.dot} />
           </div>
 
           <OmmClient
             initialEntries={initialEntries as Parameters<typeof OmmClient>[0]['initialEntries']}
             totalCount={totalCount}
           />
-
         </div>
+
       </div>
     </main>
   )

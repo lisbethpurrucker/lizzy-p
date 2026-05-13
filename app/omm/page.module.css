@@ -1,160 +1,184 @@
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Page wrapper: dark background ───────────────────────────────────────── */
-
 .page {
-  padding-top: var(--nav-h);
   min-height: 100svh;
-  background: #1a1612;
   animation: fadeIn 0.4s ease-out both;
 }
 
-/* ── Stage: centers the receipt ──────────────────────────────────────────── */
-
-.stage {
-  display: flex;
-  justify-content: center;
-  padding: 40px 16px 0;
+.inner {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: calc(var(--nav-h) + 3.5rem) 2.5rem 4rem;
 }
 
-/* ── Receipt paper ────────────────────────────────────────────────────────── */
+/* ── Page header (matches Words / all pages) ─────────── */
 
-.receipt {
-  width: 100%;
-  max-width: 440px;
-  background: #f9f4e9;
-  padding: 28px 24px 96px;
+.header {
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+
+.label {
+  font-family: var(--font-fluor-rush);
+  font-size: 0.875rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-family: var(--font-fluor-rush);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 0.9;
+}
+
+.intro {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 1rem;
+  max-width: 56ch;
+}
+
+/* ── Window chrome ─────────────────────────────────── */
+
+.window {
+  border: 1px solid var(--border);
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.55;
-  color: #14100d;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
-
-  /* torn bottom edge */
-  --tooth: 9px;
-  -webkit-mask:
-    linear-gradient(#000, #000) top / 100% calc(100% - var(--tooth)) no-repeat,
-    conic-gradient(from -45deg at 50% var(--tooth), #000 90deg, transparent 0)
-      bottom / 18px var(--tooth) repeat-x;
-  mask:
-    linear-gradient(#000, #000) top / 100% calc(100% - var(--tooth)) no-repeat,
-    conic-gradient(from -45deg at 50% var(--tooth), #000 90deg, transparent 0)
-      bottom / 18px var(--tooth) repeat-x;
+  margin-top: 3rem;
 }
 
-/* ── Receipt header ───────────────────────────────────────────────────────── */
-
-.receiptHead {
-  text-align: center;
-  border-bottom: 1px dashed rgba(20, 16, 13, 0.3);
-  padding-bottom: 16px;
-  margin-bottom: 16px;
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
 }
 
-.receiptLabel {
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(20, 16, 13, 0.5);
-  margin-bottom: 4px;
+.dot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
 }
 
-.receiptTitle {
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 0.3em;
-  color: #d8232a;
-  margin-bottom: 4px;
-}
+/* ── Entry grid ────────────────────────────────────── */
 
-.receiptSub {
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  color: rgba(20, 16, 13, 0.45);
+.entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
 }
-
-/* ── Individual entry ─────────────────────────────────────────────────────── */
 
 .entry {
-  padding: 14px 0;
-  border-bottom: 1px dashed rgba(20, 16, 13, 0.2);
+  background: var(--surface);
+  padding: 1.25rem;
 }
 
 .entryMeta {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
 }
 
 .timestamp {
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  color: rgba(20, 16, 13, 0.5);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--faint);
+  text-transform: uppercase;
 }
 
 .entryType {
-  display: inline-block;
   font-size: 8px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  border: 1.5px solid #d8232a;
-  color: #d8232a;
-  padding: 1px 6px;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 1px 5px;
 }
 
 .entryBody {
   font-size: 13px;
   line-height: 1.6;
-  color: #14100d;
+  color: var(--text);
 }
 
 .entryContent {
   font-size: 13px;
-  color: rgba(20, 16, 13, 0.6);
+  color: var(--muted);
 }
 
-/* ── Load more ────────────────────────────────────────────────────────────── */
+/* ── Load more ─────────────────────────────────────── */
 
 .loadMore {
   display: block;
   width: 100%;
-  margin: 18px 0 0;
   padding: 10px 0;
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.2em;
+  font-size: 10px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(20, 16, 13, 0.5);
-  background: none;
+  color: var(--faint);
+  background: var(--card);
   border: none;
-  border-top: 1px dashed rgba(20, 16, 13, 0.2);
+  border-top: 1px solid var(--border);
   cursor: pointer;
   text-align: center;
-  transition: color 0.15s;
+  transition: color 0.15s, background 0.15s;
 }
 
 .loadMore:hover:not(:disabled) {
-  color: #d8232a;
+  color: var(--red);
+  background: var(--surface);
 }
 
 .loadMore:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: default;
 }
 
-/* ── Receipt footer ───────────────────────────────────────────────────────── */
+/* ── Window footer ─────────────────────────────────── */
 
-.receiptFoot {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px dashed rgba(20, 16, 13, 0.2);
-  font-size: 10px;
-  letter-spacing: 0.25em;
+.windowFoot {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  font-size: 9px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(20, 16, 13, 0.35);
+  color: var(--faint);
+  opacity: 0.6;
   text-align: center;
+}
+
+/* ── Mobile ────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .inner {
+    padding: calc(var(--nav-h) + 1rem) 1.25rem 3rem;
+  }
+
+  .entries {
+    grid-template-columns: 1fr;
+  }
 }

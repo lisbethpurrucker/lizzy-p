@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import styles from './SolarSystem.module.css'
 
@@ -34,23 +34,43 @@ interface Props {
 // Canvas dimensions for the orrery SVG
 const W = 1200, H = 720
 const CX = W / 2, CY = H / 2
-const ORBITS = [130, 185, 240, 295, 345]
+const ORBITS = [255, 310, 370, 430, 480]
 
 // Planet assignment by category slug
 const PLANET_MAP: Record<string, { kind: PlanetKind; orbitIdx: number; angle: number; size: number }> = {
-  building:      { kind: 'saturn',  orbitIdx: 0, angle: 35,  size: 84 },
-  creating:      { kind: 'venus',   orbitIdx: 1, angle: 130, size: 60 },
-  animating:     { kind: 'jupiter', orbitIdx: 2, angle: 215, size: 72 },
-  collaborating: { kind: 'mars',    orbitIdx: 3, angle: 305, size: 56 },
-  documenting:   { kind: 'moon',    orbitIdx: 4, angle: 60,  size: 52 },
+  building:      { kind: 'saturn',  orbitIdx: 0, angle: 25,  size: 84 },
+  creating:      { kind: 'venus',   orbitIdx: 1, angle: 145, size: 60 },
+  animating:     { kind: 'jupiter', orbitIdx: 2, angle: 230, size: 72 },
+  collaborating: { kind: 'mars',    orbitIdx: 3, angle: 315, size: 56 },
+  documenting:   { kind: 'moon',    orbitIdx: 4, angle: 30,  size: 52 },
 }
 
 const FALLBACK: { kind: PlanetKind; orbitIdx: number; angle: number; size: number }[] = [
-  { kind: 'saturn',  orbitIdx: 0, angle: 35,  size: 80 },
-  { kind: 'venus',   orbitIdx: 1, angle: 130, size: 60 },
-  { kind: 'jupiter', orbitIdx: 2, angle: 215, size: 70 },
-  { kind: 'mars',    orbitIdx: 3, angle: 305, size: 55 },
-  { kind: 'moon',    orbitIdx: 4, angle: 60,  size: 50 },
+  { kind: 'saturn',  orbitIdx: 0, angle: 25,  size: 80 },
+  { kind: 'venus',   orbitIdx: 1, angle: 145, size: 60 },
+  { kind: 'jupiter', orbitIdx: 2, angle: 230, size: 70 },
+  { kind: 'mars',    orbitIdx: 3, angle: 315, size: 55 },
+  { kind: 'moon',    orbitIdx: 4, angle: 30,  size: 50 },
+]
+
+// ── Mobile (portrait) layout ───────────────────────────────────────────────
+// Angles chosen so no planet clips the header or bottom edge on ~390px wide screens.
+const MOBILE_ORBITS = [230, 295, 350, 390, 445]
+
+const MOBILE_PLANET_MAP: Record<string, { kind: PlanetKind; orbitIdx: number; angle: number; size: number }> = {
+  building:      { kind: 'saturn',  orbitIdx: 0, angle: 42,  size: 76 },
+  creating:      { kind: 'venus',   orbitIdx: 1, angle: 152, size: 54 },
+  animating:     { kind: 'jupiter', orbitIdx: 2, angle: 205, size: 64 },
+  collaborating: { kind: 'mars',    orbitIdx: 3, angle: 322, size: 50 },
+  documenting:   { kind: 'moon',    orbitIdx: 4, angle: 42,  size: 46 },
+}
+
+const MOBILE_FALLBACK: { kind: PlanetKind; orbitIdx: number; angle: number; size: number }[] = [
+  { kind: 'saturn',  orbitIdx: 0, angle: 42,  size: 76 },
+  { kind: 'venus',   orbitIdx: 1, angle: 152, size: 54 },
+  { kind: 'jupiter', orbitIdx: 2, angle: 205, size: 64 },
+  { kind: 'mars',    orbitIdx: 3, angle: 322, size: 50 },
+  { kind: 'moon',    orbitIdx: 4, angle: 42,  size: 46 },
 ]
 
 // Deterministic star field
@@ -187,13 +207,25 @@ function PlanetSVG({ kind, size, id, glowing }: { kind: PlanetKind; size: number
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default function SolarSystem({ categories, projects }: Props) {
-  const [hoverId, setHoverId]             = useState<string | null>(null)
+  const [hoverId, setHoverId]               = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
+  const [isMobile, setIsMobile]             = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  const activePlanetMap = isMobile ? MOBILE_PLANET_MAP : PLANET_MAP
+  const activeFallback  = isMobile ? MOBILE_FALLBACK  : FALLBACK
+  const activeOrbits    = isMobile ? MOBILE_ORBITS    : ORBITS
 
   // Map categories to planets
   const planets = categories.map((cat, i) => {
-    const cfg = PLANET_MAP[cat.slug] ?? FALLBACK[i % FALLBACK.length]
-    const orbitR = ORBITS[cfg.orbitIdx]
+    const cfg = activePlanetMap[cat.slug] ?? activeFallback[i % activeFallback.length]
+    const orbitR = activeOrbits[cfg.orbitIdx]
     const a  = toRad(cfg.angle)
     const px = CX + Math.cos(a) * orbitR
     const py = CY + Math.sin(a) * orbitR
@@ -324,7 +356,7 @@ export default function SolarSystem({ categories, projects }: Props) {
           ))}
 
           {/* Orbit rings */}
-          {ORBITS.map((r, i) => (
+          {activeOrbits.map((r, i) => (
             <circle key={i} cx={CX} cy={CY} r={r}
               fill="none" stroke="rgba(242,236,226,0.08)" strokeDasharray="2 6" />
           ))}
@@ -346,6 +378,13 @@ export default function SolarSystem({ categories, projects }: Props) {
             letterSpacing="6" fill="rgba(255,245,208,0.65)"
             fontFamily="'JetBrains Mono', monospace">★ LIZZYP ★</text>
         </svg>
+
+        {/* Sun click target — navigates to about section on home page */}
+        <Link
+          href="/#about"
+          className={styles.sunBtn}
+          aria-label="About me"
+        />
 
         {/* Planets */}
         {planets.map((planet) => {
@@ -404,7 +443,7 @@ export default function SolarSystem({ categories, projects }: Props) {
         {/* Header */}
         <div className={styles.header}>
           <p className={styles.eyebrow}>my work</p>
-          <h1 className={styles.title}>universe_</h1>
+          <h1 className={styles.title}>universe</h1>
           <p className={styles.subtitle}>five worlds. click any to explore.</p>
         </div>
 

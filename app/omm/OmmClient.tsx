@@ -45,27 +45,29 @@ export default function OmmClient({ initialEntries, totalCount }: Props) {
 
   if (entries.length === 0) {
     return (
-      <div className={styles.entry}>
-        <p className={styles.timestamp}>—</p>
-        <p className={styles.entryType}>note</p>
-        <p className={styles.entryContent}>Nothing yet. Check back soon.</p>
+      <div className={styles.entries}>
+        <div className={styles.entry}>
+          <p className={styles.entryContent}>Nothing yet. Check back soon.</p>
+        </div>
       </div>
     )
   }
 
   return (
     <>
-      {entries.map(entry => (
-        <div key={entry._id} className={styles.entry}>
-          <div className={styles.entryMeta}>
-            <span className={styles.timestamp}>{formatDate(entry.publishedAt)}</span>
-            <span className={styles.entryType}>{entry.entryType}</span>
+      <div className={styles.entries}>
+        {entries.map(entry => (
+          <div key={entry._id} className={styles.entry}>
+            <div className={styles.entryMeta}>
+              <span className={styles.timestamp}>{formatDate(entry.publishedAt)}</span>
+              <span className={styles.entryType}>{entry.entryType}</span>
+            </div>
+            <div className={styles.entryBody}>
+              <OmmEntryRenderer entry={entry as Parameters<typeof OmmEntryRenderer>[0]['entry']} />
+            </div>
           </div>
-          <div className={styles.entryBody}>
-            <OmmEntryRenderer entry={entry as Parameters<typeof OmmEntryRenderer>[0]['entry']} />
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       {hasMore && (
         <button
@@ -73,13 +75,11 @@ export default function OmmClient({ initialEntries, totalCount }: Props) {
           onClick={loadMore}
           disabled={loading}
         >
-          {loading ? '…' : '▼ load more'}
+          {loading ? '…' : '▼  load more'}
         </button>
       )}
 
-      <div className={styles.receiptFoot}>
-        — end of tape —
-      </div>
+      <div className={styles.windowFoot}>— end of tape —</div>
     </>
   )
 }

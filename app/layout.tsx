@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import { JetBrains_Mono, Bungee, Caveat } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/Nav/Nav'
+import Footer from '@/components/Footer/Footer'
 
 const departureMono = localFont({
   src: '../public/fonts/DepartureMono-Regular.woff2',
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   )

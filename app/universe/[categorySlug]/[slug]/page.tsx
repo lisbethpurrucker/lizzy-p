@@ -47,6 +47,8 @@ export default async function ProjectPage({ params }: { params: Params }) {
   const tags        = project.tags as string[] | undefined
   const externalLink = project.externalLink as string | undefined
   const coverImage  = project.coverImage as { asset: { _ref: string } } | undefined
+  const videoFile   = project.videoFile as { asset: { url: string } } | undefined
+  const videoUrl    = project.videoUrl as string | undefined
   const theWhy      = project.theWhy as unknown[] | undefined
   const theHow      = project.theHow as unknown[] | undefined
   const whatILearned = project.whatILearned as unknown[] | undefined
@@ -139,11 +141,32 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </dl>
       </div>
 
-      {/* ── Screenshot ───────────────────────────────────────────────────── */}
+      {/* ── Media (video or screenshot) ──────────────────────────────────── */}
       <div className={styles.section}>
-        <p className={styles.sectionLabel}>the screenshot</p>
+        <p className={styles.sectionLabel}>
+          {(videoFile || videoUrl) ? 'the video' : 'the screenshot'}
+        </p>
         <div className={styles.screenshotWrap}>
-          {coverImage ? (
+          {videoFile?.asset?.url ? (
+            <video
+              src={videoFile.asset.url}
+              controls
+              playsInline
+              className={styles.screenshot}
+            />
+          ) : videoUrl ? (
+            <iframe
+              src={
+                videoUrl.includes('youtu')
+                  ? videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
+                  : videoUrl.replace('vimeo.com/', 'player.vimeo.com/video/')
+              }
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              className={styles.screenshot}
+              title={title}
+            />
+          ) : coverImage ? (
             <Image
               src={urlFor(coverImage).width(1200).height(750).url()}
               alt={title}
@@ -153,7 +176,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
             />
           ) : (
             <div className={styles.screenshotPlaceholder}>
-              [ real screenshot : 16:10 ]
+              [ screenshot / video ]
             </div>
           )}
         </div>
@@ -190,7 +213,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
       )}
 
       {/* ── Fallback: legacy description ─────────────────────────────────── */}
-      {(!theWhy && !theHow && !whatILearned && description && description.length > 0) && (
+      {(!theWhy?.length && !theHow?.length && !whatILearned?.length && !!description?.length) && (
         <div className={styles.section}>
           <p className={styles.sectionLabel}>about</p>
           <div className={styles.sectionBody}>
@@ -200,18 +223,20 @@ export default async function ProjectPage({ params }: { params: Params }) {
       )}
 
       {/* ── Footer nav ───────────────────────────────────────────────────── */}
-      <div className={styles.footNav}>
-        {prevProject ? (
-          <Link href={`/universe/${categorySlug}/${prevProject.slug}`} className={styles.footNavLink}>
-            ← {prevProject.title}
-          </Link>
-        ) : <span />}
-        {nextProject && (
-          <Link href={`/universe/${categorySlug}/${nextProject.slug}`} className={styles.footNavLink}>
-            {nextProject.title} →
-          </Link>
-        )}
-      </div>
+      {(prevProject || nextProject) && (
+        <div className={styles.footNav}>
+          {prevProject ? (
+            <Link href={`/universe/${categorySlug}/${prevProject.slug}`} className={styles.footNavLink}>
+              ← {prevProject.title}
+            </Link>
+          ) : <span />}
+          {nextProject && (
+            <Link href={`/universe/${categorySlug}/${nextProject.slug}`} className={styles.footNavLink}>
+              {nextProject.title} →
+            </Link>
+          )}
+        </div>
+      )}
 
     </main>
   )

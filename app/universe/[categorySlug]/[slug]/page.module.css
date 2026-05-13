@@ -5,8 +5,6 @@
 
 .page {
   padding-top: var(--nav-h);
-  min-height: 100svh;
-  background: var(--bg);
   font-family: var(--mono);
   animation: fadeIn 0.3s ease-out both;
 }
@@ -157,6 +155,10 @@
   padding: 40px 32px;
   border-bottom: 1px solid var(--border);
   align-items: start;
+}
+
+.section:last-child {
+  border-bottom: none;
 }
 
 .sectionLabel {

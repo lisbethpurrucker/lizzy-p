@@ -5,7 +5,6 @@
 
 .page {
   min-height: 100svh;
-  background: var(--page-bg);
   animation: fadeIn 0.4s ease-out both;
 }
 
@@ -15,15 +14,18 @@
   padding: calc(var(--nav-h) + 3.5rem) 2.5rem 5rem;
 }
 
+/* ─── Header ──────────────────────────────────────── */
+
 .header {
-  margin-bottom: 2.5rem;
-  max-width: 680px;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
 }
 
 .label {
   font-family: var(--font-fluor-rush);
   font-size: 0.875rem;
-  color: #c41818;
+  color: var(--red);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
@@ -35,55 +37,99 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #1a1820;
+  color: var(--text);
   margin-bottom: 0.5rem;
   line-height: 0.9;
 }
 
-.tagline {
+.intro {
   font-size: 0.9375rem;
-  color: rgba(26, 24, 32, 0.6);
-  line-height: 1.65;
-  max-width: 520px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  max-width: 56ch;
 }
 
-/* ─── Sections ────────────────────────────────────── */
+.tagline {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 0.5rem;
+  max-width: 56ch;
+}
+
+/* ─── Anchor nav ───────────────────────────────────── */
+
+.anchorNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.anchorLink {
+  font-family: var(--font-fluor-rush);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+}
+
+.anchorLink:hover {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+/* ─── Sections (label | content two-column) ────────── */
 
 .section {
-  margin-bottom: 4rem;
-  max-width: 720px;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 3rem;
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+  scroll-margin-top: calc(var(--nav-h) + 2rem);
+}
+
+.section:last-child {
+  border-bottom: none;
 }
 
 .sectionLabel {
   font-family: var(--font-fluor-rush);
-  font-size: 1rem;
-  color: rgba(26, 24, 32, 0.55);
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  color: var(--faint);
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(26, 24, 32, 0.12);
-  padding-bottom: 0.75rem;
+  padding-top: 4px;
 }
 
 /* ─── Posts (Substack) ────────────────────────────── */
 
 .posts {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1px;
-  background: rgba(26, 24, 32, 0.08);
+  background: var(--border);
   border-radius: var(--r);
   overflow: hidden;
 }
 
 .post {
   display: block;
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--surface);
   padding: 1.5rem;
   transition: background 0.15s ease;
 }
 
-.post:hover { background: rgba(255, 255, 255, 0.65); }
+.post:hover { background: var(--card); }
 
 .postMeta {
   display: flex;
@@ -94,14 +140,14 @@
 
 .postDate {
   font-size: 0.7rem;
-  color: rgba(26, 24, 32, 0.5);
+  color: var(--faint);
   letter-spacing: 0.04em;
 }
 
 .postTag {
   font-size: 0.65rem;
   background: var(--pill-bg);
-  color: rgba(26, 24, 32, 0.5);
+  color: var(--faint);
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   letter-spacing: 0.04em;
@@ -111,14 +157,14 @@
   font-size: 1.0625rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: #1a1820;
+  color: var(--text);
   margin-bottom: 0.5rem;
   line-height: 1.3;
 }
 
 .postExcerpt {
   font-size: 0.875rem;
-  color: rgba(26, 24, 32, 0.6);
+  color: var(--muted);
   line-height: 1.65;
 }
 
@@ -129,7 +175,7 @@
   margin-top: 1rem;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #c41818;
+  color: var(--red);
   transition: opacity 0.15s ease;
 }
 
@@ -139,10 +185,9 @@
 
 .speakingIntro {
   font-size: 0.9375rem;
-  color: rgba(26, 24, 32, 0.6);
+  color: var(--muted);
   line-height: 1.75;
   margin-bottom: 1.25rem;
-  max-width: 480px;
 }
 
 .topicsList {
@@ -154,8 +199,8 @@
 }
 
 .topic {
-  font-size: 1rem;
-  color: #1a1820;
+  font-size: 0.9375rem;
+  color: var(--text);
   padding-left: 1.25rem;
   position: relative;
 }
@@ -164,7 +209,7 @@
   content: '→';
   position: absolute;
   left: 0;
-  color: #c41818;
+  color: var(--red);
   font-size: 0.8rem;
   top: 0.1em;
 }
@@ -173,13 +218,25 @@
   display: inline-block;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #c41818;
+  color: var(--red);
   transition: opacity 0.15s ease;
 }
 
 .speakingCta:hover { opacity: 0.75; }
 
 /* ─── Mobile ──────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 2rem 0;
+  }
+
+  .posts {
+    grid-template-columns: 1fr;
+  }
+}
 
 @media (max-width: 640px) {
   .inner {

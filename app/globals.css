@@ -39,7 +39,7 @@
   --r:         4px;
 
   /* ── Nav ── */
-  --nav-bg:    rgba(246, 239, 230, 0.92);
+  --nav-bg:    rgba(235, 225, 210, 0.92);
   --pill-bg:   rgba(20, 16, 13, 0.05);
 
   /* ── Legacy aliases (existing components reference these) ── */
@@ -66,7 +66,7 @@
   --muted:     rgba(246, 239, 230, 0.55);
   --faint:     rgba(246, 239, 230, 0.35);
   --border:    rgba(246, 239, 230, 0.10);
-  --nav-bg:    rgba(20, 16, 13, 0.92);
+  --nav-bg:    rgba(42, 30, 20, 0.92);
   --pill-bg:   rgba(246, 239, 230, 0.07);
   --red-dim:   rgba(216, 35, 42, 0.18);
   --page-bg:   #14100d;

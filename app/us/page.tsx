@@ -4,33 +4,50 @@ import { getSiteSettingsQuery } from '@/sanity/lib/queries'
 
 export const revalidate = 60
 
-const FALLBACK_EMAIL = 'hello@lisbethpurrucker.com'
+const FALLBACK_EMAIL = 'sayhi@lisbethpurrucker.com'
 
 const SHAPES = [
   {
     num: '01',
-    name: 'a kickoff',
-    desc: 'You have a vague feeling and a deadline. I show up, ask annoying questions, and we leave with a plan and a working prototype.',
+    name: 'a technical co-founder, briefly',
+    desc: "You're founding something and need someone to own the tech. Architecture, stack decisions, first lines of code. I step in properly — not advisory, but builder-mode. I've done it before.",
+    subject: 'technical co-founder enquiry',
   },
   {
     num: '02',
-    name: 'a from-blank',
-    desc: 'Brand, site, or product — started from zero. No template, no agency middle. You and me, building from the first line. This is my favourite shape.',
+    name: 'an MVP before the round',
+    desc: "You need something working before the investor meeting. Full-stack, production-ready, fast. I've shipped apps with real users. I write the code and the copy.",
+    subject: 'MVP development',
   },
   {
     num: '03',
-    name: 'an embed',
-    desc: '8–12 weeks inside your team. Founder-mode, hands-on, design + build + ship.',
+    name: 'something that moves',
+    desc: "Generative art, interactive installations, live visuals, browser-based experiences. For galleries, events, brands that want a room to remember. This is Studio Pilz work.",
+    subject: 'creative tech / installation project',
   },
   {
     num: '04',
-    name: 'a talk or workshop',
-    desc: "Conferences, women-in-tech rooms, founding & building, creative tech. I bring slides that aren't slop.",
+    name: 'AI, built in',
+    desc: "You know your product needs AI but don't know where to start. I build the integration — agents, workflows, Anthropic/Claude APIs — and I speak both the product language and the technical one.",
+    subject: 'AI integration project',
   },
   {
     num: '05',
-    name: 'a friend who codes',
-    desc: "Monthly, for the side-project you can't stop thinking about. We meet, I unblock you, you ship.",
+    name: 'a site that stays alive',
+    desc: "For studios, founders, cultural spaces. Content-heavy, editorially considered, with a CMS you'll actually use. I design the structure, write the first words, and hand you the keys.",
+    subject: 'website / CMS project',
+  },
+  {
+    num: '06',
+    name: 'a workshop or a room',
+    desc: "Team onboarding, founder sprints, teaching code from scratch. I've run full-stack curricula for Le Wagon across Berlin and Cape Town. I design the material, I don't recycle slides.",
+    subject: 'workshop / education enquiry',
+  },
+  {
+    num: '07',
+    name: 'a talk',
+    desc: "Conferences, women-in-tech rooms, creative technology, founding & building. I share from experience — a female founder who shipped a real product and kept going.",
+    subject: 'speaking enquiry',
   },
 ]
 
@@ -51,12 +68,9 @@ export default async function Us() {
       {/* ── Top: lede + CTA ──────────────────────────────────────────────── */}
       <div className={styles.top}>
         <div className={styles.lede}>
-          <div className={styles.stamp}>creative technologist · open for work</div>
+          <p className={styles.label}>creative technologist · open for work</p>
 
-          <h1 className={styles.heading}>
-            open<br />
-            <span className={styles.headingRed}>for_</span>
-          </h1>
+          <h1 className={styles.heading}>Open For_</h1>
 
           <p className={styles.copy}>
             I&rsquo;m a <strong>creative technologist</strong> and an{' '}
@@ -97,14 +111,18 @@ export default async function Us() {
       {/* ── Work shapes ──────────────────────────────────────────────────── */}
       <div className={styles.shapesSection}>
         <p className={styles.shapesLabel}>— ways we can work together —</p>
-        {SHAPES.map(({ num, name, desc }) => (
+        {SHAPES.map(({ num, name, desc, subject }) => (
           <div key={num} className={styles.shapeRow}>
             <div className={styles.shapeNum}>№ {num}</div>
             <div>
               <div className={styles.shapeName}>{name}</div>
               <div className={styles.shapeDesc}>{desc}</div>
             </div>
-            <div className={styles.shapeArrow}>→</div>
+            <a
+              href={`mailto:${email}?subject=${encodeURIComponent(subject)}`}
+              className={styles.shapeArrow}
+              aria-label={`Get in touch about ${name}`}
+            >→</a>
           </div>
         ))}
       </div>

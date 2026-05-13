@@ -22,12 +22,17 @@ export default async function Home() {
     } catch { /* fall through to defaults */ }
   }
 
-  const heroPoemText = settings?.heroPoemText || DEFAULT_HERO
-  const logoText = settings?.logoPlaceholderText || 'lizzyp.'
-  const homeCopy = settings?.contactIntroCopy || DEFAULT_COPY
-  const coverImageUrl = settings?.coverImage
+  const heroPoemText   = settings?.heroPoemText || DEFAULT_HERO
+  const logoText       = settings?.logoPlaceholderText || 'lizzyp.'
+  const homeCopy       = settings?.contactIntroCopy || DEFAULT_COPY
+  const coverImageUrl  = settings?.coverImage
     ? urlFor(settings.coverImage).width(1400).url()
     : null
+  const aboutTagline   = settings?.aboutTagline as string | undefined
+  const aboutPhotos    = (settings?.aboutPhotos ?? []) as Array<{
+    image: { asset: { _ref: string } }
+    caption?: string
+  }>
 
   return (
     <main className={styles.page}>
@@ -61,6 +66,51 @@ export default async function Home() {
 
       {/* ─── Intro copy — scroll-triggered typewriter ─── */}
       <TypewriterSection text={homeCopy} />
+
+      {/* ─── About / photos ───────────────────────────── */}
+      {aboutPhotos.length > 0 && (
+        <section id="about" className={styles.about}>
+          <div className={styles.aboutHead}>
+            <p className={styles.aboutEyebrow}>in frame</p>
+            <h2 className={styles.aboutTitle}>the human_</h2>
+            {aboutTagline && <p className={styles.aboutTagline}>{aboutTagline}</p>}
+          </div>
+          <div className={styles.photoGrid}>
+            {aboutPhotos.map((p, i) => (
+              <div key={i} className={styles.photoWrap}>
+                <Image
+                  src={urlFor(p.image).width(800).url()}
+                  alt={p.caption || ''}
+                  width={800}
+                  height={1000}
+                  className={styles.photo}
+                />
+                {p.caption && <p className={styles.photoCaption}>{p.caption}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ─── Other things ─────────────────────────────── */}
+      <section className={styles.otherThings}>
+        <div className={styles.otherHead}>
+          <p className={styles.aboutEyebrow}>other things</p>
+          <h2 className={styles.otherTitle}>about me_</h2>
+        </div>
+        <ul className={styles.otherList}>
+          <li>ex athlete &amp; sports science student</li>
+          <li>certified yoga teacher</li>
+          <li>speaks 3 languages — biggest life goal is 5</li>
+          <li>has visited all continents</li>
+          <li>ex seasonal flight attendant</li>
+          <li>ex strict vegan (still figuring that one out)</li>
+          <li>quadruple auntie to 4 brilliant humans</li>
+        </ul>
+        <p className={styles.otherCaption}>
+          you can interpret for yourself what this says about me.
+        </p>
+      </section>
 
     </main>
   )

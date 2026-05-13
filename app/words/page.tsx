@@ -18,6 +18,11 @@ const DEFAULT_TOPICS = [
   'Full immersion \u2014 on learning anything',
 ]
 
+const DEFAULT_SPEAKING_INTRO = [
+  'For most of my life, public speaking terrified me. Then I stepped into a co-founder role \u2014 and suddenly I was being called onto stages. That first time I stood up there, something shifted. Not just for me, but in the room. Sharing my experience as a female founder, navigating fear and uncertainty in public, turned out to resonate with people in ways I hadn\'t expected.',
+  'I\'m now open to speaking engagements, panels, and conversations where that perspective is useful.',
+]
+
 interface SubstackPost {
   guid: string
   title: string
@@ -85,85 +90,104 @@ export default async function Words() {
           {substackSettings?.name || 'critical sidequest'}
         </p>
         <h1 className={styles.title}>Words</h1>
+        <p className={styles.intro}>
+          I use words to express myself — written and spoken. For play, for processing, for connection.
+        </p>
         {substackSettings?.tagline && (
           <p className={styles.tagline}>{substackSettings.tagline}</p>
         )}
+        <nav className={styles.anchorNav} aria-label="Jump to section">
+          <a href="#writing" className={styles.anchorLink}>Writing</a>
+          <a href="#speaking" className={styles.anchorLink}>Speaking</a>
+          {(poems as { _id: string }[]).length > 0 && (
+            <a href="#poetry" className={styles.anchorLink}>Poetry</a>
+          )}
+        </nav>
       </div>
 
-      {/* ─── Poems ──────────────────────────────────────── */}
-      {(poems as { _id: string }[]).length > 0 && (
-        <section className={styles.section}>
-          <p className={styles.sectionLabel}>poems</p>
-          {(poems as { _id: string; title: string; body: string; publishedAt?: string }[]).map((poem) => (
-            <PoemBlock key={poem._id} poem={poem} />
-          ))}
-        </section>
-      )}
-
       {/* ─── Substack ───────────────────────────────────── */}
-      <section className={styles.section}>
-        <p className={styles.sectionLabel}>dispatches</p>
-        {substackPosts.length > 0 ? (
-          <div className={styles.posts}>
-            {substackPosts.map((post) => (
+      <section id="writing" className={styles.section}>
+        <p className={styles.sectionLabel}>writing</p>
+        <div>
+          {substackPosts.length > 0 ? (
+            <div className={styles.posts}>
+              {substackPosts.map((post) => (
+                <a
+                  key={post.guid}
+                  href={post.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.post}
+                >
+                  <div className={styles.postMeta}>
+                    <span className={styles.postDate}>{formatPostDate(post.pubDate)}</span>
+                    <span className={styles.postTag}>essay</span>
+                  </div>
+                  <h2 className={styles.postTitle}>{post.title}</h2>
+                  <p className={styles.postExcerpt}>{excerptFrom(post.description)}</p>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.posts}>
               <a
-                key={post.guid}
-                href={post.link}
+                href={SUBSTACK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.post}
               >
-                <div className={styles.postMeta}>
-                  <span className={styles.postDate}>{formatPostDate(post.pubDate)}</span>
-                  <span className={styles.postTag}>dispatch</span>
-                </div>
-                <h2 className={styles.postTitle}>{post.title}</h2>
-                <p className={styles.postExcerpt}>{excerptFrom(post.description)}</p>
+                <h2 className={styles.postTitle}>Read all essays on Substack →</h2>
               </a>
-            ))}
-          </div>
-        ) : (
-          <div className={styles.posts}>
-            <a
-              href={SUBSTACK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.post}
-            >
-              <h2 className={styles.postTitle}>Read all dispatches on Substack →</h2>
-            </a>
-          </div>
-        )}
-        <a
-          href={SUBSTACK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.readAll}
-        >
-          Read all dispatches →
-        </a>
+            </div>
+          )}
+          <a
+            href={SUBSTACK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.readAll}
+          >
+            Read all essays on Substack →
+          </a>
+        </div>
       </section>
 
       {/* ─── Speaking ───────────────────────────────────── */}
-      <section className={styles.section}>
+      <section id="speaking" className={styles.section}>
         <p className={styles.sectionLabel}>speaking</p>
-        {speakingSettings?.intro && (
-          <p className={styles.speakingIntro}>{speakingSettings.intro}</p>
-        )}
-        <ul className={styles.topicsList}>
-          {topics.map((topic: string) => (
-            <li key={topic} className={styles.topic}>{topic}</li>
-          ))}
-        </ul>
-        {speakingSettings?.ctaEmail && (
+        <div>
+          {speakingSettings?.intro ? (
+            <p className={styles.speakingIntro}>{speakingSettings.intro}</p>
+          ) : (
+            DEFAULT_SPEAKING_INTRO.map((para, i) => (
+              <p key={i} className={styles.speakingIntro}>{para}</p>
+            ))
+          )}
+          <ul className={styles.topicsList}>
+            {topics.map((topic: string) => (
+              <li key={topic} className={styles.topic}>{topic}</li>
+            ))}
+          </ul>
           <a
-            href={`mailto:${speakingSettings.ctaEmail}`}
+            href={speakingSettings?.ctaEmail ? `mailto:${speakingSettings.ctaEmail}` : 'mailto:sayhi@lisbethpurrucker.com'}
             className={styles.speakingCta}
           >
-            {speakingSettings.ctaText || 'Get in touch'} →
+            {speakingSettings?.ctaText || 'Invite me to speak'} →
           </a>
-        )}
+        </div>
       </section>
+
+      {/* ─── Poetry ─────────────────────────────────────── */}
+      {(poems as { _id: string }[]).length > 0 && (
+        <section id="poetry" className={styles.section}>
+          <p className={styles.sectionLabel}>poetry</p>
+          <div>
+            {(poems as { _id: string; title: string; body: string; publishedAt?: string }[]).map((poem) => (
+              <PoemBlock key={poem._id} poem={poem} />
+            ))}
+          </div>
+        </section>
+      )}
+
       </div>
     </main>
   )

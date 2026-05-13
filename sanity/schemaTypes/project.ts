@@ -70,6 +70,19 @@ export const project = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'videoFile',
+      title: 'Video File (MP4)',
+      type: 'file',
+      options: { accept: 'video/mp4,video/*' },
+      description: 'Upload an MP4 to show instead of (or alongside) the screenshot.',
+    }),
+    defineField({
+      name: 'videoUrl',
+      title: 'Video URL (YouTube / Vimeo)',
+      type: 'url',
+      description: 'Alternative to uploading — paste a YouTube or Vimeo link.',
+    }),
+    defineField({
       name: 'theWhy',
       title: 'The Why',
       type: 'array',

@@ -133,6 +133,129 @@
   100% { transform: scaleY(1); opacity: 0.3; }
 }
 
+/* ─── About / photos ─────────────────────────────── */
+
+.about {
+  padding: 7rem 4rem;
+  background: var(--bg);
+}
+
+.aboutHead {
+  margin-bottom: 4rem;
+}
+
+.aboutEyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.75rem;
+}
+
+.aboutTitle {
+  font-family: var(--font-fluor-rush);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.aboutTagline {
+  font-family: var(--hand);
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.photoGrid {
+  columns: 3;
+  column-gap: 1.25rem;
+}
+
+.photoWrap {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(15%);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.photo:hover {
+  filter: grayscale(0%);
+  transform: scale(1.01);
+}
+
+.photoCaption {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  text-transform: uppercase;
+  padding: 0.4rem 0 0;
+}
+
+/* ─── Other things ───────────────────────────────── */
+
+.otherThings {
+  padding: 5rem 4rem 6rem;
+  border-top: 1px solid var(--border);
+}
+
+.otherHead {
+  margin-bottom: 2.5rem;
+}
+
+.otherTitle {
+  font-family: var(--font-fluor-rush);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  line-height: 0.95;
+}
+
+.otherList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 2rem;
+  max-width: 560px;
+}
+
+.otherList li {
+  font-size: 1rem;
+  color: var(--muted);
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.otherList li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+}
+
+.otherCaption {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  font-style: italic;
+}
+
 /* ─── Mobile ──────────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -147,5 +270,22 @@
 
   .overlay {
     background: rgba(13, 12, 16, 0.55);
+  }
+
+  .about {
+    padding: 4rem 1.5rem;
+  }
+
+  .otherThings {
+    padding: 4rem 1.5rem 5rem;
+  }
+
+  .photoGrid {
+    columns: 2;
+    column-gap: 0.75rem;
+  }
+
+  .photoWrap {
+    margin-bottom: 0.75rem;
   }
 }

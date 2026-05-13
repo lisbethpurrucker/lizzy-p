@@ -48,5 +48,32 @@ export const siteSettings = defineType({
       title: 'Footer Text',
       type: 'string',
     }),
+    defineField({
+      name: 'aboutTagline',
+      title: 'About Tagline',
+      type: 'string',
+      description: 'Short line shown above the photo grid on the home page (e.g. "the human behind the work").',
+    }),
+    defineField({
+      name: 'aboutPhotos',
+      title: 'About Photos',
+      type: 'array',
+      description: 'A few photographs that give visitors a sense of who you are.',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'image', title: 'Photo', type: 'image', options: { hotspot: true } }),
+            defineField({ name: 'caption', title: 'Caption (optional)', type: 'string' }),
+          ],
+          preview: {
+            select: { media: 'image', title: 'caption' },
+            prepare({ media, title }: { media: unknown; title?: string }) {
+              return { media, title: title || 'Photo' }
+            },
+          },
+        },
+      ],
+    }),
   ],
 })

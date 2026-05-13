@@ -9,7 +9,12 @@ export const getSiteSettingsQuery = groq`
     contactIntroCopy,
     email,
     footerText,
-    coverImage
+    coverImage,
+    aboutTagline,
+    aboutPhotos[] {
+      image,
+      caption
+    }
   }
 `
 
@@ -68,6 +73,8 @@ export const getProjectBySlugQuery = groq`
     yearEnd,
     status,
     coverImage,
+    "videoFile": videoFile { asset->{ url } },
+    videoUrl,
     theWhy,
     theHow,
     whatILearned,
@@ -112,9 +119,9 @@ export const getOmmEntriesQuery = groq`
     linkTitle,
     linkDescription,
     linkImage,
-    videoFile,
     videoUrl,
-    audioFile
+    "videoFile": videoFile { asset->{ url } },
+    "audioFile": audioFile { asset->{ url } }
   }
 `
 

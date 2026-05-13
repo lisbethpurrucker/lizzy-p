@@ -49,11 +49,11 @@
 }
 
 .quoteText {
-  font-family: var(--hand);
-  font-size: 1.05rem;
+  font-family: var(--mono);
+  font-size: 0.9375rem;
   color: var(--text);
-  line-height: 1.6;
-  font-style: italic;
+  line-height: 1.65;
+  font-style: normal;
   margin-bottom: 0.75rem;
   padding-top: 1rem;
 }
