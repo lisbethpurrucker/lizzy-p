@@ -68,8 +68,8 @@ export const siteSettings = defineType({
           ],
           preview: {
             select: { media: 'image', title: 'caption' },
-            prepare({ media, title }: { media: unknown; title?: string }) {
-              return { media, title: title || 'Photo' }
+            prepare(value: Record<string, any>) {
+              return { media: value.media, title: (value.title as string) || 'Photo' }
             },
           },
         },
