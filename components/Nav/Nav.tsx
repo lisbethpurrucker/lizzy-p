@@ -89,7 +89,7 @@ export default function Nav() {
     <>
       <header className={styles.header}>
         <div className={styles.inner}>
-          <Link href="/" className={styles.logo}>lizzyp_</Link>
+          <Link href="/" className={styles.logo}>lizzyp.</Link>
           <div className={styles.controls}>
             <button
               className={styles.themeToggle}

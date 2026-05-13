@@ -37,7 +37,7 @@ export default function Footer({ email }: { email: string }) {
         </div>
 
         <div className={styles.bottom}>
-          <Link href="/" className={styles.logo}>lizzyp_</Link>
+          <Link href="/" className={styles.logo}>lizzyp.</Link>
           <span className={styles.copy}>© {new Date().getFullYear()} Lisbeth Purrucker</span>
         </div>
 

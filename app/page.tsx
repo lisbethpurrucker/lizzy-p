@@ -72,7 +72,7 @@ export default async function Home() {
         <section id="about" className={styles.about}>
           <div className={styles.aboutHead}>
             <p className={styles.aboutEyebrow}>in frame</p>
-            <h2 className={styles.aboutTitle}>the human_</h2>
+            <h2 className={styles.aboutTitle}>the human.</h2>
             {aboutTagline && <p className={styles.aboutTagline}>{aboutTagline}</p>}
           </div>
           <div className={styles.photoGrid}>

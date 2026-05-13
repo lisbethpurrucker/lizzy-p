@@ -64,7 +64,7 @@ export default async function Us() {
         <div className={styles.lede}>
           <p className={styles.label}>creative technologist · open for work</p>
 
-          <h1 className={styles.heading}>Open For_</h1>
+          <h1 className={styles.heading}>Open For.</h1>
 
           <p className={styles.copy}>
             I&rsquo;m a <strong>creative technologist</strong> and an{' '}

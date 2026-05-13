@@ -248,7 +248,7 @@ export default function SolarSystem({ categories, projects }: Props) {
               <div>
                 <p className={styles.catEyebrow}>universe / {activeCategory.slug}</p>
                 <h1 className={styles.catTitle}>
-                  {activeCategory.name}<span className={styles.accent}>_</span>
+                  {activeCategory.name}<span className={styles.accent}>.</span>
                 </h1>
                 {activeCategory.introLine && (
                   <p className={styles.catIntro}>{activeCategory.introLine}</p>
