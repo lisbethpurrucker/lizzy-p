@@ -4,7 +4,7 @@ import { getSiteSettingsQuery } from '@/sanity/lib/queries'
 
 export const revalidate = 60
 
-const FALLBACK_EMAIL = 'sayhi@lisbethpurrucker.com'
+const FALLBACK_EMAIL = 'lisbethpurrucker@gmail.com'
 
 const SHAPES = [
   {

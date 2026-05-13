@@ -7,7 +7,7 @@ import Footer from '@/components/Footer/Footer'
 import { client, isConfigured } from '@/sanity/lib/client'
 import { getSiteSettingsQuery } from '@/sanity/lib/queries'
 
-const FALLBACK_EMAIL = 'sayhi@lisbethpurrucker.com'
+const FALLBACK_EMAIL = 'lisbethpurrucker@gmail.com'
 
 const departureMono = localFont({
   src: '../public/fonts/DepartureMono-Regular.woff2',

@@ -171,7 +171,7 @@ export default async function Words() {
             ))}
           </ul>
           <a
-            href={`mailto:${speakingSettings?.ctaEmail || siteSettings?.email || 'sayhi@lisbethpurrucker.com'}`}
+            href={`mailto:${speakingSettings?.ctaEmail || siteSettings?.email || 'lisbethpurrucker@gmail.com'}`}
             className={styles.speakingCta}
           >
             {speakingSettings?.ctaText || 'Invite me to speak'} →
