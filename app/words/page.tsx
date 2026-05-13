@@ -92,7 +92,7 @@ export default async function Words() {
         <p className={styles.label}>
           {substackSettings?.name || 'critical sidequest'}
         </p>
-        <h1 className={styles.title}>Words</h1>
+        <h1 className={styles.title}>Words.</h1>
         <p className={styles.intro}>
           I use words to express myself — written and spoken. For play, for processing, for connection.
         </p>

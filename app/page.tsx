@@ -96,7 +96,7 @@ export default async function Home() {
       <section className={styles.otherThings}>
         <div className={styles.otherHead}>
           <p className={styles.aboutEyebrow}>other things</p>
-          <h2 className={styles.otherTitle}>about me</h2>
+          <h2 className={styles.otherTitle}>about me.</h2>
         </div>
         <ul className={styles.otherList}>
           <li>ex athlete &amp; sports science student</li>

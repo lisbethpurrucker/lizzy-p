@@ -443,7 +443,7 @@ export default function SolarSystem({ categories, projects }: Props) {
         {/* Header */}
         <div className={styles.header}>
           <p className={styles.eyebrow}>my work</p>
-          <h1 className={styles.title}>universe</h1>
+          <h1 className={styles.title}>universe.</h1>
           <p className={styles.subtitle}>five worlds. click any to explore.</p>
         </div>
 
