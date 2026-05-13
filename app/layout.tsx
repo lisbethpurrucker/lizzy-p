@@ -4,6 +4,10 @@ import { JetBrains_Mono, Bungee, Caveat } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/Nav/Nav'
 import Footer from '@/components/Footer/Footer'
+import { client, isConfigured } from '@/sanity/lib/client'
+import { getSiteSettingsQuery } from '@/sanity/lib/queries'
+
+const FALLBACK_EMAIL = 'sayhi@lisbethpurrucker.com'
 
 const departureMono = localFont({
   src: '../public/fonts/DepartureMono-Regular.woff2',
@@ -49,7 +53,15 @@ export const metadata: Metadata = {
   description: 'creative technologist. artist. writer.',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let email = FALLBACK_EMAIL
+  if (isConfigured) {
+    try {
+      const settings = await client.fetch(getSiteSettingsQuery)
+      if (settings?.email) email = settings.email
+    } catch { /* use fallback */ }
+  }
+
   return (
     <html
       lang="en"
@@ -58,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Nav />
         {children}
-        <Footer />
+        <Footer email={email} />
       </body>
     </html>
   )

@@ -11,7 +11,7 @@ const links = [
   { href: '/us',       label: 'Open For' },
 ]
 
-export default function Footer() {
+export default function Footer({ email }: { email: string }) {
   const pathname = usePathname()
   if (pathname.startsWith('/studio')) return null
 
@@ -22,7 +22,7 @@ export default function Footer() {
         <div className={styles.top}>
           <div className={styles.message}>
             <p className={styles.line}>i&rsquo;m curious what you have to say.</p>
-            <a href="mailto:sayhi@lisbethpurrucker.com" className={styles.cta}>
+            <a href={`mailto:${email}`} className={styles.cta}>
               hit me up →
             </a>
           </div>

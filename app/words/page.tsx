@@ -4,6 +4,7 @@ import {
   getAllPoemsQuery,
   getSubstackSettingsQuery,
   getSpeakingSettingsQuery,
+  getSiteSettingsQuery,
 } from '@/sanity/lib/queries'
 import PoemBlock from '@/components/PoemBlock/PoemBlock'
 
@@ -65,13 +66,15 @@ export default async function Words() {
   let poems: unknown[] = []
   let substackSettings = null
   let speakingSettings = null
+  let siteSettings = null
 
   if (isConfigured) {
     try {
-      ;[poems, substackSettings, speakingSettings] = await Promise.all([
+      ;[poems, substackSettings, speakingSettings, siteSettings] = await Promise.all([
         client.fetch(getAllPoemsQuery),
         client.fetch(getSubstackSettingsQuery),
         client.fetch(getSpeakingSettingsQuery),
+        client.fetch(getSiteSettingsQuery),
       ])
     } catch { /* fall through to defaults */ }
   }
@@ -168,7 +171,7 @@ export default async function Words() {
             ))}
           </ul>
           <a
-            href={speakingSettings?.ctaEmail ? `mailto:${speakingSettings.ctaEmail}` : 'mailto:sayhi@lisbethpurrucker.com'}
+            href={`mailto:${speakingSettings?.ctaEmail || siteSettings?.email || 'sayhi@lisbethpurrucker.com'}`}
             className={styles.speakingCta}
           >
             {speakingSettings?.ctaText || 'Invite me to speak'} →
