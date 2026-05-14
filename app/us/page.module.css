@@ -210,6 +210,42 @@
 }
 
 
+/* ── CV ───────────────────────────────────────────────────────────────────── */
+
+.cvSection {
+  padding: 0 56px 80px;
+  border-top: 1px solid var(--border);
+}
+
+.cvHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+
+.cvDownload {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.cvDownload:hover { opacity: 0.6; }
+
+.cvFrame {
+  display: block;
+  width: 100%;
+  height: 80vh;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.cvMobileDownload { display: none; }
+
 /* ── Mobile ───────────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -229,4 +265,16 @@
   }
 
   .shapeArrow { display: none; }
+
+  .cvSection {
+    padding: 0 20px 60px;
+  }
+
+  .cvFrame { display: none; }
+
+  .cvMobileDownload {
+    display: block;
+    padding: 32px 0;
+    text-align: center;
+  }
 }

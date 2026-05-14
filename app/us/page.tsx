@@ -55,6 +55,7 @@ export default async function Us() {
   }
 
   const email = settings?.email || FALLBACK_EMAIL
+  const cvUrl = settings?.cvUrl as string | undefined
 
   return (
     <main className={styles.page}>
@@ -116,6 +117,32 @@ export default async function Us() {
           </div>
         ))}
       </div>
+
+      {/* ── CV ───────────────────────────────────────────────────────────── */}
+      {cvUrl && (
+        <div className={styles.cvSection}>
+          <div className={styles.cvHead}>
+            <p className={styles.shapesLabel}>— on paper —</p>
+            <a
+              href={cvUrl}
+              download
+              className={styles.cvDownload}
+            >
+              download PDF ↓
+            </a>
+          </div>
+          <iframe
+            src={cvUrl}
+            className={styles.cvFrame}
+            title="CV"
+          />
+          <div className={styles.cvMobileDownload}>
+            <a href={cvUrl} download className={styles.cvDownload}>
+              download PDF ↓
+            </a>
+          </div>
+        </div>
+      )}
 
     </main>
   )

@@ -55,6 +55,13 @@ export const siteSettings = defineType({
       description: 'Short line shown above the photo grid on the home page (e.g. "the human behind the work").',
     }),
     defineField({
+      name: 'cv',
+      title: 'CV / Résumé (PDF)',
+      type: 'file',
+      description: 'Upload a PDF — shown as a preview on the Open For page with a download link.',
+      options: { accept: '.pdf,application/pdf' },
+    }),
+    defineField({
       name: 'aboutPhotos',
       title: 'About Photos',
       type: 'array',

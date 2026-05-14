@@ -14,7 +14,8 @@ export const getSiteSettingsQuery = groq`
     aboutPhotos[] {
       image,
       caption
-    }
+    },
+    "cvUrl": cv.asset->url
   }
 `
 
