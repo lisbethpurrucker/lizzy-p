@@ -1,6 +1,7 @@
 import styles from './page.module.css'
 import { client, isConfigured } from '@/sanity/lib/client'
 import { getSiteSettingsQuery } from '@/sanity/lib/queries'
+import CvViewer from '@/components/CvViewer/CvViewer'
 
 export const revalidate = 60
 
@@ -121,26 +122,8 @@ export default async function Us() {
       {/* ── CV ───────────────────────────────────────────────────────────── */}
       {cvUrl && (
         <div className={styles.cvSection}>
-          <div className={styles.cvHead}>
-            <p className={styles.shapesLabel}>— on paper —</p>
-            <a
-              href={cvUrl}
-              download
-              className={styles.cvDownload}
-            >
-              download PDF ↓
-            </a>
-          </div>
-          <iframe
-            src={cvUrl}
-            className={styles.cvFrame}
-            title="CV"
-          />
-          <div className={styles.cvMobileDownload}>
-            <a href={cvUrl} download className={styles.cvDownload}>
-              download PDF ↓
-            </a>
-          </div>
+          <p className={styles.shapesLabel}>— on paper —</p>
+          <CvViewer url={cvUrl} downloadUrl={cvUrl} />
         </div>
       )}
 
