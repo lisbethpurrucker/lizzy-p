@@ -6,6 +6,39 @@ import styles from './SolarSystem.module.css'
 
 type PlanetKind = 'saturn' | 'venus' | 'jupiter' | 'mars' | 'moon'
 
+// ── Moon phase + zodiac calculation ────────────────────────────────────────
+
+const ZODIAC = ['aries','taurus','gemini','cancer','leo','virgo',
+                 'libra','scorpio','sagittarius','capricorn','aquarius','pisces']
+const ZODIAC_GLYPHS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓']
+
+function moonInfo() {
+  const JD = Date.now() / 86400000 + 2440587.5
+  // Reference: new moon Jan 6 2000 18:14 UTC → JD 2451551.26, ecliptic lon ~280°
+  const REF_JD  = 2451551.26
+  const REF_LON = 280
+  const SYNODIC  = 29.53058867
+  const DAILY    = 360 / 27.32158
+
+  const d    = JD - REF_JD
+  const age  = ((d % SYNODIC) + SYNODIC) % SYNODIC
+  const lon  = ((REF_LON + d * DAILY) % 360 + 360) % 360
+  const sign = ZODIAC[Math.floor(lon / 30)]
+  const glyph = ZODIAC_GLYPHS[Math.floor(lon / 30)]
+
+  let phase: string
+  if      (age <  1.85) phase = 'new moon'
+  else if (age <  7.38) phase = 'waxing crescent'
+  else if (age <  9.22) phase = 'first quarter'
+  else if (age < 14.77) phase = 'waxing gibbous'
+  else if (age < 16.61) phase = 'full moon'
+  else if (age < 22.15) phase = 'waning gibbous'
+  else if (age < 23.99) phase = 'last quarter'
+  else                   phase = 'waning crescent'
+
+  return { phase, sign, glyph }
+}
+
 interface Category {
   _id: string
   name: string
@@ -389,6 +422,8 @@ export default function SolarSystem({ categories, projects }: Props) {
         {/* Planets */}
         {planets.map((planet) => {
           const isHover = hoverId === planet._id
+          const isMoon  = planet.kind === 'moon'
+          const moon    = isMoon ? moonInfo() : null
           return (
             <div
               key={planet._id}
@@ -411,6 +446,12 @@ export default function SolarSystem({ categories, projects }: Props) {
                 id={planet.slug}
                 glowing={isHover}
               />
+              {isMoon && moon && (
+                <div className={`${styles.moonTooltip} ${isHover ? styles.moonTooltipVisible : ''}`}>
+                  <span className={styles.moonPhase}>{moon.phase}</span>
+                  <span className={styles.moonSign}>{moon.glyph} in {moon.sign}</span>
+                </div>
+              )}
             </div>
           )
         })}

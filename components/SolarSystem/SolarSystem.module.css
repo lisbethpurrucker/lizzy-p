@@ -49,6 +49,47 @@
   filter: drop-shadow(0 0 22px rgba(216, 35, 42, 0.55));
 }
 
+/* ── Moon phase tooltip ──────────────────────────────────────────────────── */
+
+.moonTooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: rgba(12, 10, 8, 0.88);
+  border: 1px solid rgba(242, 236, 226, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 8px 14px 9px;
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.moonTooltipVisible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.moonPhase {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.95);
+}
+
+.moonSign {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(242, 236, 226, 0.5);
+}
+
 /* ── Planet label below each planet ──────────────────────────────────────── */
 
 .label {
