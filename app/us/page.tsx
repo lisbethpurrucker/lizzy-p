@@ -10,13 +10,13 @@ const SHAPES = [
   {
     num: '01',
     name: 'a technical co-founder, briefly',
-    desc: "You're founding something and need someone to own the tech. Architecture, stack decisions, first lines of code. I step in properly — not advisory, but builder-mode. I've done it before.",
+    desc: "You're founding something with impact and need someone to own the tech. Architecture, stack decisions, first lines of code. I step in properly — not advisory, but builder-mode. I've done it before.",
     subject: 'technical co-founder enquiry',
   },
   {
     num: '02',
     name: 'an MVP before the round',
-    desc: "You need something working before the investor meeting. Full-stack, production-ready, fast. I've shipped apps with real users. I write the code and the copy.",
+    desc: "You need something working before the investor meeting. Full-stack, production-ready, fast. I've shipped apps with real users.",
     subject: 'MVP development',
   },
   {
@@ -28,13 +28,13 @@ const SHAPES = [
   {
     num: '04',
     name: 'a site that stays alive',
-    desc: "For studios, founders, cultural spaces. Content-heavy, editorially considered, with a CMS you'll actually use. I design the structure, write the first words, and hand you the keys.",
+    desc: "For studios, founders, cultural spaces. Content-heavy, editorially considered, with a CMS you'll actually use. I design the structure and hand you the keys.",
     subject: 'website / CMS project',
   },
   {
     num: '05',
     name: 'a workshop or a room',
-    desc: "Team onboarding, founder sprints, teaching code from scratch. I've run full-stack curricula for Le Wagon across Berlin and Cape Town. I design the material, I don't recycle slides.",
+    desc: "Team onboarding, founder sprints, teaching code from scratch. I've run full-stack curricula for Le Wagon across Berlin and Cape Town ofr 5+ years.",
     subject: 'workshop / education enquiry',
   },
   {
@@ -76,29 +76,25 @@ export default async function Us() {
           <p className={styles.copy}>
             I&rsquo;m on a learning journey deep into <strong>creative coding</strong> — installations
             in <strong>TouchDesigner</strong>, web frontends in{' '}
-            <strong>p5.js, three.js, shaders</strong>. Things that move, react, surprise.
+            <strong>p5.js, three.js</strong>. Things that move, react, surprise.
           </p>
           <p className={styles.copy}>
-            I build small, weird, well-made things on the web — landing pages, prototypes,
+            I build things on the web — landing pages, prototypes,
             interactive essays, the occasional whole product. I write the code{' '}
             <strong>and</strong> the copy.
           </p>
         </div>
 
         <div className={styles.cta}>
-          <p className={styles.ctaLabel}>get in touch</p>
+          <p className={styles.ctaLabel}>let&rsquo;s make something</p>
           <p className={styles.ctaHead}>start a thing.</p>
           <p className={styles.ctaBody}>
             Send me one paragraph. Tell me what&rsquo;s broken, what you&rsquo;re
-            hoping for, and when. I read everything and reply within two days.
+            hoping for, and when.
           </p>
           <a href={`mailto:${email}`} className={styles.ctaEmail}>
             {email} →
           </a>
-          <div className={styles.ctaPs}>
-            ps. the question I always ask:<br />
-            <span className={styles.ctaQuestion}>&ldquo;what would make this feel <u>alive</u>?&rdquo;</span>
-          </div>
         </div>
       </div>
 

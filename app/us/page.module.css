@@ -16,7 +16,7 @@
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 56px;
-  align-items: end;
+  align-items: center;
   padding: 56px 56px 48px;
   border-bottom: 1px solid var(--text);
 }
@@ -56,15 +56,12 @@
   font-weight: 700;
 }
 
-/* ── Right: CTA card ─────────────────────────────────────────────────────── */
+/* ── Right: CTA — loose editorial invitation ─────────────────────────────── */
 
 .cta {
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--red);
-  padding: 28px 28px 24px;
-  background: var(--surface);
-  box-shadow: 0 6px 36px rgba(0, 0, 0, 0.07);
+  padding: 0;
   font-family: var(--mono);
+  align-self: center;
 }
 
 .ctaLabel {
@@ -72,42 +69,67 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctaLabel::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--muted);
+  flex-shrink: 0;
 }
 
 .ctaHead {
   font-family: var(--hand);
-  font-size: 2rem;
+  font-size: clamp(2.4rem, 4vw, 3.2rem);
   color: var(--red);
-  line-height: 1.1;
-  margin-bottom: 14px;
+  line-height: 1.05;
+  margin-bottom: 1.2rem;
 }
 
 .ctaBody {
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text);
-  margin-bottom: 18px;
+  margin-bottom: 1.6rem;
+  max-width: 38ch;
 }
 
 .ctaEmail {
   display: inline-block;
-  font-weight: 700;
-  font-size: 13px;
+  font-family: var(--hand);
+  font-size: 1.15rem;
   color: var(--red);
-  border-bottom: 2px solid var(--red);
-  padding-bottom: 2px;
   text-decoration: none;
+  position: relative;
   transition: opacity 0.15s;
 }
 
-.ctaEmail:hover { opacity: 0.7; }
+.ctaEmail::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--red);
+  opacity: 0.4;
+  transform: scaleX(0.85) rotate(-0.3deg);
+  transform-origin: left;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.ctaEmail:hover { opacity: 0.75; }
+.ctaEmail:hover::after { opacity: 0.8; transform: scaleX(1) rotate(-0.3deg); }
 
 .ctaPs {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
+  margin-top: 2rem;
+  font-size: 11px;
   color: var(--muted);
   line-height: 1.5;
 }
@@ -115,13 +137,14 @@
 .ctaQuestion {
   display: block;
   font-family: var(--hand);
-  font-size: 1.25rem;
-  color: var(--red);
-  margin-top: 4px;
+  font-size: 1.35rem;
+  color: var(--text);
+  margin-top: 6px;
+  opacity: 0.7;
 }
 
 .ctaQuestion u {
-  text-decoration-color: var(--red);
+  text-decoration-color: currentColor;
 }
 
 /* ── Work shapes ─────────────────────────────────────────────────────────── */
