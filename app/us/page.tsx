@@ -1,7 +1,9 @@
 import styles from './page.module.css'
 import { client, isConfigured } from '@/sanity/lib/client'
 import { getSiteSettingsQuery } from '@/sanity/lib/queries'
-import CvViewer from '@/components/CvViewer/CvViewer'
+import dynamic from 'next/dynamic'
+
+const CvViewer = dynamic(() => import('@/components/CvViewer/CvViewer'), { ssr: false })
 
 export const revalidate = 60
 
