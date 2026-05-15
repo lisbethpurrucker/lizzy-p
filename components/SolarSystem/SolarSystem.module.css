@@ -429,33 +429,32 @@
 /* ── Gallery grid ─────────────────────────────────────────────────────────── */
 
 .galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
+  columns: 3;
+  column-gap: 3px;
   padding: 3px;
 }
 
 .galleryThumb {
   position: relative;
-  aspect-ratio: 1;
   overflow: hidden;
-  background: #111;
+  background: var(--card);
   cursor: pointer;
   border: none;
   padding: 0;
   display: block;
+  break-inside: avoid;
+  margin-bottom: 3px;
 }
 
 .galleryImg {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   transition: transform 0.4s ease, filter 0.3s ease;
 }
 
 .galleryThumb:hover .galleryImg {
-  transform: scale(1.04);
+  transform: scale(1.02);
   filter: brightness(0.75);
 }
 
@@ -535,9 +534,11 @@
 
 .lightboxMeta {
   display: flex;
-  align-items: baseline;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
   width: 100%;
+  text-align: center;
 }
 
 .lightboxTitle {
@@ -552,15 +553,14 @@
   font-family: var(--mono);
   font-size: 11px;
   color: rgba(242, 236, 226, 0.4);
-  flex: 1;
 }
 
 .lightboxCount {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.15em;
-  color: rgba(242, 236, 226, 0.3);
-  margin-left: auto;
+  color: rgba(242, 236, 226, 0.25);
+  margin-top: 2px;
 }
 
 .lightboxClose {
@@ -618,7 +618,7 @@
   .header { top: 16px; left: 16px; }
   .hint   { display: none; }
 
-  .galleryGrid { grid-template-columns: repeat(2, 1fr); }
+  .galleryGrid { columns: 2; }
   .lightboxMedia { max-height: 60vh; }
   .lightboxNav { padding: 12px 14px; font-size: 1.2rem; }
 }
