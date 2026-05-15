@@ -53,9 +53,7 @@
 
 .moonTooltip {
   position: absolute;
-  bottom: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
+  transform: translateX(-50%) translateY(4px);
   background: rgba(12, 10, 8, 0.88);
   border: 1px solid rgba(242, 236, 226, 0.15);
   backdrop-filter: blur(8px);
@@ -67,6 +65,7 @@
   align-items: center;
   gap: 3px;
   opacity: 0;
+  z-index: 10;
   transition: opacity 0.22s ease, transform 0.22s ease;
 }
 

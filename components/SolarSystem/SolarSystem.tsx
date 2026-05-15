@@ -422,8 +422,6 @@ export default function SolarSystem({ categories, projects }: Props) {
         {/* Planets */}
         {planets.map((planet) => {
           const isHover = hoverId === planet._id
-          const isMoon  = planet.kind === 'moon'
-          const moon    = isMoon ? moonInfo() : null
           return (
             <div
               key={planet._id}
@@ -446,12 +444,26 @@ export default function SolarSystem({ categories, projects }: Props) {
                 id={planet.slug}
                 glowing={isHover}
               />
-              {isMoon && moon && (
-                <div className={`${styles.moonTooltip} ${isHover ? styles.moonTooltipVisible : ''}`}>
-                  <span className={styles.moonPhase}>{moon.phase}</span>
-                  <span className={styles.moonSign}>{moon.glyph} in {moon.sign}</span>
-                </div>
-              )}
+            </div>
+          )
+        })}
+
+        {/* Moon tooltip — rendered outside planet div to escape filter/overflow clipping */}
+        {planets.filter(p => p.kind === 'moon').map((planet) => {
+          const isHover = hoverId === planet._id
+          const moon = moonInfo()
+          return (
+            <div
+              key={`moon-tip-${planet._id}`}
+              className={`${styles.moonTooltip} ${isHover ? styles.moonTooltipVisible : ''}`}
+              style={{
+                left: `${(planet.px / W) * 100}%`,
+                top:  `calc(${(planet.py / H) * 100}% - ${planet.size / 2 + 14}px)`,
+              }}
+              aria-hidden="true"
+            >
+              <span className={styles.moonPhase}>{moon.phase}</span>
+              <span className={styles.moonSign}>{moon.glyph} in {moon.sign}</span>
             </div>
           )
         })}
