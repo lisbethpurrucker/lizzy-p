@@ -31,9 +31,10 @@ export const project = defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Full write-up (building, creating, collaborating)', value: 'full' },
+          { title: 'Full write-up (building, creating)', value: 'full' },
           { title: 'Gallery — film shots, photos', value: 'gallery' },
           { title: 'Video — animation, motion work', value: 'video' },
+          { title: 'Studio — collaboration partner', value: 'studio' },
         ],
         layout: 'radio',
       },
@@ -130,6 +131,31 @@ export const project = defineType({
       hidden: ({ document }) => document?.projectType === 'full',
     }),
 
+    // ── Studio type only ──────────────────────────────────────────────────────
+    defineField({
+      name: 'studioMission',
+      title: 'Mission',
+      type: 'text',
+      rows: 4,
+      description: 'What this studio stands for. Written in your voice.',
+      hidden: ({ document }) => document?.projectType !== 'studio',
+    }),
+    defineField({
+      name: 'studioOffer',
+      title: 'What we offer',
+      type: 'text',
+      rows: 4,
+      description: 'What clients / collaborators can hire or engage you for.',
+      hidden: ({ document }) => document?.projectType !== 'studio',
+    }),
+    defineField({
+      name: 'studioPartner',
+      title: 'Co-founder / Partner name',
+      type: 'string',
+      description: 'e.g. "with Jana Pilz" — shown on the studio page.',
+      hidden: ({ document }) => document?.projectType !== 'studio',
+    }),
+
     // ── Full type write-up fields ──────────────────────────────────
     defineField({
       name: 'theWhy',
@@ -175,7 +201,7 @@ export const project = defineType({
       title: 'External Link',
       type: 'url',
       description: 'Optional. Opens in a new tab.',
-      hidden: ({ document }) => document?.projectType !== 'full',
+      hidden: ({ document }) => document?.projectType !== 'full' && document?.projectType !== 'studio',
     }),
     defineField({
       name: 'order',

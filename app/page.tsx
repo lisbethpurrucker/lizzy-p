@@ -99,13 +99,13 @@ export default async function Home() {
           <h2 className={styles.otherTitle}>about me.</h2>
         </div>
         <ul className={styles.otherList}>
-          <li>ex athlete &amp; sports science student</li>
           <li>certified yoga teacher</li>
-          <li>life goal: to speak 5 languages fluently (3/5 check)</li>
-          <li>second life goal: own ducklings</li>
+          <li>ex athlete &amp; sports science student</li>
+          <li>number 1 life goal: to speak 5 languages fluently</li>
+          <li>number 2 life goal: own ducklings</li>
         </ul>
         <p className={styles.otherCaption}>
-          what does this
+          what this reveals about me is up to you to decide.
         </p>
       </section>
 

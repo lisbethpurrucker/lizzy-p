@@ -49,6 +49,11 @@ export default async function ProjectPage({ params }: { params: Params }) {
   const videoUrl          = project.videoUrl as string | undefined
   const gallery           = project.gallery as GalleryImage[] | undefined
 
+  // studio-type only
+  const studioMission     = project.studioMission as string | undefined
+  const studioOffer       = project.studioOffer as string | undefined
+  const studioPartner     = project.studioPartner as string | undefined
+
   // full-type only
   const tagline           = project.tagline as string | undefined
   const role              = project.role as string | undefined
@@ -190,6 +195,57 @@ export default async function ProjectPage({ params }: { params: Params }) {
             ))}
           </div>
         )}
+        {footNav}
+      </main>
+    )
+  }
+
+  // ── Studio template ────────────────────────────────────────────────────────
+  if (projectType === 'studio') {
+    const hostname = externalLink ? (() => { try { return new URL(externalLink).hostname.replace('www.', '') } catch { return externalLink } })() : null
+    return (
+      <main className={styles.page}>
+        {topBar}
+
+        {coverImage && (
+          <div className={styles.studioCover}>
+            <Image
+              src={urlFor(coverImage).width(1600).height(700).url()}
+              alt={title}
+              fill
+              priority
+              className={styles.studioCoverImg}
+            />
+          </div>
+        )}
+
+        <div className={styles.studioHero}>
+          <div>
+            <h1 className={styles.studioName}>{title}</h1>
+            {studioPartner && <p className={styles.studioPartner}>{studioPartner}</p>}
+          </div>
+          {externalLink && (
+            <a href={externalLink} target="_blank" rel="noopener noreferrer" className={styles.studioLink}>
+              {hostname} →
+            </a>
+          )}
+        </div>
+
+        <div className={styles.studioBody}>
+          {studioMission && (
+            <div className={styles.studioCol}>
+              <p className={styles.studioColLabel}>mission</p>
+              <p className={styles.studioColText}>{studioMission}</p>
+            </div>
+          )}
+          {studioOffer && (
+            <div className={styles.studioCol}>
+              <p className={styles.studioColLabel}>what we offer</p>
+              <p className={styles.studioColText}>{studioOffer}</p>
+            </div>
+          )}
+        </div>
+
         {footNav}
       </main>
     )

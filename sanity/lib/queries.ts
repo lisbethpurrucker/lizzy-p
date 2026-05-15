@@ -85,6 +85,9 @@ export const getProjectBySlugQuery = groq`
     description,
     tags,
     externalLink,
+    studioMission,
+    studioOffer,
+    studioPartner,
     publishedAt
   }
 `
