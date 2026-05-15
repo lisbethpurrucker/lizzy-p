@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import styles from './SolarSystem.module.css'
 
@@ -47,17 +47,25 @@ interface Category {
   order?: number
 }
 
+interface GalleryItem { url: string; w?: number; h?: number }
+
 interface Project {
   _id: string
   title: string
   slug?: string
   categorySlug: string
+  projectType?: string
+  shortDescription?: string
   coverImage?: { asset: { _ref: string } }
-  description?: unknown[]
+  coverImageUrl?: string
+  gallery?: GalleryItem[]
+  videoFile?: { url: string }
+  videoUrl?: string
   tags?: string[]
   externalLink?: string
-  gallery?: Array<{ asset: { _ref: string } }>
 }
+
+const GALLERY_CATEGORIES = ['documenting', 'animating']
 
 interface Props {
   categories: Category[]
@@ -243,6 +251,9 @@ export default function SolarSystem({ categories, projects }: Props) {
   const [hoverId, setHoverId]               = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const [isMobile, setIsMobile]             = useState(false)
+  const [lightboxProject, setLightboxProject] = useState<Project | null>(null)
+
+  const closeLightbox = useCallback(() => setLightboxProject(null), [])
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -250,6 +261,21 @@ export default function SolarSystem({ categories, projects }: Props) {
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  useEffect(() => {
+    if (!lightboxProject) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        const catProjects = projects.filter(p => p.categorySlug === activeCategory?.slug)
+        const idx = catProjects.findIndex(p => p._id === lightboxProject._id)
+        const next = e.key === 'ArrowRight' ? catProjects[idx + 1] : catProjects[idx - 1]
+        if (next) setLightboxProject(next)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxProject, activeCategory, projects, closeLightbox])
 
   const activePlanetMap = isMobile ? MOBILE_PLANET_MAP : PLANET_MAP
   const activeFallback  = isMobile ? MOBILE_FALLBACK  : FALLBACK
@@ -269,31 +295,169 @@ export default function SolarSystem({ categories, projects }: Props) {
   if (activeCategory) {
     const catProjects = projects.filter(p => p.categorySlug === activeCategory.slug)
     const planet = planets.find(p => p._id === activeCategory._id)
+    const isGallery = GALLERY_CATEGORIES.includes(activeCategory.slug)
 
+    const catHead = (
+      <div className={styles.catHead}>
+        <button className={styles.backBtn} onClick={() => setActiveCategory(null)}>
+          ← back to universe
+        </button>
+        <div className={styles.catHero}>
+          <div>
+            <p className={styles.catEyebrow}>universe / {activeCategory.slug}</p>
+            <h1 className={styles.catTitle}>
+              {activeCategory.name}<span className={styles.accent}>.</span>
+            </h1>
+            {activeCategory.introLine && (
+              <p className={styles.catIntro}>{activeCategory.introLine}</p>
+            )}
+          </div>
+          {planet && (
+            <div className={styles.catPlanetThumb}>
+              <PlanetSVG kind={planet.kind} size={120} id={`cat-thumb-${planet.slug}`} glowing={false} />
+            </div>
+          )}
+        </div>
+      </div>
+    )
+
+    const otherWorlds = (
+      <div className={styles.otherWorlds}>
+        <p className={styles.otherLabel}>other worlds</p>
+        <div className={styles.otherGrid}>
+          {planets.filter(pl => pl._id !== activeCategory._id).map(pl => (
+            <button
+              key={pl._id}
+              className={styles.otherItem}
+              onClick={() => setActiveCategory(pl)}
+            >
+              <PlanetSVG kind={pl.kind} size={32} id={`other-${pl.slug}`} glowing={false} />
+              <div>
+                <div className={styles.otherName}>{pl.name}</div>
+                <div className={styles.otherCount}>{pl.count} projects →</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+
+    // ── Gallery view (documenting / animating) ───────────────────────────────
+    if (isGallery) {
+      const lbIdx = lightboxProject ? catProjects.findIndex(p => p._id === lightboxProject._id) : -1
+      const lbPrev = lbIdx > 0 ? catProjects[lbIdx - 1] : null
+      const lbNext = lbIdx < catProjects.length - 1 ? catProjects[lbIdx + 1] : null
+
+      const thumbUrl = (p: Project) =>
+        p.coverImageUrl ||
+        p.gallery?.[0]?.url ||
+        null
+
+      const mediaUrl = (p: Project): { type: 'image' | 'video' | 'embed'; src: string } | null => {
+        if (p.videoFile?.url) return { type: 'video', src: p.videoFile.url }
+        if (p.videoUrl) return { type: 'embed', src: p.videoUrl }
+        const img = p.coverImageUrl || p.gallery?.[0]?.url
+        if (img) return { type: 'image', src: img }
+        return null
+      }
+
+      return (
+        <>
+          <div className={styles.catView}>
+            {catHead}
+
+            {catProjects.length === 0 ? (
+              <p className={styles.emptyNote} style={{ padding: '40px 32px' }}>Nothing here yet.</p>
+            ) : (
+              <div className={styles.galleryGrid}>
+                {catProjects.map((p) => {
+                  const thumb = thumbUrl(p)
+                  const isVideo = p.projectType === 'video' || !!p.videoFile?.url || !!p.videoUrl
+                  return (
+                    <button
+                      key={p._id}
+                      className={styles.galleryThumb}
+                      onClick={() => setLightboxProject(p)}
+                      aria-label={p.title}
+                    >
+                      {thumb ? (
+                        <img src={`${thumb}?w=600&fit=crop`} alt={p.title} className={styles.galleryImg} />
+                      ) : (
+                        <div className={styles.galleryPlaceholder} />
+                      )}
+                      {isVideo && <span className={styles.galleryPlayIcon}>▶</span>}
+                      <div className={styles.galleryOverlay}>
+                        <span className={styles.galleryTitle}>{p.title}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+
+            {otherWorlds}
+          </div>
+
+          {/* Lightbox */}
+          {lightboxProject && (() => {
+            const media = mediaUrl(lightboxProject)
+            return (
+              <div className={styles.lightbox} onClick={closeLightbox}>
+                <button className={styles.lightboxClose} onClick={closeLightbox} aria-label="Close">×</button>
+
+                {lbPrev && (
+                  <button
+                    className={`${styles.lightboxNav} ${styles.lightboxPrev}`}
+                    onClick={(e) => { e.stopPropagation(); setLightboxProject(lbPrev) }}
+                    aria-label="Previous"
+                  >←</button>
+                )}
+                {lbNext && (
+                  <button
+                    className={`${styles.lightboxNav} ${styles.lightboxNext}`}
+                    onClick={(e) => { e.stopPropagation(); setLightboxProject(lbNext) }}
+                    aria-label="Next"
+                  >→</button>
+                )}
+
+                <div className={styles.lightboxContent} onClick={e => e.stopPropagation()}>
+                  {media?.type === 'image' && (
+                    <img src={media.src} alt={lightboxProject.title} className={styles.lightboxMedia} />
+                  )}
+                  {media?.type === 'video' && (
+                    <video src={media.src} controls autoPlay className={styles.lightboxMedia} />
+                  )}
+                  {media?.type === 'embed' && (
+                    <iframe
+                      src={media.src.includes('youtu')
+                        ? media.src.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
+                        : media.src.replace('vimeo.com/', 'player.vimeo.com/video/')}
+                      allow="autoplay; fullscreen"
+                      allowFullScreen
+                      className={styles.lightboxMedia}
+                      title={lightboxProject.title}
+                    />
+                  )}
+                  <div className={styles.lightboxMeta}>
+                    <span className={styles.lightboxTitle}>{lightboxProject.title}</span>
+                    {lightboxProject.shortDescription && (
+                      <span className={styles.lightboxDesc}>{lightboxProject.shortDescription}</span>
+                    )}
+                    <span className={styles.lightboxCount}>{lbIdx + 1} / {catProjects.length}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
+        </>
+      )
+    }
+
+    // ── Project list view (building / creating / collaborating) ─────────────
     return (
       <>
         <div className={styles.catView}>
-          <div className={styles.catHead}>
-            <button className={styles.backBtn} onClick={() => setActiveCategory(null)}>
-              ← back to universe
-            </button>
-            <div className={styles.catHero}>
-              <div>
-                <p className={styles.catEyebrow}>universe / {activeCategory.slug}</p>
-                <h1 className={styles.catTitle}>
-                  {activeCategory.name}<span className={styles.accent}>.</span>
-                </h1>
-                {activeCategory.introLine && (
-                  <p className={styles.catIntro}>{activeCategory.introLine}</p>
-                )}
-              </div>
-              {planet && (
-                <div className={styles.catPlanetThumb}>
-                  <PlanetSVG kind={planet.kind} size={120} id={`cat-thumb-${planet.slug}`} glowing={false} />
-                </div>
-              )}
-            </div>
-          </div>
+          {catHead}
 
           <div className={styles.colHead}>
             <span>№</span>
@@ -336,26 +500,8 @@ export default function SolarSystem({ categories, projects }: Props) {
             })}
           </div>
 
-          <div className={styles.otherWorlds}>
-            <p className={styles.otherLabel}>other worlds</p>
-            <div className={styles.otherGrid}>
-              {planets.filter(pl => pl._id !== activeCategory._id).map(pl => (
-                <button
-                  key={pl._id}
-                  className={styles.otherItem}
-                  onClick={() => setActiveCategory(pl)}
-                >
-                  <PlanetSVG kind={pl.kind} size={32} id={`other-${pl.slug}`} glowing={false} />
-                  <div>
-                    <div className={styles.otherName}>{pl.name}</div>
-                    <div className={styles.otherCount}>{pl.count} projects →</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+          {otherWorlds}
         </div>
-
       </>
     )
   }

@@ -53,19 +53,20 @@
 
 .moonAnnotation {
   position: absolute;
-  transform: translateX(-100%) translateY(-50%) translateX(-12px);
+  transform: translateX(-100%) translateY(-50%) translateX(12px);
   pointer-events: none;
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   z-index: 10;
   opacity: 0;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .moonAnnotationVisible {
   opacity: 1;
-  transform: translateX(-100%) translateY(-50%) translateX(-20px);
+  transform: translateX(-100%) translateY(-50%) translateX(-4px);
 }
 
 .moonGlyph {
@@ -425,6 +426,179 @@
   margin-top: 2px;
 }
 
+/* ── Gallery grid ─────────────────────────────────────────────────────────── */
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  padding: 3px;
+}
+
+.galleryThumb {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #111;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  display: block;
+}
+
+.galleryImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.galleryThumb:hover .galleryImg {
+  transform: scale(1.04);
+  filter: brightness(0.75);
+}
+
+.galleryPlayIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: rgba(242, 236, 226, 0.8);
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.galleryOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 12px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.galleryThumb:hover .galleryOverlay {
+  opacity: 1;
+}
+
+.galleryTitle {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.9);
+}
+
+.galleryPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+}
+
+/* ── Lightbox ─────────────────────────────────────────────────────────────── */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 4, 4, 0.96);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightboxContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: auto;
+  gap: 16px;
+}
+
+.lightboxMedia {
+  display: block;
+  max-width: 90vw;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: none;
+  aspect-ratio: 16/9;
+}
+
+.lightboxMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  width: 100%;
+}
+
+.lightboxTitle {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.9);
+}
+
+.lightboxDesc {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(242, 236, 226, 0.4);
+  flex: 1;
+}
+
+.lightboxCount {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(242, 236, 226, 0.3);
+  margin-left: auto;
+}
+
+.lightboxClose {
+  position: fixed;
+  top: 24px;
+  right: 28px;
+  background: none;
+  border: none;
+  color: rgba(242, 236, 226, 0.7);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.15s;
+  z-index: 1001;
+}
+
+.lightboxClose:hover { color: #f2ece2; }
+
+.lightboxNav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(242, 236, 226, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 16px 20px;
+  transition: color 0.15s;
+  z-index: 1001;
+  font-family: var(--mono);
+}
+
+.lightboxNav:hover { color: #f2ece2; }
+.lightboxPrev { left: 12px; }
+.lightboxNext { right: 12px; }
+
 /* ── Mobile ───────────────────────────────────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -443,4 +617,8 @@
 
   .header { top: 16px; left: 16px; }
   .hint   { display: none; }
+
+  .galleryGrid { grid-template-columns: repeat(2, 1fr); }
+  .lightboxMedia { max-height: 60vh; }
+  .lightboxNav { padding: 12px 14px; font-size: 1.2rem; }
 }

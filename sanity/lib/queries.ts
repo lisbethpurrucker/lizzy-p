@@ -51,11 +51,15 @@ export const getAllProjectsQuery = groq`
     title,
     "slug": slug.current,
     "categorySlug": category->slug.current,
+    projectType,
+    shortDescription,
     coverImage,
-    description,
+    "coverImageUrl": coverImage.asset->url,
+    "gallery": gallery[] { "url": asset->url, "w": asset->metadata.dimensions.width, "h": asset->metadata.dimensions.height },
+    "videoFile": videoFile { "url": asset->url },
+    videoUrl,
     tags,
     externalLink,
-    gallery,
     publishedAt
   }
 `
