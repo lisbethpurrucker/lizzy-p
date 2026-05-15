@@ -49,44 +49,56 @@
   filter: drop-shadow(0 0 22px rgba(216, 35, 42, 0.55));
 }
 
-/* ── Moon phase tooltip ──────────────────────────────────────────────────── */
+/* ── Moon annotation ─────────────────────────────────────────────────────── */
 
-.moonTooltip {
+.moonAnnotation {
   position: absolute;
-  transform: translateX(-50%) translateY(4px);
-  background: rgba(12, 10, 8, 0.88);
-  border: 1px solid rgba(242, 236, 226, 0.15);
-  backdrop-filter: blur(8px);
-  padding: 8px 14px 9px;
-  white-space: nowrap;
+  transform: translateX(-100%) translateY(-50%) translateX(-12px);
   pointer-events: none;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 3px;
-  opacity: 0;
+  gap: 10px;
   z-index: 10;
-  transition: opacity 0.22s ease, transform 0.22s ease;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-.moonTooltipVisible {
+.moonAnnotationVisible {
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-100%) translateY(-50%) translateX(-20px);
 }
 
-.moonPhase {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(242, 236, 226, 0.95);
+.moonGlyph {
+  font-size: 2.8rem;
+  line-height: 1;
+  color: rgba(242, 236, 226, 0.18);
+  text-shadow: 0 0 30px rgba(220, 208, 184, 0.4);
+  display: block;
 }
 
-.moonSign {
+.moonText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.moonPhaseName {
+  font-family: var(--hand);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: rgba(242, 236, 226, 0.9);
+  text-shadow: 0 0 20px rgba(220, 208, 184, 0.3);
+  white-space: nowrap;
+}
+
+.moonSignLine {
   font-family: var(--mono);
   font-size: 9px;
-  letter-spacing: 0.15em;
-  color: rgba(242, 236, 226, 0.5);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.4);
+  white-space: nowrap;
 }
 
 /* ── Planet label below each planet ──────────────────────────────────────── */

@@ -448,22 +448,25 @@ export default function SolarSystem({ categories, projects }: Props) {
           )
         })}
 
-        {/* Moon tooltip — rendered outside planet div to escape filter/overflow clipping */}
+        {/* Moon annotation — rendered outside planet div to escape filter/overflow clipping */}
         {planets.filter(p => p.kind === 'moon').map((planet) => {
           const isHover = hoverId === planet._id
           const moon = moonInfo()
           return (
             <div
               key={`moon-tip-${planet._id}`}
-              className={`${styles.moonTooltip} ${isHover ? styles.moonTooltipVisible : ''}`}
+              className={`${styles.moonAnnotation} ${isHover ? styles.moonAnnotationVisible : ''}`}
               style={{
-                left: `${(planet.px / W) * 100}%`,
-                top:  `calc(${(planet.py / H) * 100}% - ${planet.size / 2 + 14}px)`,
+                left: `calc(${(planet.px / W) * 100}% - ${planet.size / 2 + 20}px)`,
+                top:  `${(planet.py / H) * 100}%`,
               }}
               aria-hidden="true"
             >
-              <span className={styles.moonPhase}>{moon.phase}</span>
-              <span className={styles.moonSign}>{moon.glyph} in {moon.sign}</span>
+              <span className={styles.moonGlyph}>{moon.glyph}</span>
+              <div className={styles.moonText}>
+                <span className={styles.moonPhaseName}>{moon.phase}</span>
+                <span className={styles.moonSignLine}>in {moon.sign}</span>
+              </div>
             </div>
           )
         })}

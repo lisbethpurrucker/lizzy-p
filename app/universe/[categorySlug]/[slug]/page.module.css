@@ -273,6 +273,15 @@
   max-width: 60ch;
 }
 
+.photoSingle {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.photoSingle .photoWrap {
+  aspect-ratio: 3 / 2;
+}
+
 .photoGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

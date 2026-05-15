@@ -116,20 +116,22 @@ export default async function ProjectPage({ params }: { params: Params }) {
           <h1 className={styles.lightTitle}>{title}</h1>
           {shortDescription && <p className={styles.lightDesc}>{shortDescription}</p>}
         </div>
-        <div className={styles.photoGrid}>
-          {gallery && gallery.length > 0 ? (
-            gallery.map((img, i) => (
+        {gallery && gallery.length > 0 ? (
+          <div className={gallery.length === 1 ? styles.photoSingle : styles.photoGrid}>
+            {gallery.map((img, i) => (
               <div key={i} className={styles.photoWrap}>
                 <Image
                   src={img.asset.url}
                   alt={`${title} ${i + 1}`}
                   fill
                   className={styles.photo}
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes={gallery.length === 1 ? '100vw' : '(max-width: 768px) 100vw, 50vw'}
                 />
               </div>
-            ))
-          ) : coverImage ? (
+            ))}
+          </div>
+        ) : coverImage ? (
+          <div className={styles.photoSingle}>
             <div className={styles.photoWrap}>
               <Image
                 src={urlFor(coverImage).width(1200).url()}
@@ -139,8 +141,8 @@ export default async function ProjectPage({ params }: { params: Params }) {
                 sizes="100vw"
               />
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
         {footNav}
       </main>
     )
