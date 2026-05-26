@@ -230,7 +230,7 @@
 
 .colHead {
   display: grid;
-  grid-template-columns: 44px 1fr 80px 28px;
+  grid-template-columns: 44px 1fr 28px;
   gap: 24px;
   padding: 12px 56px;
   border-bottom: 1px solid var(--text);
@@ -249,7 +249,7 @@
 
 .projectRow {
   display: grid;
-  grid-template-columns: 44px 1fr 80px 28px;
+  grid-template-columns: 44px 1fr 28px;
   gap: 24px;
   align-items: baseline;
   padding: 24px 0;
@@ -588,7 +588,6 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(242, 236, 226, 0.85);
-  white-space: nowrap;
 }
 
 .filmPlaceholder {
@@ -723,9 +722,8 @@
 
   .catHero      { grid-template-columns: 1fr; }
   .catPlanetThumb { display: none; }
-  .colHead      { grid-template-columns: 36px 1fr; }
-  .projectRow   { grid-template-columns: 36px 1fr; }
-  .rowStatus, .rowArrow { display: none; }
+  .colHead      { grid-template-columns: 36px 1fr 24px; }
+  .projectRow   { grid-template-columns: 36px 1fr 24px; }
 
   .otherGrid    { grid-template-columns: repeat(2, 1fr); }
 

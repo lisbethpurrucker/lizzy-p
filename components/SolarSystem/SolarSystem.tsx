@@ -70,7 +70,7 @@ const MOBILE_ORBITS = [230, 295, 350, 390, 445]
 
 const MOBILE_PLANET_MAP: Record<string, { kind: PlanetKind; orbitIdx: number; angle: number; size: number }> = {
   building:      { kind: 'saturn',  orbitIdx: 0, angle: 42,  size: 76 },
-  creating:      { kind: 'venus',   orbitIdx: 1, angle: 152, size: 54 },
+  creating:      { kind: 'venus',   orbitIdx: 2, angle: 145, size: 54 },
   animating:     { kind: 'jupiter', orbitIdx: 2, angle: 205, size: 64 },
   collaborating: { kind: 'mars',    orbitIdx: 3, angle: 322, size: 50 },
   documenting:   { kind: 'moon',    orbitIdx: 4, angle: 42,  size: 46 },
@@ -582,7 +582,6 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
           <div className={styles.colHead}>
             <span>№</span>
             <span>project</span>
-            <span>status</span>
             <span />
           </div>
 
@@ -602,7 +601,6 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
                       <div className={styles.rowTags}>{p.tags.join(' · ')}</div>
                     )}
                   </div>
-                  <span className={styles.rowStatus}>{p.externalLink ? 'live' : 'project'}</span>
                   <span className={styles.rowArrow}>→</span>
                 </>
               )
