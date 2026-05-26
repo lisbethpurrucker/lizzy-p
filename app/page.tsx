@@ -103,6 +103,7 @@ export default async function Home() {
           <li>ex athlete &amp; sports science student</li>
           <li>number 1 life goal: to speak 5 languages fluently</li>
           <li>number 2 life goal: own ducklings</li>
+          <li>i love writing lowercase only #rebel</li>
         </ul>
         <p className={styles.otherCaption}>
           what this reveals about me is up to you to decide.

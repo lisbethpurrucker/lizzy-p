@@ -66,7 +66,7 @@ export default async function Us() {
       {/* ── Top: lede + CTA ──────────────────────────────────────────────── */}
       <div className={styles.top}>
         <div className={styles.lede}>
-          <p className={styles.label}>creative technologist · open for work</p>
+          <p className={styles.label}>creative technologist</p>
 
           <h1 className={styles.heading}>Open For.</h1>
 
@@ -75,7 +75,6 @@ export default async function Us() {
             <strong>initiator</strong> — I love the blank page, the empty repo,
             the &ldquo;what if we just…&rdquo; conversation. The part where there&rsquo;s
             nothing yet and everything is still possible.{' '}
-            <strong>I dive in first. I bring the kindling.</strong>
           </p>
           <p className={styles.copy}>
             I&rsquo;m on a learning journey deep into <strong>creative coding</strong> — installations
@@ -84,8 +83,8 @@ export default async function Us() {
           </p>
           <p className={styles.copy}>
             I build things on the web — landing pages, prototypes,
-            interactive essays, the occasional whole product. I write the code{' '}
-            <strong>and</strong> the copy.
+            interactive essays, the whole product. I write the code{' '}
+            <strong>and</strong> help you build a userbase.
           </p>
         </div>
 
@@ -93,8 +92,8 @@ export default async function Us() {
           <p className={styles.ctaLabel}>let&rsquo;s make something</p>
           <p className={styles.ctaHead}>start a thing.</p>
           <p className={styles.ctaBody}>
-            Send me one paragraph. Tell me what&rsquo;s broken, what you&rsquo;re
-            hoping for, and when.
+            Send me one paragraph. Tell what you&rsquo;re
+            hoping for.
           </p>
           <a href={`mailto:${email}`} className={styles.ctaEmail}>
             {email} →

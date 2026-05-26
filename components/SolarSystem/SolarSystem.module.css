@@ -309,6 +309,20 @@
   align-self: center;
 }
 
+.rowThumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  opacity: 0.88;
+  transition: opacity 0.2s;
+}
+
+.projectRow:hover .rowThumb {
+  opacity: 1;
+}
+
 .rowArrow {
   font-size: 20px;
   color: var(--faint);
@@ -325,7 +339,6 @@
 /* ── Other worlds strip ───────────────────────────────────────────────────── */
 
 .otherWorlds {
-  margin-top: auto;
   padding: 40px 56px;
   border-top: 1px solid var(--text);
 }
@@ -348,7 +361,7 @@
 .otherItem {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: none;
   border: none;
   cursor: pointer;
@@ -357,6 +370,15 @@
   color: var(--text);
   font-family: var(--mono);
   transition: opacity 0.15s;
+}
+
+/* wide enough so Saturn's rings (extend ~15px each side of 32px sphere) don't clip */
+.otherIcon {
+  flex-shrink: 0;
+  width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .otherItem:hover { opacity: 0.7; }
@@ -606,6 +628,9 @@
   .colHead      { padding: 12px 20px; }
   .projectList  { padding: 0 20px; }
   .otherWorlds  { padding: 32px 20px; }
+
+  .catTitle     { font-size: clamp(1.75rem, 9vw, 3rem); }
+  .catIntro     { font-size: 14px; }
 
   .catHero      { grid-template-columns: 1fr; }
   .catPlanetThumb { display: none; }

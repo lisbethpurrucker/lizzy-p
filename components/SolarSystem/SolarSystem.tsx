@@ -330,7 +330,9 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
               className={styles.otherItem}
               onClick={() => selectCategory(pl)}
             >
-              <PlanetSVG kind={pl.kind} size={32} id={`other-${pl.slug}`} glowing={false} />
+              <span className={styles.otherIcon}>
+                <PlanetSVG kind={pl.kind} size={32} id={`other-${pl.slug}`} glowing={false} />
+              </span>
               <div>
                 <div className={styles.otherName}>{pl.name}</div>
                 <div className={styles.otherCount}>{pl.count} projects →</div>
@@ -479,7 +481,7 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
           <div className={styles.colHead}>
             <span>№</span>
             <span>project</span>
-            <span>status</span>
+            <span>{activeCategory.slug === 'collaborating' ? '' : 'status'}</span>
             <span />
           </div>
 
@@ -490,6 +492,7 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
               const href = p.slug
                 ? `/universe/${activeCategory.slug}/${p.slug}`
                 : undefined
+              const isCollaborating = activeCategory.slug === 'collaborating'
               const inner = (
                 <>
                   <span className={styles.rowNum}>{String(i + 1).padStart(2, '0')}</span>
@@ -500,7 +503,16 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
                     )}
                   </div>
                   <span className={styles.rowStatus}>
-                    {p.externalLink ? 'live' : 'project'}
+                    {isCollaborating
+                      ? p.coverImageUrl && (
+                          <img
+                            src={`${p.coverImageUrl}?w=96&h=96&fit=crop&q=85`}
+                            alt=""
+                            className={styles.rowThumb}
+                          />
+                        )
+                      : (p.externalLink ? 'live' : 'project')
+                    }
                   </span>
                   <span className={styles.rowArrow}>→</span>
                 </>

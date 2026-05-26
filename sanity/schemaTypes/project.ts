@@ -105,7 +105,7 @@ export const project = defineType({
       options: { hotspot: true },
     }),
 
-    // ── Video (video type only) ────────────────────────────────────
+    // ── Single video (video type only) ────────────────────────────
     defineField({
       name: 'videoFile',
       title: 'Video File (MP4)',
@@ -119,6 +119,48 @@ export const project = defineType({
       type: 'url',
       description: 'Alternative to uploading — paste a YouTube or Vimeo link.',
       hidden: ({ document }) => document?.projectType !== 'video',
+    }),
+
+    // ── Multiple videos (all types except studio) ──────────────────
+    defineField({
+      name: 'videos',
+      title: 'Videos',
+      type: 'array',
+      description: 'Add as many videos as you like. Each entry can be an uploaded file, a YouTube / Vimeo link, or both.',
+      hidden: ({ document }) => document?.projectType === 'studio',
+      of: [
+        {
+          type: 'object',
+          name: 'videoEntry',
+          title: 'Video',
+          fields: [
+            defineField({
+              name: 'title',
+              title: 'Title / Caption',
+              type: 'string',
+              description: 'Optional — shown as a label beneath the video.',
+            }),
+            defineField({
+              name: 'videoFile',
+              title: 'Upload file (MP4)',
+              type: 'file',
+              options: { accept: 'video/mp4,video/*' },
+            }),
+            defineField({
+              name: 'videoUrl',
+              title: 'Or paste a URL (YouTube / Vimeo)',
+              type: 'url',
+            }),
+          ],
+          preview: {
+            select: { title: 'title', url: 'videoUrl' },
+            prepare: ({ title, url }: { title?: string; url?: string }) => ({
+              title: title || url || 'Video',
+              subtitle: url ?? undefined,
+            }),
+          },
+        },
+      ],
     }),
 
     // ── Gallery (gallery + video types — sketches, stills) ────────

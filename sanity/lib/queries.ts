@@ -58,6 +58,7 @@ export const getAllProjectsQuery = groq`
     "gallery": gallery[] { "url": asset->url, "w": asset->metadata.dimensions.width, "h": asset->metadata.dimensions.height },
     "videoFile": videoFile { "url": asset->url },
     videoUrl,
+    "videos": videos[] { title, "videoFile": videoFile { "url": asset->url }, videoUrl },
     tags,
     externalLink,
     publishedAt
@@ -82,6 +83,7 @@ export const getProjectBySlugQuery = groq`
     coverImage,
     "videoFile": videoFile { asset->{ url } },
     videoUrl,
+    "videos": videos[] { title, "videoFile": videoFile { "url": asset->url }, videoUrl },
     "gallery": gallery[] { asset->{ url, metadata { dimensions } }, hotspot, crop },
     theWhy,
     theHow,

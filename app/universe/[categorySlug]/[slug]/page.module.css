@@ -171,6 +171,37 @@
 
 /* ── Screenshot ──────────────────────────────────────────────────────────── */
 
+/* ── Multiple videos ──────────────────────────────────────────────────────── */
+
+.videosWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.videoEntry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.videoEntryTitle {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.videoEntry .screenshot,
+.videoEntry .videoPlayer {
+  aspect-ratio: 16 / 9;
+  height: auto;
+  background: #000;
+}
+
+/* ── Single screenshot / video ────────────────────────────────────────────── */
+
 .screenshotWrap {
   width: 100%;
   aspect-ratio: 16 / 10;

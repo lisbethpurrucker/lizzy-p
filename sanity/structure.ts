@@ -1,7 +1,14 @@
 import type { StructureResolver } from 'sanity/structure'
 
-export const structure: StructureResolver = (S) =>
-  S.list()
+export const structure: StructureResolver = async (S, context) => {
+  const client = context.getClient({ apiVersion: '2024-01-01' })
+
+  // Fetch categories in order so we can build per-category project lists
+  const categories: { _id: string; name: string }[] = await client.fetch(
+    `*[_type == "category"] | order(order asc) { _id, name }`,
+  )
+
+  return S.list()
     .title('Content')
     .items([
       // ─── Site Settings (singleton) ──────────────────────────────
@@ -24,7 +31,48 @@ export const structure: StructureResolver = (S) =>
             .title('My Universe')
             .items([
               S.documentTypeListItem('category').title('Categories'),
-              S.documentTypeListItem('project').title('Projects'),
+
+              // Projects grouped under each category
+              S.listItem()
+                .title('Projects')
+                .child(
+                  S.list()
+                    .title('Projects by category')
+                    .items([
+                      // One folder per category
+                      ...categories.map((cat) =>
+                        S.listItem()
+                          .title(cat.name)
+                          .id(cat._id)
+                          .child(
+                            S.documentList()
+                              .title(cat.name)
+                              .filter(
+                                '_type == "project" && category._ref == $catId',
+                              )
+                              .params({ catId: cat._id })
+                              .defaultOrdering([
+                                { field: 'order', direction: 'asc' },
+                              ]),
+                          ),
+                      ),
+
+                      // Catch-all for projects with no category assigned
+                      S.listItem()
+                        .title('— Uncategorised')
+                        .id('projects-uncategorised')
+                        .child(
+                          S.documentList()
+                            .title('Uncategorised projects')
+                            .filter(
+                              '_type == "project" && !defined(category)',
+                            )
+                            .defaultOrdering([
+                              { field: 'order', direction: 'asc' },
+                            ]),
+                        ),
+                    ]),
+                ),
             ]),
         ),
 
@@ -73,3 +121,4 @@ export const structure: StructureResolver = (S) =>
       // ─── Social Links ────────────────────────────────────────────
       S.documentTypeListItem('socialLink').title('Social Links'),
     ])
+}

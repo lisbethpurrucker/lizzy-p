@@ -5,6 +5,7 @@ import { PortableText } from '@portabletext/react'
 import { client, isConfigured } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { getProjectBySlugQuery, getProjectSlugsByCategoryQuery } from '@/sanity/lib/queries'
+import VideoGallery from '@/components/VideoGallery/VideoGallery'
 import styles from './page.module.css'
 
 export const revalidate = 60
@@ -48,6 +49,10 @@ export default async function ProjectPage({ params }: { params: Params }) {
   const videoFile         = project.videoFile as { asset: { url: string } } | undefined
   const videoUrl          = project.videoUrl as string | undefined
   const gallery           = project.gallery as GalleryImage[] | undefined
+  type VideoEntry = { title?: string; videoFile?: { url: string }; videoUrl?: string }
+  const videos            = (project.videos as VideoEntry[] | undefined)?.filter(
+    v => v.videoFile?.url || v.videoUrl
+  ) ?? []
 
   // studio-type only
   const studioMission     = project.studioMission as string | undefined
@@ -67,6 +72,14 @@ export default async function ProjectPage({ params }: { params: Params }) {
   const description       = project.description as unknown[] | undefined
 
   const period = yearStart ? `${yearStart} — ${yearEnd ?? 'present'}` : undefined
+
+  function embedSrc(url: string) {
+    if (url.includes('youtu'))
+      return url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
+    if (url.includes('vimeo.com/'))
+      return url.replace('vimeo.com/', 'player.vimeo.com/video/')
+    return url
+  }
 
   // ── Shared top bar ─────────────────────────────────────────────────────────
   const topBar = (
@@ -157,31 +170,34 @@ export default async function ProjectPage({ params }: { params: Params }) {
           <h1 className={styles.lightTitle}>{title}</h1>
           {shortDescription && <p className={styles.lightDesc}>{shortDescription}</p>}
         </div>
-        <div className={styles.videoSection}>
-          {videoFile?.asset?.url ? (
-            <video src={videoFile.asset.url} controls playsInline className={styles.videoPlayer} />
-          ) : videoUrl ? (
-            <iframe
-              src={
-                videoUrl.includes('youtu')
-                  ? videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
-                  : videoUrl.replace('vimeo.com/', 'player.vimeo.com/video/')
-              }
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-              className={styles.videoPlayer}
-              title={title}
-            />
-          ) : coverImage ? (
-            <Image
-              src={urlFor(coverImage).width(1200).height(750).url()}
-              alt={title}
-              width={1200}
-              height={750}
-              className={styles.videoPlayer}
-            />
-          ) : null}
-        </div>
+
+        {/* Multiple videos take priority over the legacy single-video fields */}
+        {videos.length > 0 ? (
+          <VideoGallery videos={videos} projectTitle={title} />
+        ) : (
+          <div className={styles.videoSection}>
+            {videoFile?.asset?.url ? (
+              <video src={videoFile.asset.url} controls playsInline className={styles.videoPlayer} />
+            ) : videoUrl ? (
+              <iframe
+                src={embedSrc(videoUrl)}
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+                className={styles.videoPlayer}
+                title={title}
+              />
+            ) : coverImage ? (
+              <Image
+                src={urlFor(coverImage).width(1200).height(750).url()}
+                alt={title}
+                width={1200}
+                height={750}
+                className={styles.videoPlayer}
+              />
+            ) : null}
+          </div>
+        )}
+
         {gallery && gallery.length > 0 && (
           <div className={styles.sketchGrid}>
             {gallery.map((img, i) => (
@@ -306,32 +322,32 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </dl>
       </div>
 
-      <div className={styles.section}>
-        <p className={styles.sectionLabel}>
-          {(videoFile || videoUrl) ? 'the video' : 'the screenshot'}
-        </p>
-        <div className={styles.screenshotWrap}>
-          {videoFile?.asset?.url ? (
-            <video src={videoFile.asset.url} controls playsInline className={styles.screenshot} />
-          ) : videoUrl ? (
-            <iframe
-              src={
-                videoUrl.includes('youtu')
-                  ? videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')
-                  : videoUrl.replace('vimeo.com/', 'player.vimeo.com/video/')
-              }
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-              className={styles.screenshot}
-              title={title}
-            />
-          ) : coverImage ? (
-            <Image src={urlFor(coverImage).width(1200).height(750).url()} alt={title} width={1200} height={750} className={styles.screenshot} />
-          ) : (
-            <div className={styles.screenshotPlaceholder}>[ screenshot / video ]</div>
-          )}
+      {videos.length > 0 ? (
+        <VideoGallery videos={videos} projectTitle={title} />
+      ) : (
+        <div className={styles.section}>
+          <p className={styles.sectionLabel}>
+            {(videoFile?.asset?.url || videoUrl) ? 'the video' : 'the screenshot'}
+          </p>
+          <div className={styles.screenshotWrap}>
+            {videoFile?.asset?.url ? (
+              <video src={videoFile.asset.url} controls playsInline className={styles.screenshot} />
+            ) : videoUrl ? (
+              <iframe
+                src={embedSrc(videoUrl)}
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+                className={styles.screenshot}
+                title={title}
+              />
+            ) : coverImage ? (
+              <Image src={urlFor(coverImage).width(1200).height(750).url()} alt={title} width={1200} height={750} className={styles.screenshot} />
+            ) : (
+              <div className={styles.screenshotPlaceholder}>[ screenshot / video ]</div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {(theWhy && theWhy.length > 0) && (
         <div className={styles.section}>
