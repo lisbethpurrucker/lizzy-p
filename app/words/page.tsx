@@ -10,7 +10,10 @@ import PoemBlock from '@/components/PoemBlock/PoemBlock'
 
 export const revalidate = 3600
 
-const DEFAULT_RSS = 'https://puderzuckr.substack.com/feed'
+const DEFAULT_RSS_URLS = [
+  'https://puderzuckr.substack.com/feed',
+  'https://theforwardcurrent.substack.com/feed',
+]
 const SUBSTACK_URL = 'https://puderzuckr.substack.com'
 const DEFAULT_TOPICS = [
   'Women in tech',
@@ -85,13 +88,14 @@ export default async function Words() {
     } catch { /* fall through to defaults */ }
   }
 
-  // Collect all RSS URLs (primary + any extras added in studio)
   const allRssUrls: string[] = [
-    substackSettings?.rssUrl || DEFAULT_RSS,
+    ...(substackSettings?.rssUrl
+      ? [substackSettings.rssUrl]
+      : DEFAULT_RSS_URLS),
     ...((substackSettings?.additionalRssUrls as string[] | undefined) ?? []),
   ].filter(Boolean)
 
-  const authorFilter = substackSettings?.filterAuthor as string | undefined
+  const authorFilter = (substackSettings?.filterAuthor as string | undefined) ?? 'Lisbeth'
   const allFetched = await Promise.all(allRssUrls.map(url => fetchSubstackPosts(url, authorFilter)))
   const substackPosts = allFetched
     .flat()
