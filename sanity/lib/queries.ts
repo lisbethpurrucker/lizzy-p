@@ -153,7 +153,9 @@ export const getSubstackSettingsQuery = groq`
   *[_type == "substackSettings"][0] {
     name,
     tagline,
-    rssUrl
+    rssUrl,
+    additionalRssUrls,
+    filterAuthor
   }
 `
 

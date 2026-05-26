@@ -30,9 +30,10 @@ interface SubstackPost {
   link: string
   pubDate: string
   description: string
+  author?: string
 }
 
-async function fetchSubstackPosts(rssUrl: string): Promise<SubstackPost[]> {
+async function fetchSubstackPosts(rssUrl: string, authorFilter?: string): Promise<SubstackPost[]> {
   try {
     const res = await fetch(
       `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`,
@@ -40,7 +41,12 @@ async function fetchSubstackPosts(rssUrl: string): Promise<SubstackPost[]> {
     )
     if (!res.ok) return []
     const data = await res.json()
-    return (data.items || []).slice(0, 3)
+    const items: SubstackPost[] = data.items || []
+    if (authorFilter) {
+      const name = authorFilter.toLowerCase()
+      return items.filter(item => item.author?.toLowerCase().includes(name))
+    }
+    return items
   } catch {
     return []
   }
@@ -79,8 +85,18 @@ export default async function Words() {
     } catch { /* fall through to defaults */ }
   }
 
-  const rssUrl: string = substackSettings?.rssUrl || DEFAULT_RSS
-  const substackPosts = await fetchSubstackPosts(rssUrl)
+  // Collect all RSS URLs (primary + any extras added in studio)
+  const allRssUrls: string[] = [
+    substackSettings?.rssUrl || DEFAULT_RSS,
+    ...((substackSettings?.additionalRssUrls as string[] | undefined) ?? []),
+  ].filter(Boolean)
+
+  const authorFilter = substackSettings?.filterAuthor as string | undefined
+  const allFetched = await Promise.all(allRssUrls.map(url => fetchSubstackPosts(url, authorFilter)))
+  const substackPosts = allFetched
+    .flat()
+    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+    .slice(0, 6)
   const topics: string[] = speakingSettings?.topics?.length
     ? speakingSettings.topics
     : DEFAULT_TOPICS
@@ -158,13 +174,12 @@ export default async function Words() {
       <section id="speaking" className={styles.section}>
         <p className={styles.sectionLabel}>speaking</p>
         <div>
-          {speakingSettings?.intro ? (
-            <p className={styles.speakingIntro}>{speakingSettings.intro}</p>
-          ) : (
-            DEFAULT_SPEAKING_INTRO.map((para, i) => (
-              <p key={i} className={styles.speakingIntro}>{para}</p>
-            ))
-          )}
+          {(speakingSettings?.intro
+            ? (speakingSettings.intro as string).split(/\n\n+/).filter(Boolean)
+            : DEFAULT_SPEAKING_INTRO
+          ).map((para: string, i: number) => (
+            <p key={i} className={styles.speakingIntro}>{para}</p>
+          ))}
           <ul className={styles.topicsList}>
             {topics.map((topic: string) => (
               <li key={topic} className={styles.topic}>{topic}</li>

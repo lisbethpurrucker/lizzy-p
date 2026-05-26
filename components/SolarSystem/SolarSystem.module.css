@@ -49,58 +49,6 @@
   filter: drop-shadow(0 0 22px rgba(216, 35, 42, 0.55));
 }
 
-/* ── Moon annotation ─────────────────────────────────────────────────────── */
-
-.moonAnnotation {
-  position: absolute;
-  transform: translateX(-100%) translateY(-50%) translateX(12px);
-  pointer-events: none;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 12px;
-  z-index: 10;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.moonAnnotationVisible {
-  opacity: 1;
-  transform: translateX(-100%) translateY(-50%) translateX(-4px);
-}
-
-.moonGlyph {
-  font-size: 2.8rem;
-  line-height: 1;
-  color: rgba(242, 236, 226, 0.18);
-  text-shadow: 0 0 30px rgba(220, 208, 184, 0.4);
-  display: block;
-}
-
-.moonText {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-}
-
-.moonPhaseName {
-  font-family: var(--hand);
-  font-size: 1.6rem;
-  line-height: 1;
-  color: rgba(242, 236, 226, 0.9);
-  text-shadow: 0 0 20px rgba(220, 208, 184, 0.3);
-  white-space: nowrap;
-}
-
-.moonSignLine {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: rgba(242, 236, 226, 0.4);
-  white-space: nowrap;
-}
 
 /* ── Planet label below each planet ──────────────────────────────────────── */
 
@@ -128,7 +76,7 @@
 .labelMeta {
   font-size: 9px;
   letter-spacing: 0.15em;
-  color: rgba(242, 236, 226, 0.5);
+  color: rgba(242, 236, 226, 0.82);
   display: block;
   white-space: nowrap;
   opacity: 0;
@@ -171,7 +119,7 @@
 .subtitle {
   font-family: var(--mono);
   font-size: 11px;
-  color: rgba(242, 236, 226, 0.45);
+  color: rgba(242, 236, 226, 0.78);
   max-width: 280px;
   margin-top: 12px;
   line-height: 1.55;
@@ -275,6 +223,7 @@
 
 .catPlanetThumb {
   flex-shrink: 0;
+  padding-right: 68px; /* Saturn's rings extend r×1.95 = 57px beyond the SVG box; this keeps them inside the viewport */
 }
 
 /* ── Column header ────────────────────────────────────────────────────────── */
@@ -426,76 +375,128 @@
   margin-top: 2px;
 }
 
-/* ── Gallery grid ─────────────────────────────────────────────────────────── */
+/* ── Film strip (documenting / animating) ────────────────────────────────── */
 
-.galleryGrid {
-  columns: 3;
-  column-gap: 3px;
-  padding: 3px;
+.filmStripWrap {
+  position: relative;
 }
 
-.galleryThumb {
+.scrollHint {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 140px;
+  background: linear-gradient(to right, transparent, rgba(8, 6, 6, 0.90));
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 28px;
+  pointer-events: none;
+}
+
+.scrollHintArrow {
+  font-family: var(--mono);
+  font-size: 1.25rem;
+  color: rgba(242, 236, 226, 0.85);
+  animation: nudgeRight 1.5s ease-in-out infinite;
+}
+
+@keyframes nudgeRight {
+  0%, 100% { transform: translateX(0);   opacity: 0.85; }
+  50%       { transform: translateX(9px); opacity: 1;    }
+}
+
+.filmStrip {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: flex-start;
+  gap: 0;
+  background: #080606;
+  padding: 52px 0 40px;
+  margin-bottom: 56px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(242, 236, 226, 0.12) transparent;
+}
+
+.filmStrip::-webkit-scrollbar { height: 4px; }
+.filmStrip::-webkit-scrollbar-track { background: transparent; }
+.filmStrip::-webkit-scrollbar-thumb { background: rgba(242, 236, 226, 0.15); border-radius: 2px; }
+
+.filmFrame {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: none;
+  border: none;
+  padding: 0 20px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.filmFrame:first-child { padding-left: 56px; }
+.filmFrame:last-child  { padding-right: 56px; }
+
+.filmImgWrap {
   position: relative;
   overflow: hidden;
-  background: var(--card);
-  cursor: pointer;
-  border: none;
-  padding: 0;
+}
+
+.filmImg {
+  height: 54vh;
+  width: auto;
+  max-width: 72vw;
   display: block;
-  break-inside: avoid;
-  margin-bottom: 3px;
+  filter: saturate(0.88) contrast(1.05);
+  transition: filter 0.45s ease;
 }
 
-.galleryImg {
-  width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.4s ease, filter 0.3s ease;
+.filmFrame:hover .filmImg {
+  filter: saturate(1) contrast(1.05) brightness(1.1);
 }
 
-.galleryThumb:hover .galleryImg {
-  transform: scale(1.02);
-  filter: brightness(0.75);
-}
-
-.galleryPlayIcon {
+.filmPlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.5rem;
-  color: rgba(242, 236, 226, 0.8);
+  font-size: 2.5rem;
+  color: rgba(242, 236, 226, 0.85);
   pointer-events: none;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
 }
 
-.galleryOverlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px 12px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
-  opacity: 0;
-  transition: opacity 0.25s ease;
+.filmMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 14px;
 }
 
-.galleryThumb:hover .galleryOverlay {
-  opacity: 1;
-}
-
-.galleryTitle {
+.filmNum {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(242, 236, 226, 0.9);
+  letter-spacing: 0.18em;
+  color: rgba(242, 236, 226, 0.5);
+  flex-shrink: 0;
 }
 
-.galleryPlaceholder {
-  width: 100%;
-  height: 100%;
-  background: #1a1a1a;
+.filmTitle {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.85);
+  white-space: nowrap;
+}
+
+.filmPlaceholder {
+  height: 54vh;
+  width: 300px;
+  background: rgba(242, 236, 226, 0.05);
 }
 
 /* ── Lightbox ─────────────────────────────────────────────────────────────── */
@@ -529,7 +530,6 @@
   height: auto;
   object-fit: contain;
   border: none;
-  aspect-ratio: 16/9;
 }
 
 .lightboxMeta {
@@ -618,7 +618,10 @@
   .header { top: 16px; left: 16px; }
   .hint   { display: none; }
 
-  .galleryGrid { columns: 2; }
+  .filmImg { height: 38vh; max-width: 80vw; }
+  .filmPlaceholder { height: 38vh; }
+  .filmFrame:first-child { padding-left: 20px; }
+  .filmFrame:last-child  { padding-right: 20px; }
   .lightboxMedia { max-height: 60vh; }
   .lightboxNav { padding: 12px 14px; font-size: 1.2rem; }
 }

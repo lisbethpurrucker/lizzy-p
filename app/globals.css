@@ -63,16 +63,16 @@
   --surface:   #1e1510;
   --card:      #2a1e14;
   --text:      #f6efe6;
-  --muted:     rgba(246, 239, 230, 0.55);
-  --faint:     rgba(246, 239, 230, 0.35);
+  --muted:     rgba(246, 239, 230, 0.78);
+  --faint:     rgba(246, 239, 230, 0.52);
   --border:    rgba(246, 239, 230, 0.10);
   --nav-bg:    rgba(42, 30, 20, 0.92);
   --pill-bg:   rgba(246, 239, 230, 0.07);
   --red-dim:   rgba(216, 35, 42, 0.18);
   --page-bg:   #14100d;
-  --content-text: rgba(246, 239, 230, 0.65);
+  --content-text: rgba(246, 239, 230, 0.82);
   --tw-bg:     #14100d;
-  --tw-text:   rgba(246, 239, 230, 0.75);
+  --tw-text:   rgba(246, 239, 230, 0.85);
   --tw-border: rgba(216, 35, 42, 0.20);
 }
 

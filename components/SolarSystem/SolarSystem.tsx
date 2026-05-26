@@ -1,43 +1,12 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './SolarSystem.module.css'
 
 type PlanetKind = 'saturn' | 'venus' | 'jupiter' | 'mars' | 'moon'
 
-// ── Moon phase + zodiac calculation ────────────────────────────────────────
-
-const ZODIAC = ['aries','taurus','gemini','cancer','leo','virgo',
-                 'libra','scorpio','sagittarius','capricorn','aquarius','pisces']
-const ZODIAC_GLYPHS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓']
-
-function moonInfo() {
-  const JD = Date.now() / 86400000 + 2440587.5
-  // Reference: new moon Jan 6 2000 18:14 UTC → JD 2451551.26, ecliptic lon ~280°
-  const REF_JD  = 2451551.26
-  const REF_LON = 280
-  const SYNODIC  = 29.53058867
-  const DAILY    = 360 / 27.32158
-
-  const d    = JD - REF_JD
-  const age  = ((d % SYNODIC) + SYNODIC) % SYNODIC
-  const lon  = ((REF_LON + d * DAILY) % 360 + 360) % 360
-  const sign = ZODIAC[Math.floor(lon / 30)]
-  const glyph = ZODIAC_GLYPHS[Math.floor(lon / 30)]
-
-  let phase: string
-  if      (age <  1.85) phase = 'new moon'
-  else if (age <  7.38) phase = 'waxing crescent'
-  else if (age <  9.22) phase = 'first quarter'
-  else if (age < 14.77) phase = 'waxing gibbous'
-  else if (age < 16.61) phase = 'full moon'
-  else if (age < 22.15) phase = 'waning gibbous'
-  else if (age < 23.99) phase = 'last quarter'
-  else                   phase = 'waning crescent'
-
-  return { phase, sign, glyph }
-}
 
 interface Category {
   _id: string
@@ -70,6 +39,7 @@ const GALLERY_CATEGORIES = ['documenting', 'animating']
 interface Props {
   categories: Category[]
   projects: Project[]
+  initialCategorySlug?: string
 }
 
 // Canvas dimensions for the orrery SVG
@@ -247,11 +217,32 @@ function PlanetSVG({ kind, size, id, glowing }: { kind: PlanetKind; size: number
 
 // ── Main component ─────────────────────────────────────────────────────────
 
-export default function SolarSystem({ categories, projects }: Props) {
+export default function SolarSystem({ categories, projects, initialCategorySlug }: Props) {
+  const router = useRouter()
   const [hoverId, setHoverId]               = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const [isMobile, setIsMobile]             = useState(false)
   const [lightboxProject, setLightboxProject] = useState<Project | null>(null)
+  const [showScrollHint, setShowScrollHint]   = useState(true)
+  const filmStripRef = useRef<HTMLDivElement>(null)
+
+  // Sync active category into the URL so a page refresh lands in the right place
+  const selectCategory = useCallback((cat: Category | null) => {
+    setActiveCategory(cat)
+    if (cat) {
+      router.replace(`/universe?category=${cat.slug}`, { scroll: false })
+    } else {
+      router.replace('/universe', { scroll: false })
+    }
+  }, [router])
+
+  // Open the correct category on first load (back-link or refresh)
+  useEffect(() => {
+    if (initialCategorySlug && categories.length > 0) {
+      const match = categories.find(c => c.slug === initialCategorySlug)
+      if (match) setActiveCategory(match)
+    }
+  }, [initialCategorySlug, categories])
 
   const closeLightbox = useCallback(() => setLightboxProject(null), [])
 
@@ -277,6 +268,14 @@ export default function SolarSystem({ categories, projects }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [lightboxProject, activeCategory, projects, closeLightbox])
 
+  // Reset scroll hint (and strip position) each time a gallery category is opened
+  useEffect(() => {
+    if (activeCategory && GALLERY_CATEGORIES.includes(activeCategory.slug)) {
+      setShowScrollHint(true)
+      if (filmStripRef.current) filmStripRef.current.scrollLeft = 0
+    }
+  }, [activeCategory])
+
   const activePlanetMap = isMobile ? MOBILE_PLANET_MAP : PLANET_MAP
   const activeFallback  = isMobile ? MOBILE_FALLBACK  : FALLBACK
   const activeOrbits    = isMobile ? MOBILE_ORBITS    : ORBITS
@@ -299,7 +298,7 @@ export default function SolarSystem({ categories, projects }: Props) {
 
     const catHead = (
       <div className={styles.catHead}>
-        <button className={styles.backBtn} onClick={() => setActiveCategory(null)}>
+        <button className={styles.backBtn} onClick={() => selectCategory(null)}>
           ← back to universe
         </button>
         <div className={styles.catHero}>
@@ -329,7 +328,7 @@ export default function SolarSystem({ categories, projects }: Props) {
             <button
               key={pl._id}
               className={styles.otherItem}
-              onClick={() => setActiveCategory(pl)}
+              onClick={() => selectCategory(pl)}
             >
               <PlanetSVG kind={pl.kind} size={32} id={`other-${pl.slug}`} glowing={false} />
               <div>
@@ -369,29 +368,47 @@ export default function SolarSystem({ categories, projects }: Props) {
             {catProjects.length === 0 ? (
               <p className={styles.emptyNote} style={{ padding: '40px 32px' }}>Nothing here yet.</p>
             ) : (
-              <div className={styles.galleryGrid}>
-                {catProjects.map((p) => {
-                  const thumb = thumbUrl(p)
-                  const isVideo = p.projectType === 'video' || !!p.videoFile?.url || !!p.videoUrl
-                  return (
-                    <button
-                      key={p._id}
-                      className={styles.galleryThumb}
-                      onClick={() => setLightboxProject(p)}
-                      aria-label={p.title}
-                    >
-                      {thumb ? (
-                        <img src={`${thumb}?w=600&fit=crop`} alt={p.title} className={styles.galleryImg} />
-                      ) : (
-                        <div className={styles.galleryPlaceholder} />
-                      )}
-                      {isVideo && <span className={styles.galleryPlayIcon}>▶</span>}
-                      <div className={styles.galleryOverlay}>
-                        <span className={styles.galleryTitle}>{p.title}</span>
-                      </div>
-                    </button>
-                  )
-                })}
+              <div className={styles.filmStripWrap}>
+                <div
+                  className={styles.filmStrip}
+                  ref={filmStripRef}
+                  onScroll={() => {
+                    if (filmStripRef.current && filmStripRef.current.scrollLeft > 30) {
+                      setShowScrollHint(false)
+                    }
+                  }}
+                >
+                  {catProjects.map((p, i) => {
+                    const thumb = thumbUrl(p)
+                    const isVideo = p.projectType === 'video' || !!p.videoFile?.url || !!p.videoUrl
+                    return (
+                      <button
+                        key={p._id}
+                        className={styles.filmFrame}
+                        onClick={() => setLightboxProject(p)}
+                        aria-label={p.title}
+                      >
+                        <div className={styles.filmImgWrap}>
+                          {thumb ? (
+                            <img src={`${thumb}?w=1200&q=90`} alt={p.title} className={styles.filmImg} />
+                          ) : (
+                            <div className={styles.filmPlaceholder} />
+                          )}
+                          {isVideo && <span className={styles.filmPlay}>▶</span>}
+                        </div>
+                        <div className={styles.filmMeta}>
+                          <span className={styles.filmNum}>{String(i + 1).padStart(3, '0')}</span>
+                          <span className={styles.filmTitle}>{p.title}</span>
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
+                {showScrollHint && (
+                  <div className={styles.scrollHint} aria-hidden="true">
+                    <span className={styles.scrollHintArrow}>→</span>
+                  </div>
+                )}
               </div>
             )}
 
@@ -582,7 +599,7 @@ export default function SolarSystem({ categories, projects }: Props) {
               }}
               onMouseEnter={() => setHoverId(planet._id)}
               onMouseLeave={() => setHoverId(null)}
-              onClick={() => setActiveCategory(planet)}
+              onClick={() => selectCategory(planet)}
             >
               <PlanetSVG
                 kind={planet.kind}
@@ -594,28 +611,6 @@ export default function SolarSystem({ categories, projects }: Props) {
           )
         })}
 
-        {/* Moon annotation — rendered outside planet div to escape filter/overflow clipping */}
-        {planets.filter(p => p.kind === 'moon').map((planet) => {
-          const isHover = hoverId === planet._id
-          const moon = moonInfo()
-          return (
-            <div
-              key={`moon-tip-${planet._id}`}
-              className={`${styles.moonAnnotation} ${isHover ? styles.moonAnnotationVisible : ''}`}
-              style={{
-                left: `calc(${(planet.px / W) * 100}% - ${planet.size / 2 + 20}px)`,
-                top:  `${(planet.py / H) * 100}%`,
-              }}
-              aria-hidden="true"
-            >
-              <span className={styles.moonGlyph}>{moon.glyph}</span>
-              <div className={styles.moonText}>
-                <span className={styles.moonPhaseName}>{moon.phase}</span>
-                <span className={styles.moonSignLine}>in {moon.sign}</span>
-              </div>
-            </div>
-          )
-        })}
 
         {/* Planet labels */}
         {planets.map((planet) => {
@@ -630,7 +625,7 @@ export default function SolarSystem({ categories, projects }: Props) {
               }}
               onMouseEnter={() => setHoverId(planet._id)}
               onMouseLeave={() => setHoverId(null)}
-              onClick={() => setActiveCategory(planet)}
+              onClick={() => selectCategory(planet)}
             >
               <span className={styles.labelName}>{planet.name}</span>
               <span className={styles.labelMeta}>

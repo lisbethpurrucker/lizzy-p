@@ -256,6 +256,39 @@
   font-style: italic;
 }
 
+/* ─── Medium desktop / tablet ────────────────────── */
+
+@media (max-width: 1100px) {
+  .content {
+    padding: 0 2.75rem 4rem;
+  }
+  .about {
+    padding: 5rem 2.75rem;
+  }
+  .otherThings {
+    padding: 4rem 2.75rem 5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 0 2rem 3.5rem;
+  }
+  .name {
+    font-size: 3.75rem;
+  }
+  .about {
+    padding: 4rem 2rem;
+  }
+  .photoGrid {
+    columns: 2;
+    column-gap: 0.75rem;
+  }
+  .otherThings {
+    padding: 3.5rem 2rem 4.5rem;
+  }
+}
+
 /* ─── Mobile ──────────────────────────────────────── */
 
 @media (max-width: 640px) {

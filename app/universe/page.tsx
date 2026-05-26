@@ -5,7 +5,11 @@ import styles from './page.module.css'
 
 export const revalidate = 60
 
-export default async function Universe() {
+export default async function Universe({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>
+}) {
   let categories: unknown[] = []
   let projects: unknown[] = []
 
@@ -18,11 +22,14 @@ export default async function Universe() {
     } catch { /* render with empty data */ }
   }
 
+  const { category: initialCategorySlug } = await searchParams
+
   return (
     <main className={styles.page}>
       <SolarSystem
         categories={categories as Parameters<typeof SolarSystem>[0]['categories']}
         projects={projects as Parameters<typeof SolarSystem>[0]['projects']}
+        initialCategorySlug={initialCategorySlug}
       />
     </main>
   )

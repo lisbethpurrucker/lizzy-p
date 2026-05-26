@@ -350,10 +350,10 @@
 .studioHero {
   padding: 48px 56px 40px;
   border-bottom: 1px solid var(--border);
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .studioName {
@@ -406,8 +406,8 @@
 }
 
 .studioColLabel {
-  font-size: 10px;
-  letter-spacing: 0.3em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 20px;
@@ -463,9 +463,8 @@
   .sketchGrid { grid-template-columns: repeat(2, 1fr); }
 
   .studioHero {
-    grid-template-columns: 1fr;
     padding: 32px 20px 28px;
-    gap: 20px;
+    gap: 8px;
   }
   .studioBody { grid-template-columns: 1fr; }
   .studioCol {

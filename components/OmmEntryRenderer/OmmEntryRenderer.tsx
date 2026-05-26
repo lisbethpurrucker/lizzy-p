@@ -32,7 +32,9 @@ function Timestamp({ iso }: { iso: string }) {
 export default function OmmEntryRenderer({ entry }: { entry: OmmEntry }) {
   return (
     <div className={styles.entry}>
-      <EntryContent entry={entry} />
+      <div className={styles.body}>
+        <EntryContent entry={entry} />
+      </div>
       <Timestamp iso={entry.publishedAt} />
     </div>
   )

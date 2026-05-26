@@ -27,7 +27,7 @@ export default async function Omm() {
         <div className={styles.header}>
           <p className={styles.label}>on my mind</p>
           <h1 className={styles.title}>OMM.</h1>
-          <p className={styles.intro}>updated whenever something matters</p>
+          <p className={styles.intro}>Updated whenever something matters.</p>
         </div>
 
         <div className={styles.window}>

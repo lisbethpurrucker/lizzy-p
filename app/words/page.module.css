@@ -104,9 +104,9 @@
 
 .sectionLabel {
   font-family: var(--font-fluor-rush);
-  font-size: 0.75rem;
+  font-size: 1.1rem;
   color: var(--faint);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   padding-top: 4px;
 }

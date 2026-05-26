@@ -4,6 +4,13 @@
   border-radius: var(--r);
   overflow: hidden;
   break-inside: avoid;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.body {
+  flex: 1;
 }
 
 .timestamp {
@@ -92,10 +99,10 @@
 }
 
 .linkBody {
-  padding: 1rem 1.25rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.65rem;
 }
 
 .linkTitle {

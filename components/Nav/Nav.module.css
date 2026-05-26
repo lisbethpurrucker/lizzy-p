@@ -13,8 +13,6 @@
 }
 
 .inner {
-  max-width: var(--content-w);
-  margin: 0 auto;
   padding: 0 2rem;
   height: var(--nav-h);
   display: flex;
@@ -43,7 +41,64 @@
   gap: 0.75rem;
 }
 
-/* ─── Moon phase toggle ───────────────────────────── */
+/* ─── Moon phase toggle + annotation ─────────────── */
+
+.moonWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.moonAnnotationNav {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  pointer-events: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.moonAnnotationNavVisible {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.moonAnnotationText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.moonAnnotationPhase {
+  font-family: var(--hand);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--text);
+}
+
+.moonAnnotationSign {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.moonAnnotationMode {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-top: 4px;
+}
 
 .themeToggle {
   display: flex;
@@ -157,6 +212,19 @@
   position: fixed;
   inset: 0;
   z-index: 198;
+}
+
+/* ─── Tablet ──────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .inner {
+    padding: 0 1.5rem;
+  }
+
+  .panel {
+    right: 1.5rem;
+    min-width: 200px;
+  }
 }
 
 /* ─── Mobile ──────────────────────────────────────── */

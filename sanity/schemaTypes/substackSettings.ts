@@ -20,9 +20,22 @@ export const substackSettings = defineType({
     }),
     defineField({
       name: 'rssUrl',
-      title: 'RSS URL',
+      title: 'RSS URL (primary publication)',
       type: 'string',
       initialValue: 'https://puderzuckr.substack.com/feed',
+    }),
+    defineField({
+      name: 'additionalRssUrls',
+      title: 'Additional RSS URLs',
+      description: 'Add RSS feeds for other publications (e.g. The Forward Current). Posts from all feeds will be merged and sorted by date.',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
+      name: 'filterAuthor',
+      title: 'Filter by author name',
+      type: 'string',
+      description: 'If set, only posts whose author field matches this name will be shown (useful for shared publications). E.g. "Lisbeth Purrucker".',
     }),
   ],
 })

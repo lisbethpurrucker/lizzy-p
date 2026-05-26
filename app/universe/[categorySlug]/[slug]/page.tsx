@@ -71,7 +71,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
   // ── Shared top bar ─────────────────────────────────────────────────────────
   const topBar = (
     <div className={styles.topBar}>
-      <Link href={`/universe`} className={styles.backLink}>
+      <Link href={`/universe?category=${categorySlug}`} className={styles.backLink}>
         ← {categoryName?.toLowerCase() ?? 'universe'}
       </Link>
       <div className={styles.breadcrumb}>
@@ -222,15 +222,13 @@ export default async function ProjectPage({ params }: { params: Params }) {
         )}
 
         <div className={styles.studioHero}>
-          <div>
-            <h1 className={styles.studioName}>{title}</h1>
-            {studioPartner && <p className={styles.studioPartner}>{studioPartner}</p>}
-          </div>
+          <h1 className={styles.studioName}>{title}</h1>
           {externalLink && (
             <a href={externalLink} target="_blank" rel="noopener noreferrer" className={styles.studioLink}>
               {hostname} →
             </a>
           )}
+          {studioPartner && <p className={styles.studioPartner}>w/ {studioPartner}</p>}
         </div>
 
         <div className={styles.studioBody}>

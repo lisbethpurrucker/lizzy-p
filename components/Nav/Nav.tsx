@@ -12,14 +12,16 @@ const links = [
   { href: '/us',        label: 'Open For' },
 ]
 
-// ── Live moon phase SVG ──────────────────────────────────────────────────────
-// Known new moon reference: 2000-01-06T18:14:00Z
+// ── Live moon phase + zodiac ─────────────────────────────────────────────────
 const MOON_REF    = Date.UTC(2000, 0, 6, 18, 14, 0)
-const MOON_PERIOD = 29.530588853 // synodic month in days
+const MOON_PERIOD = 29.530588853
+const ZODIAC_SIGNS = ['aries','taurus','gemini','cancer','leo','virgo',
+                      'libra','scorpio','sagittarius','capricorn','aquarius','pisces']
+const ZODIAC_GLYPHS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓']
 
 function getMoonPhase() {
   const days  = ((Date.now() - MOON_REF) / 86400000 % MOON_PERIOD + MOON_PERIOD) % MOON_PERIOD
-  const phase = days / MOON_PERIOD          // 0=new, 0.5=full
+  const phase = days / MOON_PERIOD
   const cosP  = Math.cos(phase * 2 * Math.PI)
   const r = 11, cx = 11, cy = 11
   const ex = Math.abs(r * cosP)
@@ -43,16 +45,19 @@ function getMoonPhase() {
   else if (phase < 0.78) name = 'last quarter'
   else                   name = 'waning crescent'
 
-  const pct = Math.round(Math.abs(cosP) * 100)
-  return { path, name, pct }
+  // Zodiac: moon moves ~13.18°/day, ref lon 280° at MOON_REF new moon
+  const d = (Date.now() - MOON_REF) / 86400000
+  const lon = ((280 + d * (360 / 27.32158)) % 360 + 360) % 360
+  const signIdx = Math.floor(lon / 30)
+
+  return { path, name, glyph: ZODIAC_GLYPHS[signIdx], sign: ZODIAC_SIGNS[signIdx] }
 }
 
 function MoonIcon() {
-  const { path, name, pct } = getMoonPhase()
+  const { path } = getMoonPhase()
   const cx = 11, cy = 11, r = 11
   return (
-    <svg viewBox="0 0 22 22" width="22" height="22" aria-label={`${name} · ${pct}% illuminated`}>
-      <title>{`${name} · ${pct}% illuminated`}</title>
+    <svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true">
       <circle cx={cx} cy={cy} r={r} fill="var(--text)" />
       <clipPath id="moon-clip"><circle cx={cx} cy={cy} r={r - 0.5} /></clipPath>
       <g clipPath="url(#moon-clip)"><path d={path} fill="#ebd9b0" /></g>
@@ -62,9 +67,11 @@ function MoonIcon() {
 }
 
 export default function Nav() {
-  const pathname = usePathname()
-  const [open, setOpen]   = useState(false)
-  const [light, setLight] = useState(true)
+  const pathname   = usePathname()
+  const [open, setOpen]         = useState(false)
+  const [light, setLight]       = useState(true)
+  const [moonHover, setMoonHover] = useState(false)
+  const moon = getMoonPhase()
 
   useEffect(() => {
     const stored  = localStorage.getItem('theme') ?? 'light'
@@ -91,14 +98,29 @@ export default function Nav() {
         <div className={styles.inner}>
           <Link href="/" className={styles.logo}>lizzyp.</Link>
           <div className={styles.controls}>
-            <button
-              className={styles.themeToggle}
-              onClick={toggleTheme}
-              aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
-              title={light ? 'Switch to dark mode' : 'Switch to light mode'}
+            <div
+              className={styles.moonWrap}
+              onMouseEnter={() => setMoonHover(true)}
+              onMouseLeave={() => setMoonHover(false)}
             >
-              <MoonIcon />
-            </button>
+              <div
+                className={`${styles.moonAnnotationNav} ${moonHover ? styles.moonAnnotationNavVisible : ''}`}
+                aria-hidden="true"
+              >
+                <div className={styles.moonAnnotationText}>
+                  <span className={styles.moonAnnotationPhase}>{moon.name}</span>
+                  <span className={styles.moonAnnotationSign}>in {moon.sign}</span>
+                  <span className={styles.moonAnnotationMode}>{light ? 'switch to dark mode' : 'switch to light mode'}</span>
+                </div>
+              </div>
+              <button
+                className={styles.themeToggle}
+                onClick={toggleTheme}
+                aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
+              >
+                <MoonIcon />
+              </button>
+            </div>
             <button
               className={styles.toggle}
               onClick={() => setOpen(o => !o)}
