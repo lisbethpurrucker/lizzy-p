@@ -472,7 +472,54 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
       )
     }
 
-    // ── Project list view (building / creating / collaborating) ─────────────
+    // ── Collaborating card grid ──────────────────────────────────────────────
+    if (activeCategory.slug === 'collaborating') {
+      return (
+        <>
+          <div className={styles.catView}>
+            {catHead}
+            <div className={styles.collabGrid}>
+              {catProjects.length === 0 ? (
+                <p className={styles.emptyNote}>No collaborations yet.</p>
+              ) : catProjects.map(p => {
+                const href = p.slug ? `/universe/collaborating/${p.slug}` : undefined
+                const inner = (
+                  <>
+                    <div className={styles.collabImgWrap}>
+                      {p.coverImageUrl ? (
+                        <img
+                          src={`${p.coverImageUrl}?w=600&h=600&fit=crop&q=85`}
+                          alt={p.title}
+                          className={styles.collabImg}
+                        />
+                      ) : (
+                        <div className={styles.collabImgPlaceholder} />
+                      )}
+                    </div>
+                    <div className={styles.collabName}>{p.title}</div>
+                    {p.tags && p.tags.length > 0 && (
+                      <div className={styles.collabStack}>{p.tags.join(' · ')}</div>
+                    )}
+                  </>
+                )
+                return href ? (
+                  <Link key={p._id} href={href} className={styles.collabCard}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <div key={p._id} className={styles.collabCard}>
+                    {inner}
+                  </div>
+                )
+              })}
+            </div>
+            {otherWorlds}
+          </div>
+        </>
+      )
+    }
+
+    // ── Project list view (building / creating) ──────────────────────────────
     return (
       <>
         <div className={styles.catView}>
@@ -481,7 +528,7 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
           <div className={styles.colHead}>
             <span>№</span>
             <span>project</span>
-            <span>{activeCategory.slug === 'collaborating' ? '' : 'status'}</span>
+            <span>status</span>
             <span />
           </div>
 
@@ -492,7 +539,6 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
               const href = p.slug
                 ? `/universe/${activeCategory.slug}/${p.slug}`
                 : undefined
-              const isCollaborating = activeCategory.slug === 'collaborating'
               const inner = (
                 <>
                   <span className={styles.rowNum}>{String(i + 1).padStart(2, '0')}</span>
@@ -502,18 +548,7 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
                       <div className={styles.rowTags}>{p.tags.join(' · ')}</div>
                     )}
                   </div>
-                  <span className={styles.rowStatus}>
-                    {isCollaborating
-                      ? p.coverImageUrl && (
-                          <img
-                            src={`${p.coverImageUrl}?w=96&h=96&fit=crop&q=85`}
-                            alt=""
-                            className={styles.rowThumb}
-                          />
-                        )
-                      : (p.externalLink ? 'live' : 'project')
-                    }
-                  </span>
+                  <span className={styles.rowStatus}>{p.externalLink ? 'live' : 'project'}</span>
                   <span className={styles.rowArrow}>→</span>
                 </>
               )

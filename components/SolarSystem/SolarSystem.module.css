@@ -338,9 +338,70 @@
 
 /* ── Other worlds strip ───────────────────────────────────────────────────── */
 
-.otherWorlds {
+/* ── Collaborating card grid ─────────────────────────────────────────────── */
+
+.collabGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px 24px;
   padding: 40px 56px;
-  border-top: 1px solid var(--text);
+}
+
+.collabCard {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--text);
+  transition: opacity 0.2s ease;
+}
+
+.collabCard:hover { opacity: 0.72; }
+
+.collabImgWrap {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--card);
+  margin-bottom: 14px;
+}
+
+.collabImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.collabCard:hover .collabImg { transform: scale(1.03); }
+
+.collabImgPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: var(--card);
+}
+
+.collabName {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 5px;
+}
+
+.collabStack {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ── ─────────────────────────────────────────────────────────────────────── */
+
+.otherWorlds {
+  margin-top: auto;
+  padding: 40px 56px;
 }
 
 .otherLabel {
@@ -438,7 +499,6 @@
   gap: 0;
   background: #080606;
   padding: 52px 0 40px;
-  margin-bottom: 56px;
   scrollbar-width: thin;
   scrollbar-color: rgba(242, 236, 226, 0.12) transparent;
 }
@@ -628,6 +688,18 @@
   .colHead      { padding: 12px 20px; }
   .projectList  { padding: 0 20px; }
   .otherWorlds  { padding: 32px 20px; }
+  .collabGrid   { grid-template-columns: repeat(2, 1fr); padding: 28px 20px; gap: 24px 16px; }
+
+  .otherItem {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .otherIcon {
+    width: 56px;
+  }
 
   .catTitle     { font-size: clamp(1.75rem, 9vw, 3rem); }
   .catIntro     { font-size: 14px; }
