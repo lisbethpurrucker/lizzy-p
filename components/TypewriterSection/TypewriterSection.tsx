@@ -69,7 +69,13 @@ export default function TypewriterSection({ text }: { text: string }) {
   }, [text, clearTick, startForward])
 
   const handlePausePlay = useCallback(() => {
-    if (rewinding) return // can't pause a rewind
+    if (rewinding) {
+      // stop rewind and pause at current position
+      clearTick()
+      setRewinding(false)
+      setPaused(true)
+      return
+    }
     if (done) { startRewind(); return }
     if (paused) {
       setPaused(false)
@@ -109,7 +115,7 @@ export default function TypewriterSection({ text }: { text: string }) {
     return () => { obs.disconnect(); clearTick() }
   }, [startForward, clearTick])
 
-  const playIcon = rewinding ? '⏮' : done ? '↺' : paused ? '▶' : '⏸'
+  const playIcon = done ? '↺' : paused ? '▶' : '⏸'
 
   return (
     <section ref={ref} className={styles.section}>
@@ -124,7 +130,7 @@ export default function TypewriterSection({ text }: { text: string }) {
           >⏮</button>
 
           <button
-            className={`${styles.controlBtn} ${rewinding ? styles.controlBtnDisabled : ''}`}
+            className={styles.controlBtn}
             onClick={handlePausePlay}
             aria-label={playIcon}
           >{playIcon}</button>

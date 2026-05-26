@@ -340,6 +340,22 @@
 
 /* ── Collaborating card grid ─────────────────────────────────────────────── */
 
+/* Creating: 2-col grid with 16:9 cinematic images */
+.creatingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+  padding: 40px 56px;
+}
+
+.creatingImgWrap {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--card);
+  margin-bottom: 14px;
+}
+
 .collabGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -689,6 +705,7 @@
   .projectList  { padding: 0 20px; }
   .otherWorlds  { padding: 32px 20px; }
   .collabGrid   { grid-template-columns: repeat(2, 1fr); padding: 28px 20px; gap: 24px 16px; }
+  .creatingGrid { grid-template-columns: 1fr; padding: 28px 20px; gap: 24px; }
 
   .otherItem {
     flex-direction: column;

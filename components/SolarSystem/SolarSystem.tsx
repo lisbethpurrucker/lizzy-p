@@ -463,11 +463,65 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
                       <span className={styles.lightboxDesc}>{lightboxProject.shortDescription}</span>
                     )}
                     <span className={styles.lightboxCount}>{lbIdx + 1} / {catProjects.length}</span>
+                    {lightboxProject.slug && activeCategory && (
+                      <Link
+                        href={`/universe/${activeCategory.slug}/${lightboxProject.slug}`}
+                        className={styles.lightboxLink}
+                        onClick={e => e.stopPropagation()}
+                      >view project →</Link>
+                    )}
                   </div>
                 </div>
               </div>
             )
           })()}
+        </>
+      )
+    }
+
+    // ── Creating card grid ───────────────────────────────────────────────────
+    if (activeCategory.slug === 'creating') {
+      return (
+        <>
+          <div className={styles.catView}>
+            {catHead}
+            <div className={styles.creatingGrid}>
+              {catProjects.length === 0 ? (
+                <p className={styles.emptyNote}>No projects yet in this world.</p>
+              ) : catProjects.map(p => {
+                const href = p.slug ? `/universe/creating/${p.slug}` : undefined
+                const inner = (
+                  <>
+                    <div className={styles.creatingImgWrap}>
+                      {p.coverImageUrl ? (
+                        <img
+                          src={`${p.coverImageUrl}?w=800&h=450&fit=crop&q=85`}
+                          alt={p.title}
+                          className={styles.collabImg}
+                        />
+                      ) : (
+                        <div className={styles.collabImgPlaceholder} />
+                      )}
+                    </div>
+                    <div className={styles.collabName}>{p.title}</div>
+                    {p.tags && p.tags.length > 0 && (
+                      <div className={styles.collabStack}>{p.tags.join(' · ')}</div>
+                    )}
+                  </>
+                )
+                return href ? (
+                  <Link key={p._id} href={href} className={styles.collabCard}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <div key={p._id} className={styles.collabCard}>
+                    {inner}
+                  </div>
+                )
+              })}
+            </div>
+            {otherWorlds}
+          </div>
         </>
       )
     }
