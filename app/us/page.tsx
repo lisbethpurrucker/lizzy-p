@@ -67,24 +67,25 @@ export default async function Us() {
       <div className={styles.top}>
         <div className={styles.lede}>
           <p className={styles.label}>creative technologist</p>
-
           <h1 className={styles.heading}>Open For.</h1>
 
           <p className={styles.copy}>
-            I&rsquo;m a <strong>creative technologist</strong> and an{' '}
-            <strong>initiator</strong> — I love the blank page, the empty repo,
-            the &ldquo;what if we just…&rdquo; conversation. The part where there&rsquo;s
-            nothing yet and everything is still possible.{' '}
+            Web development — considered architecture, clean code, built to last.
+            For startups, brands, and projects whose values I believe in.
+            I own the architecture, write the code, and ship it.
           </p>
+
           <p className={styles.copy}>
-            I&rsquo;m on a learning journey deep into <strong>creative coding</strong> — installations
-            in <strong>TouchDesigner</strong>, web frontends in{' '}
-            <strong>p5.js, three.js</strong>. Things that move, react, surprise.
+            Creative technology — installations in{' '}
+            <strong>TouchDesigner</strong>, web frontends in{' '}
+            <strong>p5.js</strong> and <strong>three.js</strong>.
+            Things that move, react, surprise.
           </p>
+
           <p className={styles.copy}>
-            I build things on the web — landing pages, prototypes,
-            interactive essays, the whole product. I write the code{' '}
-            <strong>and</strong> help you build a userbase.
+            Technical co-founder conversations — if you&rsquo;re building
+            something that matters and need someone who owns the stack
+            end to end.
           </p>
         </div>
 
@@ -92,7 +93,7 @@ export default async function Us() {
           <p className={styles.ctaLabel}>let&rsquo;s make something</p>
           <p className={styles.ctaHead}>start a thing.</p>
           <p className={styles.ctaBody}>
-            Send me one paragraph. Tell what you&rsquo;re
+            Send me one paragraph. Tell me what you&rsquo;re
             hoping for.
           </p>
           <a href={`mailto:${email}`} className={styles.ctaEmail}>

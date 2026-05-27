@@ -34,7 +34,7 @@ interface Project {
   externalLink?: string
 }
 
-const GALLERY_CATEGORIES = ['documenting', 'animating']
+const GALLERY_CATEGORIES = ['documenting', 'animating', 'creating']
 
 interface Props {
   categories: Category[]
@@ -383,13 +383,8 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
                   {catProjects.map((p, i) => {
                     const thumb = thumbUrl(p)
                     const isVideo = p.projectType === 'video' || !!p.videoFile?.url || !!p.videoUrl
-                    return (
-                      <button
-                        key={p._id}
-                        className={styles.filmFrame}
-                        onClick={() => setLightboxProject(p)}
-                        aria-label={p.title}
-                      >
+                    const frameInner = (
+                      <>
                         <div className={styles.filmImgWrap}>
                           {thumb ? (
                             <img src={`${thumb}?w=1200&q=90`} alt={p.title} className={styles.filmImg} />
@@ -402,6 +397,30 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
                           <span className={styles.filmNum}>{String(i + 1).padStart(3, '0')}</span>
                           <span className={styles.filmTitle}>{p.title}</span>
                         </div>
+                      </>
+                    )
+                    // Creating: link directly to the project page
+                    if (activeCategory.slug === 'creating' && p.slug) {
+                      return (
+                        <Link
+                          key={p._id}
+                          href={`/universe/creating/${p.slug}`}
+                          className={styles.filmFrame}
+                          aria-label={p.title}
+                        >
+                          {frameInner}
+                        </Link>
+                      )
+                    }
+                    // Documenting / Animating: open lightbox
+                    return (
+                      <button
+                        key={p._id}
+                        className={styles.filmFrame}
+                        onClick={() => setLightboxProject(p)}
+                        aria-label={p.title}
+                      >
+                        {frameInner}
                       </button>
                     )
                   })}
@@ -475,53 +494,6 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
               </div>
             )
           })()}
-        </>
-      )
-    }
-
-    // ── Creating card grid ───────────────────────────────────────────────────
-    if (activeCategory.slug === 'creating') {
-      return (
-        <>
-          <div className={styles.catView}>
-            {catHead}
-            <div className={styles.creatingGrid}>
-              {catProjects.length === 0 ? (
-                <p className={styles.emptyNote}>No projects yet in this world.</p>
-              ) : catProjects.map(p => {
-                const href = p.slug ? `/universe/creating/${p.slug}` : undefined
-                const inner = (
-                  <>
-                    <div className={styles.creatingImgWrap}>
-                      {p.coverImageUrl ? (
-                        <img
-                          src={`${p.coverImageUrl}?w=800&h=450&fit=crop&q=85`}
-                          alt={p.title}
-                          className={styles.collabImg}
-                        />
-                      ) : (
-                        <div className={styles.collabImgPlaceholder} />
-                      )}
-                    </div>
-                    <div className={styles.collabName}>{p.title}</div>
-                    {p.tags && p.tags.length > 0 && (
-                      <div className={styles.collabStack}>{p.tags.join(' · ')}</div>
-                    )}
-                  </>
-                )
-                return href ? (
-                  <Link key={p._id} href={href} className={styles.collabCard}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <div key={p._id} className={styles.collabCard}>
-                    {inner}
-                  </div>
-                )
-              })}
-            </div>
-            {otherWorlds}
-          </div>
         </>
       )
     }

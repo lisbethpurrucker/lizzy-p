@@ -163,14 +163,14 @@ export const project = defineType({
       ],
     }),
 
-    // ── Gallery (gallery + video types — sketches, stills) ────────
+    // ── Gallery (all types except studio — mockups, sketches, stills) ───────
     defineField({
       name: 'gallery',
-      title: 'Photos / Stills',
+      title: 'Photos / Mockups / Stills',
       type: 'array',
       of: [{ type: 'image', options: { hotspot: true } }],
-      description: 'Film shots for gallery type. Sketches / process stills for video type.',
-      hidden: ({ document }) => document?.projectType === 'full',
+      description: 'Mockup screenshots for building projects. Film shots for gallery type. Sketches / process stills for video type.',
+      hidden: ({ document }) => document?.projectType === 'studio',
     }),
 
     // ── Studio type only ──────────────────────────────────────────────────────

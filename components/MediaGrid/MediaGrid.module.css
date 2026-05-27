@@ -1,0 +1,129 @@
+/* ── 3-col grid (matches sketchGrid/sketchWrap in project page) ────────────── */
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 32px 32px;
+}
+
+.cell {
+  position: relative;
+  flex: 0 0 calc(33.333% - 8px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--card);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+}
+
+.thumb {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.cell:hover .thumb {
+  transform: scale(1.03);
+  filter: brightness(0.8);
+}
+
+.playIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: rgba(242, 236, 226, 0.9);
+  pointer-events: none;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  transition: transform 0.2s ease;
+}
+
+.cell:hover .playIcon {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(242, 236, 226, 0.05);
+}
+
+/* ── Lightbox ─────────────────────────────────────────────────────────────── */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: rgba(242, 236, 226, 0.7);
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s;
+  z-index: 1;
+}
+.lightboxClose:hover { color: #f2ece2; }
+
+.lightboxContent {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.lightboxMedia {
+  display: block;
+  max-width: 90vw;
+  max-height: 82vh;
+  width: auto;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: none;
+  background: #000;
+}
+
+.lightboxTitle {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 226, 0.6);
+  margin: 0;
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .grid {
+    padding: 16px 20px 24px;
+  }
+
+  .cell {
+    flex: 0 0 calc(50% - 6px);
+  }
+
+  .lightboxMedia {
+    max-width: 95vw;
+    max-height: 75vh;
+  }
+}

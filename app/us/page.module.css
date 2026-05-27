@@ -85,7 +85,7 @@
 }
 
 .ctaHead {
-  font-family: var(--hand);
+  font-family: var(--mono);
   font-size: clamp(2.4rem, 4vw, 3.2rem);
   color: var(--red);
   line-height: 1.05;
@@ -102,7 +102,7 @@
 
 .ctaEmail {
   display: inline-block;
-  font-family: var(--hand);
+  font-family: var(--mono);
   font-size: 1.15rem;
   color: var(--red);
   text-decoration: none;

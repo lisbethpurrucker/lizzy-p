@@ -5,7 +5,7 @@ import { PortableText } from '@portabletext/react'
 import { client, isConfigured } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { getProjectBySlugQuery, getProjectSlugsByCategoryQuery } from '@/sanity/lib/queries'
-import VideoGallery from '@/components/VideoGallery/VideoGallery'
+import MediaGrid from '@/components/MediaGrid/MediaGrid'
 import styles from './page.module.css'
 
 export const revalidate = 60
@@ -163,6 +163,12 @@ export default async function ProjectPage({ params }: { params: Params }) {
 
   // ── Video template ─────────────────────────────────────────────────────────
   if (projectType === 'video') {
+    const extraImages = (gallery ?? []).map((img, i) => ({
+      url: img.asset.url,
+      alt: `${title} ${i + 1}`,
+    }))
+    const hasExtraMedia = videos.length > 0 || extraImages.length > 0
+
     return (
       <main className={styles.page}>
         {topBar}
@@ -171,48 +177,43 @@ export default async function ProjectPage({ params }: { params: Params }) {
           {shortDescription && <p className={styles.lightDesc}>{shortDescription}</p>}
         </div>
 
-        {/* Multiple videos take priority over the legacy single-video fields */}
-        {videos.length > 0 ? (
-          <VideoGallery videos={videos} projectTitle={title} />
-        ) : (
-          <div className={styles.videoSection}>
-            {videoFile?.asset?.url ? (
-              <video src={videoFile.asset.url} controls playsInline className={styles.videoPlayer} />
-            ) : videoUrl ? (
-              <iframe
-                src={embedSrc(videoUrl)}
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                className={styles.videoPlayer}
-                title={title}
-              />
-            ) : coverImage ? (
-              <Image
-                src={urlFor(coverImage).width(1200).height(750).url()}
-                alt={title}
-                width={1200}
-                height={750}
-                className={styles.videoPlayer}
-              />
-            ) : null}
-          </div>
+        {/* Hero: always the single main video (or cover image as fallback) */}
+        <div className={styles.videoSection}>
+          {videoFile?.asset?.url ? (
+            <video
+              src={videoFile.asset.url}
+              controls
+              autoPlay
+              muted
+              playsInline
+              preload="metadata"
+              poster={coverImage ? urlFor(coverImage).width(1200).height(675).url() : undefined}
+              className={styles.videoPlayer}
+            />
+          ) : videoUrl ? (
+            <iframe
+              src={embedSrc(videoUrl)}
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              className={styles.videoPlayer}
+              title={title}
+            />
+          ) : coverImage ? (
+            <Image
+              src={urlFor(coverImage).width(1200).height(750).url()}
+              alt={title}
+              width={1200}
+              height={750}
+              className={styles.videoPlayer}
+            />
+          ) : null}
+        </div>
+
+        {/* Extra media: additional videos + gallery images, all in the same grid */}
+        {hasExtraMedia && (
+          <MediaGrid videos={videos} images={extraImages} />
         )}
 
-        {gallery && gallery.length > 0 && (
-          <div className={styles.sketchGrid}>
-            {gallery.map((img, i) => (
-              <div key={i} className={styles.sketchWrap}>
-                <Image
-                  src={img.asset.url}
-                  alt={`${title} sketch ${i + 1}`}
-                  fill
-                  className={styles.photo}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-            ))}
-          </div>
-        )}
         {footNav}
       </main>
     )
@@ -322,29 +323,44 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </dl>
       </div>
 
-      {videos.length > 0 ? (
-        <VideoGallery videos={videos} projectTitle={title} />
-      ) : (
+      <div className={styles.section}>
+        <p className={styles.sectionLabel}>
+          {(videoFile?.asset?.url || videoUrl) ? 'the video' : 'the screenshot'}
+        </p>
+        <div className={styles.screenshotWrap}>
+          {videoFile?.asset?.url ? (
+            <video src={videoFile.asset.url} controls playsInline className={styles.screenshot} />
+          ) : videoUrl ? (
+            <iframe
+              src={embedSrc(videoUrl)}
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              className={styles.screenshot}
+              title={title}
+            />
+          ) : coverImage ? (
+            <Image src={urlFor(coverImage).width(1200).height(750).url()} alt={title} width={1200} height={750} className={styles.screenshot} />
+          ) : (
+            <div className={styles.screenshotPlaceholder}>[ screenshot / video ]</div>
+          )}
+        </div>
+      </div>
+
+      {gallery && gallery.length > 0 && (
         <div className={styles.section}>
-          <p className={styles.sectionLabel}>
-            {(videoFile?.asset?.url || videoUrl) ? 'the video' : 'the screenshot'}
-          </p>
-          <div className={styles.screenshotWrap}>
-            {videoFile?.asset?.url ? (
-              <video src={videoFile.asset.url} controls playsInline className={styles.screenshot} />
-            ) : videoUrl ? (
-              <iframe
-                src={embedSrc(videoUrl)}
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                className={styles.screenshot}
-                title={title}
-              />
-            ) : coverImage ? (
-              <Image src={urlFor(coverImage).width(1200).height(750).url()} alt={title} width={1200} height={750} className={styles.screenshot} />
-            ) : (
-              <div className={styles.screenshotPlaceholder}>[ screenshot / video ]</div>
-            )}
+          <p className={styles.sectionLabel}>the mockups</p>
+          <div className={styles.sketchGrid}>
+            {gallery.map((img, i) => (
+              <div key={i} className={styles.sketchWrap}>
+                <Image
+                  src={img.asset.url}
+                  alt={`${title} mockup ${i + 1}`}
+                  fill
+                  className={styles.photo}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+            ))}
           </div>
         </div>
       )}
