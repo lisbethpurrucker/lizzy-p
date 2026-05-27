@@ -223,7 +223,8 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
   const [activeCategory, setActiveCategory] = useState<Category | null>(null)
   const [isMobile, setIsMobile]             = useState(false)
   const [lightboxProject, setLightboxProject] = useState<Project | null>(null)
-  const [showScrollHint, setShowScrollHint]   = useState(true)
+  const [canScroll, setCanScroll]             = useState(false)
+  const [showScrollHint, setShowScrollHint]   = useState(false)
   const filmStripRef = useRef<HTMLDivElement>(null)
 
   // Sync active category into the URL so a page refresh lands in the right place
@@ -268,11 +269,19 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
     return () => window.removeEventListener('keydown', onKey)
   }, [lightboxProject, activeCategory, projects, closeLightbox])
 
-  // Reset scroll hint (and strip position) each time a gallery category is opened
+  // Reset strip position and check actual overflow when a gallery category opens
   useEffect(() => {
     if (activeCategory && GALLERY_CATEGORIES.includes(activeCategory.slug)) {
-      setShowScrollHint(true)
       if (filmStripRef.current) filmStripRef.current.scrollLeft = 0
+      // Measure after paint so new content is in the DOM
+      requestAnimationFrame(() => {
+        const el = filmStripRef.current
+        if (el) {
+          const overflows = el.scrollWidth > el.clientWidth + 1
+          setCanScroll(overflows)
+          setShowScrollHint(overflows)
+        }
+      })
     }
   }, [activeCategory])
 
@@ -372,7 +381,7 @@ export default function SolarSystem({ categories, projects, initialCategorySlug 
             ) : (
               <div className={styles.filmStripWrap}>
                 <div
-                  className={styles.filmStrip}
+                  className={canScroll ? styles.filmStrip : `${styles.filmStrip} ${styles.filmStripCentered}`}
                   ref={filmStripRef}
                   onScroll={() => {
                     if (filmStripRef.current && filmStripRef.current.scrollLeft > 30) {

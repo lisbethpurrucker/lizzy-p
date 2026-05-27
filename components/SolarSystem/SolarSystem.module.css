@@ -538,6 +538,13 @@
 .filmFrame:first-child { padding-left: 56px; }
 .filmFrame:last-child  { padding-right: 56px; }
 
+/* When content fits without scrolling — centre items and restore symmetric padding */
+.filmStripCentered {
+  justify-content: center;
+}
+.filmStripCentered .filmFrame:first-child { padding-left: 20px; }
+.filmStripCentered .filmFrame:last-child  { padding-right: 20px; }
+
 .filmImgWrap {
   position: relative;
   overflow: hidden;
