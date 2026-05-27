@@ -737,8 +737,37 @@
   .header { top: 16px; left: 16px; }
   .hint   { display: none; }
 
-  .filmImg { height: 38vh; max-width: 80vw; }
-  .filmPlaceholder { height: 38vh; }
+  /* Fixed-width frames so the title can't push the frame wider than the image */
+  .filmFrame {
+    width: 72vw;
+  }
+
+  /* Fixed-size image box: fills frame, crops to fit — no tiny slivers */
+  .filmImgWrap {
+    width: 100%;
+    height: 38vh;
+  }
+
+  .filmImg {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .filmPlaceholder { height: 38vh; width: 100%; }
+
+  /* Title wraps inside the frame instead of overflowing it */
+  .filmMeta { width: 100%; }
+  .filmTitle {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.4;
+    flex: 1;
+    min-width: 0;
+  }
+
   .filmFrame:first-child { padding-left: 20px; }
   .filmFrame:last-child  { padding-right: 20px; }
   .lightboxMedia { max-height: 60vh; }
