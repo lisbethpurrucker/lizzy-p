@@ -363,6 +363,94 @@
   background: var(--card);
 }
 
+/* ── Mockup rows (building projects) ────────────────────────────────────── */
+
+.mockupSection {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Row of phones — centred, equal width, aligned at the bottom */
+.mockupPhoneRow {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.mockupPhoneCell {
+  flex: 1;
+  max-width: 160px;
+}
+
+/* Row of laptops — centred, capped width */
+.mockupLaptopRow {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.mockupLaptopCell {
+  flex: 1;
+  max-width: 440px;
+}
+
+.mockupImg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mockupSection {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  /* Phones: 3 across, constrained to a short fixed height */
+  .mockupPhoneRow {
+    gap: 8px;
+    align-items: center;
+  }
+
+  .mockupPhoneCell {
+    flex: 1;
+    max-width: none;
+    height: 180px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mockupPhoneCell .mockupImg {
+    width: auto;
+    height: 100%;
+    max-height: 180px;
+    object-fit: contain;
+  }
+
+  /* Laptops: stay side by side, short height */
+  .mockupLaptopRow {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .mockupLaptopCell {
+    height: 120px;
+    overflow: hidden;
+  }
+
+  .mockupLaptopCell .mockupImg {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+}
+
 /* ── Studio template ─────────────────────────────────────────────────────── */
 
 .studioCover {

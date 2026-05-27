@@ -15,7 +15,14 @@ interface Params {
   slug: string
 }
 
-type GalleryImage = { asset: { url: string }; hotspot?: unknown; crop?: unknown }
+type GalleryImage = {
+  asset: {
+    url: string
+    metadata?: { dimensions?: { width: number; height: number } }
+  }
+  hotspot?: unknown
+  crop?: unknown
+}
 
 export default async function ProjectPage({ params }: { params: Params }) {
   const { categorySlug, slug } = await Promise.resolve(params)
@@ -323,47 +330,52 @@ export default async function ProjectPage({ params }: { params: Params }) {
         </dl>
       </div>
 
-      <div className={styles.section}>
-        <p className={styles.sectionLabel}>
-          {(videoFile?.asset?.url || videoUrl) ? 'the video' : 'the screenshot'}
-        </p>
-        <div className={styles.screenshotWrap}>
-          {videoFile?.asset?.url ? (
-            <video src={videoFile.asset.url} controls playsInline className={styles.screenshot} />
-          ) : videoUrl ? (
-            <iframe
-              src={embedSrc(videoUrl)}
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-              className={styles.screenshot}
-              title={title}
-            />
-          ) : coverImage ? (
-            <Image src={urlFor(coverImage).width(1200).height(750).url()} alt={title} width={1200} height={750} className={styles.screenshot} />
-          ) : (
-            <div className={styles.screenshotPlaceholder}>[ screenshot / video ]</div>
-          )}
-        </div>
-      </div>
+      {gallery && gallery.length > 0 && (() => {
+        const getAR = (img: GalleryImage) =>
+          img.asset.metadata?.dimensions
+            ? img.asset.metadata.dimensions.width / img.asset.metadata.dimensions.height
+            : 1
+        const phones  = gallery.filter(img => getAR(img) < 0.85)
+        const laptops = gallery.filter(img => getAR(img) >= 0.85)
+        // Fallback when no metadata: treat everything as laptops
+        const showPhones  = phones.length > 0 ? phones  : []
+        const showLaptops = phones.length > 0 ? laptops : gallery
 
-      {gallery && gallery.length > 0 && (
-        <div className={styles.section}>
-          <p className={styles.sectionLabel}>the mockups</p>
-          <div className={styles.sketchGrid}>
-            {gallery.map((img, i) => (
-              <div key={i} className={styles.sketchWrap}>
-                <Image
-                  src={img.asset.url}
-                  alt={`${title} mockup ${i + 1}`}
-                  fill
-                  className={styles.photo}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
+        return (
+          <div className={styles.mockupSection}>
+            {showPhones.length > 0 && (
+              <div className={styles.mockupPhoneRow}>
+                {showPhones.map((img, i) => (
+                  <div key={i} className={styles.mockupPhoneCell}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${img.asset.url}?w=900&q=85`}
+                      alt={`${title} ${i + 1}`}
+                      className={styles.mockupImg}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
+            {showLaptops.length > 0 && (
+              <div className={styles.mockupLaptopRow}>
+                {showLaptops.map((img, i) => (
+                  <div key={i} className={styles.mockupLaptopCell}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${img.asset.url}?w=1600&q=85`}
+                      alt={`${title} ${showPhones.length + i + 1}`}
+                      className={styles.mockupImg}
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       {(theWhy && theWhy.length > 0) && (
         <div className={styles.section}>
